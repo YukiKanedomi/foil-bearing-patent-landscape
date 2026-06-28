@@ -1,0 +1,84 @@
+{
+  "meta": {
+    "title": "フォイル式ガス軸受 公開特許ランドスケープ",
+    "subtitle": "公知特許の調査・分析（一次サーフェス）",
+    "project": "Counsel",
+    "date": "2026-06-29",
+    "note": "公開済み特許の俯瞰のみ。自社の発明アイデア・出願戦略は含みません。web一次サーフェスであり網羅ではなく、出願人・年・分類は概略で、確定は原文・公報の確認を要します。公的特許データベースでの分類精査と原文確認は人が仕上げる前提です。"
+  },
+  "themes": [
+    {"key": "fix", "label": "フォイル固定", "blurb": "溶接レス・抗回転・公差ロバスト性。トップ/バンプをホルダにどう留めるか。", "fi": ["F16C27/02", "F16C17/02"]},
+    {"key": "thermal", "label": "熱クラウニング / 熱膨張拘束", "blurb": "固定端の熱応力・うねり、ミスアライメント追従、冷却。", "fi": ["F16C27/02", "F16C37/00"]},
+    {"key": "startup", "label": "起動停止耐久性", "blurb": "浮上前後の固体接触・摩耗。被膜／静圧リフト／タッチダウン／制御。", "fi": ["F16C17/02", "F16C33/04"]},
+    {"key": "axial", "label": "軸方向追従 / 剛性の仕立て", "blurb": "バンプ・支持層の分割やスリットで軸方向の剛性・曲げを仕立てる。", "fi": ["F16C17/024", "F16C27/02"]}
+  ],
+  "fiTerms": [
+    {"code": "F16C27/02", "label": "軸受の弾性支持（フォイル・ばね支持）"},
+    {"code": "F16C17/02", "label": "ラジアル滑り軸受（気体潤滑・フォイル）"},
+    {"code": "F16C17/024", "label": "ラジアル滑り軸受の細分（剛性・形状）"},
+    {"code": "F16C33/04", "label": "摺動層・被膜（固体潤滑）"},
+    {"code": "F16C37/00", "label": "軸受の冷却"}
+  ],
+  "patents": [
+    {"no": "US8672549B2", "applicant": "keyless/grooveless fold-over tab", "year": null, "theme": "fix", "category": "差込タブ＋折曲げ（溶接レス）", "covers": "端のタブを折ってハウジング（シェル）に固定し、抗回転・軸方向固定をする。トング＆グルーブ（舌片と溝）で保持する構成も示す。", "gap": "脱落・抗回転の確実性、タブ根元の疲労。", "tags": ["溶接レス", "抗回転"]},
+    {"no": "US20130216167A1", "applicant": "—", "year": null, "theme": "fix", "category": "差込タブ＋折曲げ（溶接レス）", "covers": "端のタブ／トングでハウジング固定・抗回転（fold-over tab 系統）。", "gap": "差込タブ系統と同様の保持確実性。", "tags": ["溶接レス", "抗回転"]},
+    {"no": "US9222509B2", "applicant": "Xdot", "year": null, "theme": "fix", "category": "wing foil / 2Dタブ配列", "covers": "翼状タブの2次元配列で周方向・軸方向の剛性を可変にした多層構造（ヘリンボーン的タブ配列）。", "gap": "連続した一体性の喪失、膜の谷。", "tags": ["wing foil", "量産性"]},
+    {"no": "US10267354B2", "applicant": "—", "year": null, "theme": "fix", "category": "wing foil / 2Dタブ配列", "covers": "溶接不可材の wing foil／2D配列で量産性・溶接回避。", "gap": "一体性の喪失・膜の谷。", "tags": ["wing foil", "溶接回避"]},
+    {"no": "US20140376844A1", "applicant": "wing foil", "year": null, "theme": "fix", "category": "シムによる局所予圧", "covers": "シム（薄板）を層の間に入れて局所プリロード（あらかじめの押付け力）を与える。", "gap": "別部品のシムで部品・工程が増える。", "tags": ["プリロード"]},
+    {"no": "WO2017022795A1", "applicant": "NTN", "year": null, "theme": "fix", "category": "摺動層の架橋接着", "covers": "摺動層の架橋接着で密着・始動トルクを低減。凝着→トルク増→焼付きにも言及。", "gap": "摺動層が主題で固定構造ではない。", "tags": ["被膜", "始動トルク"]},
+    {"no": "CN104603480B", "applicant": "—", "year": null, "theme": "fix", "category": "差込タブ＋ラジアルスロット", "covers": "差込タブ＋ラジアルスロットで自由端が軸方向に膨張できる固定。", "gap": "抗回転と滑りの両立は設計依存。", "tags": ["溶接レス", "熱膨張許容"]},
+    {"no": "US5518320A", "applicant": "Texas A&M", "year": null, "theme": "fix", "category": "剛固定の回避", "covers": "両端突き当てを避け、回転可能マウントで剛固定を回避。座屈バンプ／鋭い折り目を排除。", "gap": "張力型・可変剛性が前提。", "tags": ["剛固定回避"]},
+    {"no": "US20170030404A1", "applicant": "—", "year": null, "theme": "fix", "category": "スプリットキー固定", "covers": "スプリットキーで回転も移動も滑りも止める全方向拘束の固定。", "gap": "軸方向の熱膨張も拘束する（全方向）。", "tags": ["全方向拘束"]},
+    {"no": "US9568042", "applicant": "—", "year": null, "theme": "fix", "category": "固定・プリロード関連", "covers": "ラジアルフォイル軸受の固定・プリロード関連。", "gap": "詳細は原文要精読。", "tags": ["固定", "プリロード"]},
+    {"no": "US9551375", "applicant": "—", "year": null, "theme": "fix", "category": "固定・プリロード関連", "covers": "ラジアルフォイル軸受の固定・プリロード関連。", "gap": "詳細は原文要精読。", "tags": ["固定", "プリロード"]},
+    {"no": "US8944688", "applicant": "—", "year": null, "theme": "fix", "category": "固定・プリロード関連", "covers": "ラジアルフォイル軸受の固定・プリロード関連。", "gap": "詳細は原文要精読。", "tags": ["固定", "プリロード"]},
+
+    {"no": "US9062712B1", "applicant": "NASA", "year": null, "theme": "thermal", "category": "受動熱管理", "covers": "セクタ間の高温潤滑遮断（ワイパー／エアダム／セクタ間シール／トレーリング形状）による受動的な熱管理。", "gap": "セクタ間の熱遮断が主で、軸方向勾配のうねり・固定端応力は明示的に未対処。", "tags": ["受動", "冷却"]},
+    {"no": "US20090087299A1", "applicant": "—", "year": null, "theme": "thermal", "category": "能動冷却", "covers": "高温ブロワの冷却法／能動（熱電・SMA）による熱対策。", "gap": "効果は大きいがコスト・複雑・追加部品。", "tags": ["能動", "冷却"]},
+    {"no": "US12535102", "applicant": "—", "year": null, "theme": "thermal", "category": "CTE適応（材料）", "covers": "CTEマッチング／CTE勾配の熱適応スリーブ（異種金属積層）で差成長を吸収。", "gap": "材料・製法コスト。", "tags": ["材料", "CTE"]},
+    {"no": "US4795274A", "applicant": "—", "year": null, "theme": "thermal", "category": "自由端コンプライアンス", "covers": "resilient trailing edge／剛性勾配で、パッドの傾きが速度とともに増す。自由端で差成長を吸収。", "gap": "固定端側の拘束は残る。", "tags": ["自由端", "速度依存"]},
+    {"no": "US4668108", "applicant": "—", "year": null, "theme": "thermal", "category": "支持剛性の異方性", "covers": "支持剛性の異方性によりロータ振動を抑制（anisotropic support）。", "gap": "目的はロータ振動対策で、固定端の拘束方向の異方化（熱膨張）とは別。", "tags": ["異方性", "振動"]},
+    {"no": "US9109622", "applicant": "—", "year": null, "theme": "thermal", "category": "支持剛性の異方性", "covers": "支持剛性の異方性（振動対策）。", "gap": "振動対策が主目的。", "tags": ["異方性", "振動"]},
+
+    {"no": "US5866518", "applicant": "NASA（PS300）", "year": null, "theme": "startup", "category": "固体潤滑被膜", "covers": "PS300 系の高温固体潤滑被膜。", "gap": "低トルク×高温×長寿命の三立は単一被膜で困難。摩耗・酸化・厚み／粗さ。", "tags": ["被膜"]},
+    {"no": "US8753417", "applicant": "PS400", "year": null, "theme": "startup", "category": "固体潤滑被膜", "covers": "PS400 系の高温固体潤滑被膜。", "gap": "三立困難・摩耗・酸化。", "tags": ["被膜"]},
+    {"no": "US8500331B2", "applicant": "—", "year": null, "theme": "startup", "category": "ハイブリッド静圧リフト", "covers": "起動前に外部加圧で浮上させ、固体接触を回避。", "gap": "外部供給・配管・制御＝コスト・複雑・供給喪失リスク。", "tags": ["静圧", "リフト補助"]},
+    {"no": "US5348401", "applicant": "—", "year": null, "theme": "startup", "category": "ハイブリッド静圧リフト", "covers": "静圧リフト補助による起動時の接触回避。", "gap": "外部供給依存。", "tags": ["静圧", "リフト補助"]},
+    {"no": "US20020097927A1", "applicant": "—", "year": null, "theme": "startup", "category": "ハイブリッド静圧リフト", "covers": "静圧リフト補助。", "gap": "外部供給依存。", "tags": ["静圧", "リフト補助"]},
+    {"no": "US7830055B2", "applicant": "—", "year": null, "theme": "startup", "category": "タッチダウン／補助軸受", "covers": "磁気→機械の移行を管理するタッチダウン／補助軸受。", "gap": "追加部品。", "tags": ["タッチダウン"]},
+    {"no": "US11644227", "applicant": "—", "year": null, "theme": "startup", "category": "起動停止制御", "covers": "加減速で接触時間を最小化する制御。", "gap": "ハード本体は変えない。", "tags": ["制御"]},
+    {"no": "US11346397", "applicant": "—", "year": null, "theme": "startup", "category": "起動停止制御", "covers": "加減速で接触時間を最小化する制御。", "gap": "ハード本体は変えない。", "tags": ["制御"]},
+    {"no": "US4445792A", "applicant": "Variable preload foil bearing", "year": null, "theme": "startup", "category": "可変プリロードで適応起動", "covers": "起動時にフォイル張力（プリロード）を上げて軸を持ち上げ、回転が上がると下げる。", "gap": "機構が張力変化に依存。", "tags": ["適応起動", "プリロード"]},
+    {"no": "US20190203761A1", "applicant": "wing foil", "year": null, "theme": "startup", "category": "膜圧応答の予圧／テーパ", "covers": "プリロードや入口テーパが膜圧に応じて生まれる（wing foil 系）。", "gap": "形状が膜圧に従属。", "tags": ["膜圧応答", "wing foil"]},
+    {"no": "US5286113A", "applicant": "—", "year": null, "theme": "startup", "category": "遠心作動機構", "covers": "遠心作動の軸受機構（前例）。", "gap": "目的（浮上回転数／起動摩耗）は別。", "tags": ["遠心作動"]},
+    {"no": "US6655846B2", "applicant": "—", "year": null, "theme": "startup", "category": "遠心作動機構", "covers": "遠心作動の軸受機構（前例）。", "gap": "目的は別。", "tags": ["遠心作動"]},
+
+    {"no": "US3957317A", "applicant": "Shaped foil", "year": null, "theme": "axial", "category": "動圧ポンピング形状", "covers": "シェブロン状後端／ヘリンボーン溝で流体ポンピング＝負荷容量を上げる。", "gap": "目的は動圧ポンピングで、構造のコンプライアンスではない。", "tags": ["動圧", "形状"]},
+    {"no": "WO2024176423A1", "applicant": "—", "year": null, "theme": "axial", "category": "周方向の波形バンプ", "covers": "周方向のバンプ波形（波状バンプ）。", "gap": "軸方向の波形ではない。", "tags": ["波形バンプ"]},
+    {"no": "US9388848B2", "applicant": "Howden / Siemens", "year": null, "theme": "axial", "category": "バンプ層の軸方向分割", "covers": "バンプフォイル『層』を軸方向ストライプ化し、剛性低減・減衰向上・熱／遠心成長・ミスアライメントを吸収。フォイルは周方向に連続。", "gap": "対象がバンプ層。", "tags": ["分割", "減衰", "冷却"]},
+    {"no": "JP6113444B2", "applicant": "NTN", "year": null, "theme": "axial", "category": "後端スリットで剛性勾配", "covers": "リーフ後端（平坦部）にスリットを設け、ばね性に軸方向の勾配を付与してコニカル振れ回りを抑制。", "gap": "対象は平坦部、目的は剛性勾配。", "tags": ["スリット", "剛性勾配"]},
+    {"no": "US4296976A", "applicant": "Heshmat / Mechanical Technology Inc", "year": 1981, "theme": "axial", "category": "部分スリット（連結を残す）", "covers": "支持／中間シートを部分スリットでストリップに分割。スリットは縁まで届かず連結したモジュールとして残し、角（曲げ）剛性を消しつつ力分配・干渉防止を維持する。", "gap": "1981年の古典。フォイル分節の基礎。", "tags": ["部分スリット", "連結残し"]},
+    {"no": "CN212959540U", "applicant": "Hebei Kingston", "year": null, "theme": "axial", "category": "相互連結の擬似独立バンプ", "covers": "バンプを相互連結のまま、円弧の部分スリット（連結を20–30%残す）で擬似独立化し、軸方向ズレ防止と弾性支持・減衰を得る。", "gap": "—", "tags": ["部分スリット", "擬似独立"]},
+    {"no": "US10415634B2", "applicant": "—", "year": null, "theme": "axial", "category": "バンプ／支持層の分割系", "covers": "バンプ・支持層の分割系。", "gap": "詳細は原文確認。", "tags": ["分割"]},
+    {"no": "RE48269", "applicant": "—", "year": null, "theme": "axial", "category": "バンプ／支持層の分割系", "covers": "バンプ・支持層の分割系（再発行特許）。", "gap": "詳細は原文確認。", "tags": ["分割"]},
+    {"no": "US20140147064A1", "applicant": "—", "year": null, "theme": "axial", "category": "バンプ／支持層の分割系", "covers": "バンプ・支持層の分割系。", "gap": "詳細は原文確認。", "tags": ["分割"]},
+    {"no": "US5584582A", "applicant": "—", "year": null, "theme": "axial", "category": "バンプ2段高さ", "covers": "バンプの2段高さ構造（スリット無し）。", "gap": "web要約では分節スリット文献と取り違えられやすいが、全文では2段高さ・スリット無し。原文確認の好例。", "tags": ["2段高さ", "要注意"]}
+  ],
+  "problems": [
+    {"theme": "fix", "title": "溶接（HAZ）起因の信頼性低下", "evidence": "複数文献が冷間割れ・残留応力・疲労を明言し、各社が weld-free へ動いている。", "gap": "weld-free は脱落・保持力など別の確実性課題を生む。"},
+    {"theme": "fix", "title": "固定起因のプリロード／すきまのばらつき", "evidence": "「preload は製造ばらつきに非常に敏感」「溶接位置ばらつきで性能ばらつき」との指摘。", "gap": "固定を介した受動的なすきま自己補正・公差鈍感化は文献上手薄。"},
+    {"theme": "fix", "title": "固定端の局所剛性段差→応力集中・摩耗", "evidence": "「固定端剛性が高い」「角部は R 付与で対策」との記載。", "gap": "段差そのものの連続化は限定的。"},
+    {"theme": "fix", "title": "高温長時間での固定部フレッティング・緩み", "evidence": "weld-free は摩擦保持に依存する。", "gap": "高温での保持力維持の作り込みは文献上薄い（要追加調査）。"},
+    {"theme": "thermal", "title": "固定端の熱膨張拘束→熱応力・うねり", "evidence": "多くは「自由端で逃がす」か「勾配を下げる」。固定端応力は US9062712B1 でも明示的に未対処。", "gap": "固定端そのものの拘束・剛性段差に起因する熱応力／うねりを、抗回転を保ったまま受動・低コストで逃がす構成は文献上手薄。"},
+    {"theme": "startup", "title": "被膜の三立困難（低トルク×高温×長寿命）", "evidence": "各被膜に温度／摩耗／厚みの制約があり、各社が新被膜を出し続けている。", "gap": "単一被膜での三立は困難。材料化学の混雑領域。"},
+    {"theme": "startup", "title": "浮上回転数の構造的低減", "evidence": "浮上回転数が接触回転数＝摩耗量を決める。テクスチャ・テーパは高速性能と二律背反。", "gap": "低速で効き高速で邪魔しない速度適応構造は文献上乏しい。"},
+    {"theme": "startup", "title": "受動・自己完結のリフトオフ補助", "evidence": "ハイブリッド静圧は有効だが外部加圧に依存。", "gap": "外部供給なしの受動リフト補助は手薄。"},
+    {"theme": "startup", "title": "停止タッチダウンのダメージ低減", "evidence": "起動側に比べ停止時の再接触ダメージ対策は手薄。", "gap": "停止時の構造的保護は文献上薄い（要裏取り）。"},
+    {"theme": "startup", "title": "凝着・摩耗粉（seizure 起点）の管理", "evidence": "WO2017022795A1 が凝着→トルク増→焼付きに言及。", "gap": "凝着・摩耗粉の管理は構造側で手薄。"}
+  ],
+  "refFigs": [
+    {"path": "fig/ref-bump-radial-anatomy.svg", "title": "バンプ型ラジアル軸受の解剖図", "kind": "参照"},
+    {"path": "fig/ref-bump-geometry.svg", "title": "バンプ形状の幾何パラメータ", "kind": "参照"},
+    {"path": "fig/ref-axial-film.svg", "title": "軸方向の膜厚プロファイル", "kind": "参照"}
+  ]
+}

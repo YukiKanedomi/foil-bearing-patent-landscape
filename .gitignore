@@ -1,0 +1,8 @@
+node_modules/
+*.log
+.DS_Store
+Thumbs.db
+
+# ビルド道具はローカルのみ（公開物は index.html ＋ data.json ＋ fig）
+build.mjs
+template.html

@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="820" height="430" viewBox="0 0 820 430" font-family="'Segoe UI','Yu Gothic UI',sans-serif">
+  <defs>
+    <marker id="a2" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#333"/></marker>
+    <marker id="a2s" markerWidth="8" markerHeight="8" refX="2" refY="3" orient="auto"><path d="M6,0 L0,3 L6,6 Z" fill="#333"/></marker>
+  </defs>
+  <rect width="820" height="430" fill="#ffffff"/>
+  <text x="410" y="34" font-size="21" font-weight="700" text-anchor="middle" fill="#1a1a1a">バンプ形状の詳細（剛性レバー）</text>
+  <text x="410" y="55" font-size="12" text-anchor="middle" fill="#777">＊参照用模式図。符号・寸法は仮。確定図面は弁理士レビュー前提。</text>
+
+  <!-- housing line (top) -->
+  <line x1="80" y1="110" x2="740" y2="110" stroke="#555" stroke-width="4"/>
+  <text x="748" y="114" font-size="13" fill="#555">ハウジング内壁</text>
+
+  <!-- bump foil: arcs sitting between top foil(bottom) and housing(top) -->
+  <!-- top foil flat -->
+  <line x1="80" y1="250" x2="740" y2="250" stroke="#2980b9" stroke-width="4"/>
+  <text x="748" y="254" font-size="13" fill="#2980b9">トップフォイル</text>
+
+  <!-- bumps (5 bumps) bulging up from top foil toward housing -->
+  <path d="M 120,250 Q 165,118 210,250 M 230,250 Q 275,118 320,250 M 340,250 Q 385,118 430,250 M 450,250 Q 495,118 540,250 M 560,250 Q 605,118 650,250"
+        fill="none" stroke="#e67e22" stroke-width="3.5"/>
+  <text x="120" y="300" font-size="13" fill="#e67e22">バンプフォイル</text>
+
+  <!-- pitch s0 between apexes (165 -> 275) -->
+  <line x1="165" y1="92" x2="275" y2="92" stroke="#333" stroke-width="1" marker-start="url(#a2s)" marker-end="url(#a2)"/>
+  <text x="220" y="86" font-size="13" text-anchor="middle" fill="#333">ピッチ s₀</text>
+  <line x1="165" y1="118" x2="165" y2="92" stroke="#999" stroke-width="0.8" stroke-dasharray="3 3"/>
+  <line x1="275" y1="118" x2="275" y2="92" stroke="#999" stroke-width="0.8" stroke-dasharray="3 3"/>
+
+  <!-- bump height h (apex 118 to base 250) at x=495 -->
+  <line x1="495" y1="118" x2="495" y2="250" stroke="#333" stroke-width="1" marker-start="url(#a2s)" marker-end="url(#a2)"/>
+  <text x="505" y="190" font-size="13" fill="#333">高さ h</text>
+
+  <!-- half length l (foot of a bump: 450 -> 495) -->
+  <line x1="450" y1="268" x2="495" y2="268" stroke="#333" stroke-width="1" marker-start="url(#a2s)" marker-end="url(#a2)"/>
+  <text x="472" y="288" font-size="12" text-anchor="middle" fill="#333">半長 l</text>
+
+  <!-- thickness t callout -->
+  <line x1="650" y1="250" x2="700" y2="210" stroke="#333" stroke-width="0.8"/>
+  <text x="700" y="208" font-size="12" fill="#333">板厚 t</text>
+
+  <!-- curvature radius -->
+  <line x1="385" y1="118" x2="385" y2="250" stroke="#bbb" stroke-width="0.8" stroke-dasharray="3 3"/>
+  <text x="360" y="135" font-size="12" fill="#888" text-anchor="end">曲率半径 R_b</text>
+
+  <!-- fixed/free -->
+  <rect x="80" y="244" width="22" height="12" fill="#7f8c8d" stroke="#333" stroke-width="1"/>
+  <text x="80" y="335" font-size="13" fill="#333">固定端</text>
+  <text x="650" y="335" font-size="13" fill="#333">自由端 →</text>
+
+  <text x="410" y="388" font-size="13" text-anchor="middle" fill="#444">剛性レバー：ピッチ s₀・高さ h・板厚 t・半長 l・曲率 R_b を変えて、周/軸方向の剛性分布を仕立てる</text>
+</svg>

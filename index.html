@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>フォイル式ガス軸受 公開特許ランドスケープ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=Shippori+Mincho:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F8F5EE; --card:#FFFDF8; --ink:#3A2E20; --ink2:#4a3e2e;
+    --dim:#9a8f7c; --faint:#bcb09a; --rule:#e0d9cb; --rule2:#ece4d4;
+    --teal:#0F4C4C; --teal2:#4E7C7C; --oxblood:#4A0404; --gold:#B5822E; --rust:#9A5B2E;
+    --mono:'IBM Plex Mono',ui-monospace,Menlo,Consolas,monospace;
+    --jp:'Shippori Mincho','Hiragino Mincho ProN','Yu Mincho',serif;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:var(--paper);color:var(--ink);
+    font-family:var(--mono);font-variant-numeric:tabular-nums;
+    -webkit-font-smoothing:antialiased;-webkit-text-size-adjust:100%;}
+  .wrap{max-width:980px;margin:0 auto;padding:26px 22px 70px;}
+
+  .bar{display:flex;justify-content:space-between;align-items:center;gap:10px;
+    font-size:11px;letter-spacing:.08em;color:var(--teal);border:1px solid var(--rule);
+    border-radius:6px;padding:8px 12px;background:rgba(15,76,76,.04)}
+  .bar .dotted::before{content:'● ';color:var(--teal)}
+  .bar .r{color:var(--dim);letter-spacing:.04em;text-align:right}
+  h1{font-family:var(--mono);font-weight:600;font-size:clamp(21px,4.6vw,31px);
+    letter-spacing:-.01em;margin:20px 0 4px;line-height:1.14}
+  .path{font-family:var(--mono);font-size:11.5px;color:var(--dim);letter-spacing:.02em}
+  .lede{font-family:var(--jp);font-size:14.5px;line-height:1.9;color:var(--ink2);max-width:680px;margin:14px 0 2px}
+  .lede .small{font-family:var(--mono);font-size:11px;color:var(--dim);letter-spacing:.02em}
+  .small{font-size:11px;color:var(--dim);letter-spacing:.01em}
+  .jp{font-family:var(--jp)}
+
+  .tabs{display:flex;gap:0;overflow-x:auto;margin:20px 0 0;border-bottom:1px solid var(--rule);
+    position:sticky;top:0;background:var(--paper);z-index:5;padding-top:2px}
+  .tab{flex:0 0 auto;background:none;border:0;border-bottom:2px solid transparent;color:var(--dim);
+    padding:10px 15px 9px;font-family:var(--mono);font-size:12.5px;font-weight:500;letter-spacing:.03em;
+    cursor:pointer;white-space:nowrap;margin-bottom:-1px}
+  .tab:hover{color:var(--ink)}
+  .tab.on{color:var(--teal);border-bottom-color:var(--teal);font-weight:600}
+  .view{display:none}
+  .view.on{display:block}
+
+  .card{background:var(--card);border:1px solid var(--rule);border-radius:11px;padding:16px 16px 15px;margin:16px 0;box-shadow:0 2px 10px rgba(58,46,32,.04)}
+  .card h2{font-family:var(--mono);font-size:12.5px;font-weight:600;margin:0 0 12px;color:var(--teal);letter-spacing:.04em;display:flex;align-items:center;gap:8px}
+  .card h2::before{content:'';width:7px;height:7px;background:var(--teal);display:inline-block;flex:0 0 auto}
+
+  /* theme section */
+  .theme{border:1px solid var(--rule);border-radius:10px;background:var(--card);margin:12px 0;overflow:hidden}
+  .theme>.th{padding:12px 14px;border-bottom:1px solid var(--rule);background:rgba(15,76,76,.03)}
+  .theme .tname{font-family:var(--mono);font-weight:600;font-size:14px;display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+  .theme .tblurb{font-family:var(--jp);font-size:12px;color:var(--ink2);margin-top:5px;line-height:1.7}
+  .ficode{font-family:var(--mono);font-size:10px;color:var(--teal);border:1px solid var(--rule);border-radius:4px;padding:1px 6px;letter-spacing:.02em;background:var(--paper)}
+  .catblock{padding:11px 14px;border-top:1px dashed var(--rule2)}
+  .catblock:first-of-type{border-top:0}
+  .catname{font-family:var(--mono);font-size:11.5px;color:var(--rust);font-weight:600;letter-spacing:.02em;margin-bottom:7px}
+  .pat{display:block;border-left:2px solid var(--rule);padding:6px 0 6px 11px;margin:8px 0}
+  .pat .pno{font-family:var(--mono);font-size:12px;font-weight:600;color:var(--teal);text-decoration:none;border-bottom:1px dotted var(--teal)}
+  .pat .pap{font-family:var(--mono);font-size:10px;color:var(--dim);margin-left:7px}
+  .pat .pcov{font-family:var(--jp);font-size:12px;color:var(--ink2);margin-top:4px;line-height:1.7}
+  .pat .pgap{font-family:var(--jp);font-size:11.5px;color:var(--dim);margin-top:3px;line-height:1.65}
+  .pat .pgap::before{content:'残るギャップ：';color:var(--rust);font-family:var(--mono);font-size:9.5px}
+
+  /* badges / chips */
+  .tbadge{font-family:var(--mono);font-size:9.5px;font-weight:600;border-radius:4px;padding:2px 7px;letter-spacing:.02em;border:1px solid}
+  .chip{font-family:var(--mono);font-size:10px;background:rgba(15,76,76,.05);border:1px solid var(--rule);border-radius:4px;padding:2px 8px;color:var(--teal);letter-spacing:.02em}
+  .chips{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px}
+
+  /* patent index */
+  .filt{display:flex;flex-wrap:wrap;gap:7px;align-items:center;margin-bottom:6px}
+  .filt button{background:var(--card);border:1px solid var(--rule);color:var(--dim);border-radius:6px;padding:5px 11px;font-family:var(--mono);font-size:11px;cursor:pointer;letter-spacing:.02em}
+  .filt button.on{background:var(--teal);color:var(--paper);border-color:var(--teal)}
+  .srch{width:100%;margin:8px 0 4px;background:var(--paper);color:var(--ink);border:1px solid var(--rule);border-radius:8px;padding:10px 12px;font-family:var(--mono);font-size:12.5px}
+  .srch::placeholder{color:var(--faint)}
+  .cnt{font-family:var(--mono);font-size:11px;color:var(--dim);margin:4px 0 10px}
+  .prow{border:1px solid var(--rule);border-radius:9px;padding:11px 13px;margin:9px 0;background:var(--card)}
+  .prow:hover{box-shadow:0 2px 9px rgba(58,46,32,.06)}
+  .prow .top{display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+  .prow .pno{font-family:var(--mono);font-size:13px;font-weight:600;color:var(--teal);text-decoration:none;border-bottom:1px dotted var(--teal)}
+  .prow .pap{font-family:var(--mono);font-size:10.5px;color:var(--dim)}
+  .prow .cat{font-family:var(--mono);font-size:10px;color:var(--rust);margin-left:auto}
+  .prow .pcov{font-family:var(--jp);font-size:12.5px;color:var(--ink2);margin-top:6px;line-height:1.75}
+  .prow .pgap{font-family:var(--jp);font-size:11.5px;color:var(--dim);margin-top:4px;line-height:1.65}
+  .prow .pgap b{font-family:var(--mono);font-size:9.5px;color:var(--rust);font-weight:600}
+
+  /* crowding */
+  .barrow{display:grid;grid-template-columns:130px 1fr 30px;align-items:center;gap:10px;margin:7px 0}
+  .barrow .bl{font-family:var(--mono);font-size:11.5px;color:var(--ink2)}
+  .barrow .bt{height:14px;border-radius:4px;background:var(--teal);opacity:.85}
+  .barrow .bv{font-family:var(--mono);font-size:11px;color:var(--dim);text-align:right}
+  .crowd{display:flex;flex-wrap:wrap;gap:7px;margin-top:4px}
+  .crowd .cpill{font-family:var(--mono);font-size:11px;border:1px solid var(--rule);border-radius:6px;padding:5px 10px;background:var(--card);color:var(--ink2)}
+  .crowd .cpill b{color:var(--teal)}
+  .crowd .cpill.hot{border-color:rgba(154,91,46,.45);background:rgba(154,91,46,.05)}
+  .crowd .cpill.hot b{color:var(--rust)}
+
+  /* problems */
+  .prob{border:1px solid var(--rule);border-left:3px solid var(--rust);border-radius:8px;padding:11px 13px;margin:9px 0;background:var(--card)}
+  .prob .pt{font-family:var(--mono);font-size:12.5px;font-weight:600;color:var(--ink);display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+  .prob .ev{font-family:var(--jp);font-size:12px;color:var(--ink2);margin-top:6px;line-height:1.75}
+  .prob .ev::before{content:'根拠：';font-family:var(--mono);font-size:9.5px;color:var(--teal)}
+  .prob .gp{font-family:var(--jp);font-size:12px;color:var(--ink2);margin-top:4px;line-height:1.75}
+  .prob .gp::before{content:'残るギャップ：';font-family:var(--mono);font-size:9.5px;color:var(--rust)}
+
+  /* ref figs */
+  .figgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:6px}
+  .figcell{border:1px solid var(--rule);border-radius:9px;overflow:hidden;background:#fff;cursor:pointer}
+  .figcell:hover{box-shadow:0 3px 12px rgba(58,46,32,.08)}
+  .figcell .gsvg{padding:7px}
+  .figcell .gcap{font-family:var(--jp);font-size:11px;color:#2a2118;background:#f4efe4;padding:7px 10px;border-top:1px solid var(--rule)}
+  svg{width:100%;height:auto;display:block}
+
+  .foot{font-family:var(--jp);color:var(--dim);font-size:11px;line-height:1.85;margin-top:22px;border-top:1px solid var(--rule);padding-top:14px}
+
+  .lb{position:fixed;inset:0;background:rgba(40,32,20,.78);display:none;align-items:center;justify-content:center;z-index:50;padding:18px;backdrop-filter:blur(3px)}
+  .lb.on{display:flex}
+  .lb .box{background:#fff;border-radius:12px;max-width:96vw;max-height:92vh;overflow:auto;padding:10px}
+  .lb .cap{font-family:var(--jp);font-size:12px;color:#2a2118;text-align:center;padding:7px}
+  .lb .x{position:fixed;top:14px;right:18px;color:var(--paper);font-size:26px;cursor:pointer;font-weight:600}
+
+  @media(max-width:640px){
+    .figgrid{grid-template-columns:1fr}
+    .barrow{grid-template-columns:104px 1fr 28px}
+    .prow .cat{margin-left:0}
+    .wrap{padding:22px 16px 60px}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="bar"><span class="dotted">公開特許ランドスケープ</span><span class="r" id="barmeta"></span></div>
+  <h1>フォイル式ガス軸受 公開特許ランドスケープ</h1>
+  <div class="path">~/counsel/landscape · 公知特許の調査・分析（一次サーフェス）</div>
+  <p class="lede" id="lede"></p>
+
+  <div class="tabs">
+    <button class="tab on" data-tab="land">① アプローチ俯瞰</button>
+    <button class="tab" data-tab="idx">② 特許インデックス</button>
+    <button class="tab" data-tab="crowd">③ 混雑マップ</button>
+    <button class="tab" data-tab="prob">④ 未解決の課題</button>
+  </div>
+
+  <section class="view on" id="view-land">
+    <div class="card">
+      <h2>テーマ別の俯瞰 — アプローチ → 代表文献 → 残るギャップ</h2>
+      <p class="small jp" style="margin:-4px 0 6px;line-height:1.7">各テーマで、公知のアプローチをカテゴリに分け、代表的な公開特許と「文献が触れていない／残しているギャップ」を客観的に並べます。番号タップで Google Patents が開きます。</p>
+      <div id="themes"></div>
+    </div>
+    <div class="card">
+      <h2>参照図 — 典型構造（一般的な模式図）</h2>
+      <div class="figgrid" id="figgrid"></div>
+      <p class="small jp" style="margin-top:10px;line-height:1.7">一般的なバンプ型フォイル軸受の構造を示す模式図です（特定特許の図面ではありません）。</p>
+    </div>
+  </section>
+
+  <section class="view" id="view-idx">
+    <div class="card">
+      <h2>特許インデックス — 番号・出願人・カバー範囲</h2>
+      <div class="filt" id="themefilt"></div>
+      <input class="srch" id="srch" placeholder="番号・出願人・キーワードで絞り込み（例：wing foil, NTN, スリット）">
+      <div class="cnt" id="cnt"></div>
+      <div id="patlist"></div>
+    </div>
+  </section>
+
+  <section class="view" id="view-crowd">
+    <div class="card">
+      <h2>テーマ別の件数</h2>
+      <div id="themebars"></div>
+    </div>
+    <div class="card">
+      <h2>アプローチ・カテゴリの混雑 — 複数文献＝先行が密集</h2>
+      <p class="small jp" style="margin:-4px 0 8px;line-height:1.7">同じカテゴリに公開特許が重なるほど、その周辺は先行が混んでいるサイン（客観）。</p>
+      <div class="crowd" id="catcrowd"></div>
+    </div>
+    <div class="card">
+      <h2>登場する出願人 / FI（分類）の当たり</h2>
+      <div class="crowd" id="apcrowd" style="margin-bottom:12px"></div>
+      <div class="crowd" id="ficrowd"></div>
+    </div>
+  </section>
+
+  <section class="view" id="view-prob">
+    <div class="card">
+      <h2>未解決そうな課題 — 文献が残しているギャップ</h2>
+      <p class="small jp" style="margin:-4px 0 8px;line-height:1.7">公開特許の俯瞰から見える「各社が繰り返し触れるが残している」客観的なギャップです。未解決の断定ではなく一次調査の仮説で、網羅調査で覆りえます。</p>
+      <div id="problist"></div>
+    </div>
+  </section>
+
+  <p class="foot" id="foot"></p>
+</div>
+
+<div class="lb" id="lb"><span class="x" id="lbx">✕</span><div><div class="box" id="lbbox"></div><div class="cap" id="lbcap"></div></div></div>
+
+<script>window.DATA={"meta":{"title":"フォイル式ガス軸受 公開特許ランドスケープ","subtitle":"公知特許の調査・分析（一次サーフェス）","project":"Counsel","date":"2026-06-29","note":"公開済み特許の俯瞰のみ。自社の発明アイデア・出願戦略は含みません。web一次サーフェスであり網羅ではなく、出願人・年・分類は概略で、確定は原文・公報の確認を要します。公的特許データベースでの分類精査と原文確認は人が仕上げる前提です。"},"themes":[{"key":"fix","label":"フォイル固定","blurb":"溶接レス・抗回転・公差ロバスト性。トップ/バンプをホルダにどう留めるか。","fi":["F16C27/02","F16C17/02"]},{"key":"thermal","label":"熱クラウニング / 熱膨張拘束","blurb":"固定端の熱応力・うねり、ミスアライメント追従、冷却。","fi":["F16C27/02","F16C37/00"]},{"key":"startup","label":"起動停止耐久性","blurb":"浮上前後の固体接触・摩耗。被膜／静圧リフト／タッチダウン／制御。","fi":["F16C17/02","F16C33/04"]},{"key":"axial","label":"軸方向追従 / 剛性の仕立て","blurb":"バンプ・支持層の分割やスリットで軸方向の剛性・曲げを仕立てる。","fi":["F16C17/024","F16C27/02"]}],"fiTerms":[{"code":"F16C27/02","label":"軸受の弾性支持（フォイル・ばね支持）"},{"code":"F16C17/02","label":"ラジアル滑り軸受（気体潤滑・フォイル）"},{"code":"F16C17/024","label":"ラジアル滑り軸受の細分（剛性・形状）"},{"code":"F16C33/04","label":"摺動層・被膜（固体潤滑）"},{"code":"F16C37/00","label":"軸受の冷却"}],"patents":[{"no":"US8672549B2","applicant":"keyless/grooveless fold-over tab","year":null,"theme":"fix","category":"差込タブ＋折曲げ（溶接レス）","covers":"端のタブを折ってハウジング（シェル）に固定し、抗回転・軸方向固定をする。トング＆グルーブ（舌片と溝）で保持する構成も示す。","gap":"脱落・抗回転の確実性、タブ根元の疲労。","tags":["溶接レス","抗回転"]},{"no":"US20130216167A1","applicant":"—","year":null,"theme":"fix","category":"差込タブ＋折曲げ（溶接レス）","covers":"端のタブ／トングでハウジング固定・抗回転（fold-over tab 系統）。","gap":"差込タブ系統と同様の保持確実性。","tags":["溶接レス","抗回転"]},{"no":"US9222509B2","applicant":"Xdot","year":null,"theme":"fix","category":"wing foil / 2Dタブ配列","covers":"翼状タブの2次元配列で周方向・軸方向の剛性を可変にした多層構造（ヘリンボーン的タブ配列）。","gap":"連続した一体性の喪失、膜の谷。","tags":["wing foil","量産性"]},{"no":"US10267354B2","applicant":"—","year":null,"theme":"fix","category":"wing foil / 2Dタブ配列","covers":"溶接不可材の wing foil／2D配列で量産性・溶接回避。","gap":"一体性の喪失・膜の谷。","tags":["wing foil","溶接回避"]},{"no":"US20140376844A1","applicant":"wing foil","year":null,"theme":"fix","category":"シムによる局所予圧","covers":"シム（薄板）を層の間に入れて局所プリロード（あらかじめの押付け力）を与える。","gap":"別部品のシムで部品・工程が増える。","tags":["プリロード"]},{"no":"WO2017022795A1","applicant":"NTN","year":null,"theme":"fix","category":"摺動層の架橋接着","covers":"摺動層の架橋接着で密着・始動トルクを低減。凝着→トルク増→焼付きにも言及。","gap":"摺動層が主題で固定構造ではない。","tags":["被膜","始動トルク"]},{"no":"CN104603480B","applicant":"—","year":null,"theme":"fix","category":"差込タブ＋ラジアルスロット","covers":"差込タブ＋ラジアルスロットで自由端が軸方向に膨張できる固定。","gap":"抗回転と滑りの両立は設計依存。","tags":["溶接レス","熱膨張許容"]},{"no":"US5518320A","applicant":"Texas A&M","year":null,"theme":"fix","category":"剛固定の回避","covers":"両端突き当てを避け、回転可能マウントで剛固定を回避。座屈バンプ／鋭い折り目を排除。","gap":"張力型・可変剛性が前提。","tags":["剛固定回避"]},{"no":"US20170030404A1","applicant":"—","year":null,"theme":"fix","category":"スプリットキー固定","covers":"スプリットキーで回転も移動も滑りも止める全方向拘束の固定。","gap":"軸方向の熱膨張も拘束する（全方向）。","tags":["全方向拘束"]},{"no":"US9568042","applicant":"—","year":null,"theme":"fix","category":"固定・プリロード関連","covers":"ラジアルフォイル軸受の固定・プリロード関連。","gap":"詳細は原文要精読。","tags":["固定","プリロード"]},{"no":"US9551375","applicant":"—","year":null,"theme":"fix","category":"固定・プリロード関連","covers":"ラジアルフォイル軸受の固定・プリロード関連。","gap":"詳細は原文要精読。","tags":["固定","プリロード"]},{"no":"US8944688","applicant":"—","year":null,"theme":"fix","category":"固定・プリロード関連","covers":"ラジアルフォイル軸受の固定・プリロード関連。","gap":"詳細は原文要精読。","tags":["固定","プリロード"]},{"no":"US9062712B1","applicant":"NASA","year":null,"theme":"thermal","category":"受動熱管理","covers":"セクタ間の高温潤滑遮断（ワイパー／エアダム／セクタ間シール／トレーリング形状）による受動的な熱管理。","gap":"セクタ間の熱遮断が主で、軸方向勾配のうねり・固定端応力は明示的に未対処。","tags":["受動","冷却"]},{"no":"US20090087299A1","applicant":"—","year":null,"theme":"thermal","category":"能動冷却","covers":"高温ブロワの冷却法／能動（熱電・SMA）による熱対策。","gap":"効果は大きいがコスト・複雑・追加部品。","tags":["能動","冷却"]},{"no":"US12535102","applicant":"—","year":null,"theme":"thermal","category":"CTE適応（材料）","covers":"CTEマッチング／CTE勾配の熱適応スリーブ（異種金属積層）で差成長を吸収。","gap":"材料・製法コスト。","tags":["材料","CTE"]},{"no":"US4795274A","applicant":"—","year":null,"theme":"thermal","category":"自由端コンプライアンス","covers":"resilient trailing edge／剛性勾配で、パッドの傾きが速度とともに増す。自由端で差成長を吸収。","gap":"固定端側の拘束は残る。","tags":["自由端","速度依存"]},{"no":"US4668108","applicant":"—","year":null,"theme":"thermal","category":"支持剛性の異方性","covers":"支持剛性の異方性によりロータ振動を抑制（anisotropic support）。","gap":"目的はロータ振動対策で、固定端の拘束方向の異方化（熱膨張）とは別。","tags":["異方性","振動"]},{"no":"US9109622","applicant":"—","year":null,"theme":"thermal","category":"支持剛性の異方性","covers":"支持剛性の異方性（振動対策）。","gap":"振動対策が主目的。","tags":["異方性","振動"]},{"no":"US5866518","applicant":"NASA（PS300）","year":null,"theme":"startup","category":"固体潤滑被膜","covers":"PS300 系の高温固体潤滑被膜。","gap":"低トルク×高温×長寿命の三立は単一被膜で困難。摩耗・酸化・厚み／粗さ。","tags":["被膜"]},{"no":"US8753417","applicant":"PS400","year":null,"theme":"startup","category":"固体潤滑被膜","covers":"PS400 系の高温固体潤滑被膜。","gap":"三立困難・摩耗・酸化。","tags":["被膜"]},{"no":"US8500331B2","applicant":"—","year":null,"theme":"startup","category":"ハイブリッド静圧リフト","covers":"起動前に外部加圧で浮上させ、固体接触を回避。","gap":"外部供給・配管・制御＝コスト・複雑・供給喪失リスク。","tags":["静圧","リフト補助"]},{"no":"US5348401","applicant":"—","year":null,"theme":"startup","category":"ハイブリッド静圧リフト","covers":"静圧リフト補助による起動時の接触回避。","gap":"外部供給依存。","tags":["静圧","リフト補助"]},{"no":"US20020097927A1","applicant":"—","year":null,"theme":"startup","category":"ハイブリッド静圧リフト","covers":"静圧リフト補助。","gap":"外部供給依存。","tags":["静圧","リフト補助"]},{"no":"US7830055B2","applicant":"—","year":null,"theme":"startup","category":"タッチダウン／補助軸受","covers":"磁気→機械の移行を管理するタッチダウン／補助軸受。","gap":"追加部品。","tags":["タッチダウン"]},{"no":"US11644227","applicant":"—","year":null,"theme":"startup","category":"起動停止制御","covers":"加減速で接触時間を最小化する制御。","gap":"ハード本体は変えない。","tags":["制御"]},{"no":"US11346397","applicant":"—","year":null,"theme":"startup","category":"起動停止制御","covers":"加減速で接触時間を最小化する制御。","gap":"ハード本体は変えない。","tags":["制御"]},{"no":"US4445792A","applicant":"Variable preload foil bearing","year":null,"theme":"startup","category":"可変プリロードで適応起動","covers":"起動時にフォイル張力（プリロード）を上げて軸を持ち上げ、回転が上がると下げる。","gap":"機構が張力変化に依存。","tags":["適応起動","プリロード"]},{"no":"US20190203761A1","applicant":"wing foil","year":null,"theme":"startup","category":"膜圧応答の予圧／テーパ","covers":"プリロードや入口テーパが膜圧に応じて生まれる（wing foil 系）。","gap":"形状が膜圧に従属。","tags":["膜圧応答","wing foil"]},{"no":"US5286113A","applicant":"—","year":null,"theme":"startup","category":"遠心作動機構","covers":"遠心作動の軸受機構（前例）。","gap":"目的（浮上回転数／起動摩耗）は別。","tags":["遠心作動"]},{"no":"US6655846B2","applicant":"—","year":null,"theme":"startup","category":"遠心作動機構","covers":"遠心作動の軸受機構（前例）。","gap":"目的は別。","tags":["遠心作動"]},{"no":"US3957317A","applicant":"Shaped foil","year":null,"theme":"axial","category":"動圧ポンピング形状","covers":"シェブロン状後端／ヘリンボーン溝で流体ポンピング＝負荷容量を上げる。","gap":"目的は動圧ポンピングで、構造のコンプライアンスではない。","tags":["動圧","形状"]},{"no":"WO2024176423A1","applicant":"—","year":null,"theme":"axial","category":"周方向の波形バンプ","covers":"周方向のバンプ波形（波状バンプ）。","gap":"軸方向の波形ではない。","tags":["波形バンプ"]},{"no":"US9388848B2","applicant":"Howden / Siemens","year":null,"theme":"axial","category":"バンプ層の軸方向分割","covers":"バンプフォイル『層』を軸方向ストライプ化し、剛性低減・減衰向上・熱／遠心成長・ミスアライメントを吸収。フォイルは周方向に連続。","gap":"対象がバンプ層。","tags":["分割","減衰","冷却"]},{"no":"JP6113444B2","applicant":"NTN","year":null,"theme":"axial","category":"後端スリットで剛性勾配","covers":"リーフ後端（平坦部）にスリットを設け、ばね性に軸方向の勾配を付与してコニカル振れ回りを抑制。","gap":"対象は平坦部、目的は剛性勾配。","tags":["スリット","剛性勾配"]},{"no":"US4296976A","applicant":"Heshmat / Mechanical Technology Inc","year":1981,"theme":"axial","category":"部分スリット（連結を残す）","covers":"支持／中間シートを部分スリットでストリップに分割。スリットは縁まで届かず連結したモジュールとして残し、角（曲げ）剛性を消しつつ力分配・干渉防止を維持する。","gap":"1981年の古典。フォイル分節の基礎。","tags":["部分スリット","連結残し"]},{"no":"CN212959540U","applicant":"Hebei Kingston","year":null,"theme":"axial","category":"相互連結の擬似独立バンプ","covers":"バンプを相互連結のまま、円弧の部分スリット（連結を20–30%残す）で擬似独立化し、軸方向ズレ防止と弾性支持・減衰を得る。","gap":"—","tags":["部分スリット","擬似独立"]},{"no":"US10415634B2","applicant":"—","year":null,"theme":"axial","category":"バンプ／支持層の分割系","covers":"バンプ・支持層の分割系。","gap":"詳細は原文確認。","tags":["分割"]},{"no":"RE48269","applicant":"—","year":null,"theme":"axial","category":"バンプ／支持層の分割系","covers":"バンプ・支持層の分割系（再発行特許）。","gap":"詳細は原文確認。","tags":["分割"]},{"no":"US20140147064A1","applicant":"—","year":null,"theme":"axial","category":"バンプ／支持層の分割系","covers":"バンプ・支持層の分割系。","gap":"詳細は原文確認。","tags":["分割"]},{"no":"US5584582A","applicant":"—","year":null,"theme":"axial","category":"バンプ2段高さ","covers":"バンプの2段高さ構造（スリット無し）。","gap":"web要約では分節スリット文献と取り違えられやすいが、全文では2段高さ・スリット無し。原文確認の好例。","tags":["2段高さ","要注意"]}],"problems":[{"theme":"fix","title":"溶接（HAZ）起因の信頼性低下","evidence":"複数文献が冷間割れ・残留応力・疲労を明言し、各社が weld-free へ動いている。","gap":"weld-free は脱落・保持力など別の確実性課題を生む。"},{"theme":"fix","title":"固定起因のプリロード／すきまのばらつき","evidence":"「preload は製造ばらつきに非常に敏感」「溶接位置ばらつきで性能ばらつき」との指摘。","gap":"固定を介した受動的なすきま自己補正・公差鈍感化は文献上手薄。"},{"theme":"fix","title":"固定端の局所剛性段差→応力集中・摩耗","evidence":"「固定端剛性が高い」「角部は R 付与で対策」との記載。","gap":"段差そのものの連続化は限定的。"},{"theme":"fix","title":"高温長時間での固定部フレッティング・緩み","evidence":"weld-free は摩擦保持に依存する。","gap":"高温での保持力維持の作り込みは文献上薄い（要追加調査）。"},{"theme":"thermal","title":"固定端の熱膨張拘束→熱応力・うねり","evidence":"多くは「自由端で逃がす」か「勾配を下げる」。固定端応力は US9062712B1 でも明示的に未対処。","gap":"固定端そのものの拘束・剛性段差に起因する熱応力／うねりを、抗回転を保ったまま受動・低コストで逃がす構成は文献上手薄。"},{"theme":"startup","title":"被膜の三立困難（低トルク×高温×長寿命）","evidence":"各被膜に温度／摩耗／厚みの制約があり、各社が新被膜を出し続けている。","gap":"単一被膜での三立は困難。材料化学の混雑領域。"},{"theme":"startup","title":"浮上回転数の構造的低減","evidence":"浮上回転数が接触回転数＝摩耗量を決める。テクスチャ・テーパは高速性能と二律背反。","gap":"低速で効き高速で邪魔しない速度適応構造は文献上乏しい。"},{"theme":"startup","title":"受動・自己完結のリフトオフ補助","evidence":"ハイブリッド静圧は有効だが外部加圧に依存。","gap":"外部供給なしの受動リフト補助は手薄。"},{"theme":"startup","title":"停止タッチダウンのダメージ低減","evidence":"起動側に比べ停止時の再接触ダメージ対策は手薄。","gap":"停止時の構造的保護は文献上薄い（要裏取り）。"},{"theme":"startup","title":"凝着・摩耗粉（seizure 起点）の管理","evidence":"WO2017022795A1 が凝着→トルク増→焼付きに言及。","gap":"凝着・摩耗粉の管理は構造側で手薄。"}],"refFigs":[{"path":"fig/ref-bump-radial-anatomy.svg","title":"バンプ型ラジアル軸受の解剖図","kind":"参照","id":"fig_ref_bump_radial_anatomy_svg"},{"path":"fig/ref-bump-geometry.svg","title":"バンプ形状の幾何パラメータ","kind":"参照","id":"fig_ref_bump_geometry_svg"},{"path":"fig/ref-axial-film.svg","title":"軸方向の膜厚プロファイル","kind":"参照","id":"fig_ref_axial_film_svg"}]};
+window.FIGSVG={"fig_ref_bump_radial_anatomy_svg":"<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 760 720\" font-family=\"'Segoe UI','Yu Gothic UI',sans-serif\">\n  <defs>\n    <path id=\"fg_fig_ref_bump_radial_anatomy_svg_b\" d=\"M -15,-184 Q 0,-208 15,-184\" fill=\"none\" stroke=\"#e67e22\" stroke-width=\"2.5\"/>\n    <marker id=\"fg_fig_ref_bump_radial_anatomy_svg_ar\" markerWidth=\"9\" markerHeight=\"9\" refX=\"7\" refY=\"3\" orient=\"auto\"><path d=\"M0,0 L7,3 L0,6 Z\" fill=\"#333\"/></marker>\n  </defs>\n  <rect width=\"760\" height=\"720\" fill=\"#ffffff\"/>\n  <text x=\"380\" y=\"36\" font-size=\"22\" font-weight=\"700\" text-anchor=\"middle\" fill=\"#1a1a1a\">典型バンプフォイル型ラジアルガス軸受：横断面図</text>\n  <text x=\"380\" y=\"58\" font-size=\"12\" text-anchor=\"middle\" fill=\"#777\">＊参照用模式図。符号・寸法は仮・誇張。確定図面は弁理士レビュー前提。</text>\n\n  <g transform=\"translate(360,360)\">\n    <!-- housing outer -->\n    <circle cx=\"0\" cy=\"0\" r=\"240\" fill=\"#c8ccd2\" stroke=\"#555\" stroke-width=\"2\"/>\n    <!-- inner wall (carve white) -->\n    <circle cx=\"0\" cy=\"0\" r=\"205\" fill=\"#ffffff\" stroke=\"#555\" stroke-width=\"2\"/>\n    <!-- bump foil base ring -->\n    <circle cx=\"0\" cy=\"0\" r=\"184\" fill=\"none\" stroke=\"#e67e22\" stroke-width=\"1.4\"/>\n    <!-- 30 bumps -->\n    <use href=\"#fg_fig_ref_bump_radial_anatomy_svg_b\"/><use href=\"#fg_fig_ref_bump_radial_anatomy_svg_b\" transform=\"rotate(12)\"/><use href=\"#fg_fig_ref_bump_radial_anatomy_svg_b\" transform=\"rotate(24)\"/><use href=\"#fg_fig_ref_bump_radial_anatomy_svg_b\" transform=\"rotate(36)\"/><use href=\"#fg_fig_ref_bump_radial_anatomy_svg_b\" transform=\"rotate(48)\"/>\n    <use href=\"#fg_fig_ref_bump_radial_anatomy_svg_b\" transform=\"rotate(60)\"/><use href=\"#fg_fig_ref_bump_radial_anatomy_svg_b\" transform=\"rotate(72)\"/><use href=\"#fg_fig_ref_bump_radial_anatomy_svg_b\" transform=\"rotate(84)\"/><use href=\"#fg_fig_ref_bump_radial_anatomy_svg_b\" transform=\"rotate(96)\"/><use href=\"#fg_fig_ref_bump_radial_anatomy_svg_b\" transform=\"rotate(108)\"/>\n    <use href=\"#fg_fig_ref_bump_radial_anatomy_svg_b\" transform=\"rotate(120)\"/><use href=\"#fg_fig_ref_bump_radial_anatomy_svg_b\" transform=\"rotate(132)\"/><use href=\"#fg_fig_ref_bump_radial_anatomy_svg_b\" transform=\"rotate(144)\"/><use href=\"#fg_fig_ref_bump_radial_anatomy_svg_b\" transform=\"rotate(156)\"/><use href=\"#fg_fig_ref_bump_radial_anatomy_svg_b\" transform=\"rotate(168)\"/>\n    <use href=\"#fg_fig_ref_bump_radial_anatomy_svg_b\" transform=\"rotate(180)\"/><use href=\"#fg_fig_ref_bump_radial_anatomy_svg_b\" transform=\"rotate(192)\"/><use href=\"#fg_fig_ref_bump_radial_anatomy_svg_b\" transform=\"rotate(204)\"/><use href=\"#fg_fig_ref_bump_radial_anatomy_svg_b\" transform=\"rotate(216)\"/><use href=\"#fg_fig_ref_bump_radial_anatomy_svg_b\" transform=\"rotate(228)\"/>\n    <use href=\"#fg_fig_ref_bump_radial_anatomy_svg_b\" transform=\"rotate(240)\"/><use href=\"#fg_fig_ref_bump_radial_anatomy_svg_b\" transform=\"rotate(252)\"/><use href=\"#fg_fig_ref_bump_radial_anatomy_svg_b\" transform=\"rotate(264)\"/><use href=\"#fg_fig_ref_bump_radial_anatomy_svg_b\" transform=\"rotate(276)\"/><use href=\"#fg_fig_ref_bump_radial_anatomy_svg_b\" transform=\"rotate(288)\"/>\n    <use href=\"#fg_fig_ref_bump_radial_anatomy_svg_b\" transform=\"rotate(300)\"/><use href=\"#fg_fig_ref_bump_radial_anatomy_svg_b\" transform=\"rotate(312)\"/><use href=\"#fg_fig_ref_bump_radial_anatomy_svg_b\" transform=\"rotate(324)\"/><use href=\"#fg_fig_ref_bump_radial_anatomy_svg_b\" transform=\"rotate(336)\"/><use href=\"#fg_fig_ref_bump_radial_anatomy_svg_b\" transform=\"rotate(348)\"/>\n    <!-- top foil -->\n    <circle cx=\"0\" cy=\"0\" r=\"180\" fill=\"#ffffff\" stroke=\"#2980b9\" stroke-width=\"3\"/>\n    <!-- shaft (eccentric downward) -->\n    <circle cx=\"0\" cy=\"14\" r=\"170\" fill=\"#aeb4bd\" stroke=\"#555\" stroke-width=\"2\"/>\n    <line x1=\"-12\" y1=\"14\" x2=\"12\" y2=\"14\" stroke=\"#333\" stroke-width=\"1.2\"/>\n    <line x1=\"0\" y1=\"2\" x2=\"0\" y2=\"26\" stroke=\"#333\" stroke-width=\"1.2\"/>\n    <text x=\"0\" y=\"60\" font-size=\"14\" text-anchor=\"middle\" fill=\"#333\">軸</text>\n    <!-- rotation arrow -->\n    <path d=\"M -55,-70 A 90,90 0 0 1 70,-50\" fill=\"none\" stroke=\"#16a085\" stroke-width=\"3\" marker-end=\"url(#fg_fig_ref_bump_radial_anatomy_svg_ar)\"/>\n    <text x=\"78\" y=\"-58\" font-size=\"13\" fill=\"#16a085\">回転</text>\n    <!-- fixed end (left, 9 o'clock): clamp slot -->\n    <rect x=\"-208\" y=\"-10\" width=\"30\" height=\"20\" fill=\"#7f8c8d\" stroke=\"#333\" stroke-width=\"1\"/>\n  </g>\n\n  <!-- callouts -->\n  <text x=\"640\" y=\"150\" font-size=\"13\" fill=\"#555\">ハウジング/スリーブ</text>\n  <line x1=\"638\" y1=\"146\" x2=\"560\" y2=\"190\" stroke=\"#555\" stroke-width=\"1\" marker-end=\"url(#fg_fig_ref_bump_radial_anatomy_svg_ar)\"/>\n  <text x=\"650\" y=\"300\" font-size=\"13\" fill=\"#e67e22\">バンプフォイル</text>\n  <line x1=\"648\" y1=\"296\" x2=\"548\" y2=\"320\" stroke=\"#e67e22\" stroke-width=\"1\" marker-end=\"url(#fg_fig_ref_bump_radial_anatomy_svg_ar)\"/>\n  <text x=\"650\" y=\"430\" font-size=\"13\" fill=\"#2980b9\">トップフォイル</text>\n  <line x1=\"648\" y1=\"426\" x2=\"540\" y2=\"402\" stroke=\"#2980b9\" stroke-width=\"1\" marker-end=\"url(#fg_fig_ref_bump_radial_anatomy_svg_ar)\"/>\n  <text x=\"60\" y=\"360\" font-size=\"13\" fill=\"#333\" text-anchor=\"end\" transform=\"translate(70,0)\">固定端</text>\n  <line x1=\"92\" y1=\"356\" x2=\"162\" y2=\"360\" stroke=\"#333\" stroke-width=\"1\" marker-end=\"url(#fg_fig_ref_bump_radial_anatomy_svg_ar)\"/>\n  <text x=\"60\" y=\"378\" font-size=\"11\" fill=\"#777\" transform=\"translate(0,0)\">(溶接/差込)</text>\n\n  <!-- 空気膜 callout -->\n  <text x=\"360\" y=\"690\" font-size=\"13\" text-anchor=\"middle\" fill=\"#c0392b\">空気膜(すきま)：周方向に楔形成 → 浮上。偏心側に最小膜厚 h_min</text>\n</svg>","fig_ref_bump_geometry_svg":"<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 820 430\" font-family=\"'Segoe UI','Yu Gothic UI',sans-serif\">\n  <defs>\n    <marker id=\"fg_fig_ref_bump_geometry_svg_a2\" markerWidth=\"8\" markerHeight=\"8\" refX=\"6\" refY=\"3\" orient=\"auto\"><path d=\"M0,0 L6,3 L0,6 Z\" fill=\"#333\"/></marker>\n    <marker id=\"fg_fig_ref_bump_geometry_svg_a2s\" markerWidth=\"8\" markerHeight=\"8\" refX=\"2\" refY=\"3\" orient=\"auto\"><path d=\"M6,0 L0,3 L6,6 Z\" fill=\"#333\"/></marker>\n  </defs>\n  <rect width=\"820\" height=\"430\" fill=\"#ffffff\"/>\n  <text x=\"410\" y=\"34\" font-size=\"21\" font-weight=\"700\" text-anchor=\"middle\" fill=\"#1a1a1a\">バンプ形状の詳細（剛性レバー）</text>\n  <text x=\"410\" y=\"55\" font-size=\"12\" text-anchor=\"middle\" fill=\"#777\">＊参照用模式図。符号・寸法は仮。確定図面は弁理士レビュー前提。</text>\n\n  <!-- housing line (top) -->\n  <line x1=\"80\" y1=\"110\" x2=\"740\" y2=\"110\" stroke=\"#555\" stroke-width=\"4\"/>\n  <text x=\"748\" y=\"114\" font-size=\"13\" fill=\"#555\">ハウジング内壁</text>\n\n  <!-- bump foil: arcs sitting between top foil(bottom) and housing(top) -->\n  <!-- top foil flat -->\n  <line x1=\"80\" y1=\"250\" x2=\"740\" y2=\"250\" stroke=\"#2980b9\" stroke-width=\"4\"/>\n  <text x=\"748\" y=\"254\" font-size=\"13\" fill=\"#2980b9\">トップフォイル</text>\n\n  <!-- bumps (5 bumps) bulging up from top foil toward housing -->\n  <path d=\"M 120,250 Q 165,118 210,250 M 230,250 Q 275,118 320,250 M 340,250 Q 385,118 430,250 M 450,250 Q 495,118 540,250 M 560,250 Q 605,118 650,250\"\n        fill=\"none\" stroke=\"#e67e22\" stroke-width=\"3.5\"/>\n  <text x=\"120\" y=\"300\" font-size=\"13\" fill=\"#e67e22\">バンプフォイル</text>\n\n  <!-- pitch s0 between apexes (165 -> 275) -->\n  <line x1=\"165\" y1=\"92\" x2=\"275\" y2=\"92\" stroke=\"#333\" stroke-width=\"1\" marker-start=\"url(#fg_fig_ref_bump_geometry_svg_a2s)\" marker-end=\"url(#fg_fig_ref_bump_geometry_svg_a2)\"/>\n  <text x=\"220\" y=\"86\" font-size=\"13\" text-anchor=\"middle\" fill=\"#333\">ピッチ s₀</text>\n  <line x1=\"165\" y1=\"118\" x2=\"165\" y2=\"92\" stroke=\"#999\" stroke-width=\"0.8\" stroke-dasharray=\"3 3\"/>\n  <line x1=\"275\" y1=\"118\" x2=\"275\" y2=\"92\" stroke=\"#999\" stroke-width=\"0.8\" stroke-dasharray=\"3 3\"/>\n\n  <!-- bump height h (apex 118 to base 250) at x=495 -->\n  <line x1=\"495\" y1=\"118\" x2=\"495\" y2=\"250\" stroke=\"#333\" stroke-width=\"1\" marker-start=\"url(#fg_fig_ref_bump_geometry_svg_a2s)\" marker-end=\"url(#fg_fig_ref_bump_geometry_svg_a2)\"/>\n  <text x=\"505\" y=\"190\" font-size=\"13\" fill=\"#333\">高さ h</text>\n\n  <!-- half length l (foot of a bump: 450 -> 495) -->\n  <line x1=\"450\" y1=\"268\" x2=\"495\" y2=\"268\" stroke=\"#333\" stroke-width=\"1\" marker-start=\"url(#fg_fig_ref_bump_geometry_svg_a2s)\" marker-end=\"url(#fg_fig_ref_bump_geometry_svg_a2)\"/>\n  <text x=\"472\" y=\"288\" font-size=\"12\" text-anchor=\"middle\" fill=\"#333\">半長 l</text>\n\n  <!-- thickness t callout -->\n  <line x1=\"650\" y1=\"250\" x2=\"700\" y2=\"210\" stroke=\"#333\" stroke-width=\"0.8\"/>\n  <text x=\"700\" y=\"208\" font-size=\"12\" fill=\"#333\">板厚 t</text>\n\n  <!-- curvature radius -->\n  <line x1=\"385\" y1=\"118\" x2=\"385\" y2=\"250\" stroke=\"#bbb\" stroke-width=\"0.8\" stroke-dasharray=\"3 3\"/>\n  <text x=\"360\" y=\"135\" font-size=\"12\" fill=\"#888\" text-anchor=\"end\">曲率半径 R_b</text>\n\n  <!-- fixed/free -->\n  <rect x=\"80\" y=\"244\" width=\"22\" height=\"12\" fill=\"#7f8c8d\" stroke=\"#333\" stroke-width=\"1\"/>\n  <text x=\"80\" y=\"335\" font-size=\"13\" fill=\"#333\">固定端</text>\n  <text x=\"650\" y=\"335\" font-size=\"13\" fill=\"#333\">自由端 →</text>\n\n  <text x=\"410\" y=\"388\" font-size=\"13\" text-anchor=\"middle\" fill=\"#444\">剛性レバー：ピッチ s₀・高さ h・板厚 t・半長 l・曲率 R_b を変えて、周/軸方向の剛性分布を仕立てる</text>\n</svg>","fig_ref_axial_film_svg":"<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 820 560\" font-family=\"'Segoe UI','Yu Gothic UI',sans-serif\">\n  <defs>\n    <marker id=\"fg_fig_ref_axial_film_svg_a3\" markerWidth=\"8\" markerHeight=\"8\" refX=\"6\" refY=\"3\" orient=\"auto\"><path d=\"M0,0 L6,3 L0,6 Z\" fill=\"#333\"/></marker>\n  </defs>\n  <rect width=\"820\" height=\"560\" fill=\"#ffffff\"/>\n  <text x=\"410\" y=\"34\" font-size=\"21\" font-weight=\"700\" text-anchor=\"middle\" fill=\"#1a1a1a\">軸方向断面：膜厚プロファイルと端部の最小膜厚</text>\n  <text x=\"410\" y=\"55\" font-size=\"12\" text-anchor=\"middle\" fill=\"#777\">＊参照用模式図。符号・寸法は仮・誇張。確定図面は弁理士レビュー前提。</text>\n\n  <!-- axis arrow -->\n  <line x1=\"120\" y1=\"90\" x2=\"700\" y2=\"90\" stroke=\"#333\" stroke-width=\"1.5\" marker-end=\"url(#fg_fig_ref_axial_film_svg_a3)\"/>\n  <text x=\"708\" y=\"94\" font-size=\"13\" fill=\"#333\">軸方向 Z</text>\n\n  <!-- bump foil + top foil (top, flat-ish) -->\n  <line x1=\"140\" y1=\"150\" x2=\"680\" y2=\"150\" stroke=\"#e67e22\" stroke-width=\"3\"/>\n  <text x=\"688\" y=\"154\" font-size=\"12\" fill=\"#e67e22\">バンプ/トップフォイル</text>\n  <line x1=\"140\" y1=\"175\" x2=\"680\" y2=\"175\" stroke=\"#2980b9\" stroke-width=\"2.5\"/>\n\n  <!-- shaft surface: barrel profile (bulging up at center) -->\n  <path d=\"M 140,250 Q 410,205 680,250\" fill=\"#aeb4bd\" stroke=\"#555\" stroke-width=\"2\"/>\n  <rect x=\"140\" y=\"250\" width=\"540\" height=\"70\" fill=\"#aeb4bd\" stroke=\"#555\" stroke-width=\"2\"/>\n  <text x=\"410\" y=\"295\" font-size=\"14\" text-anchor=\"middle\" fill=\"#333\">軸(樽型プロファイル：遠心/熱膨張)</text>\n\n  <!-- film thickness: between top foil(175) and shaft top(barrel) -->\n  <!-- center gap small, end gap large -->\n  <line x1=\"160\" y1=\"175\" x2=\"160\" y2=\"247\" stroke=\"#c0392b\" stroke-width=\"1.4\" marker-end=\"url(#fg_fig_ref_axial_film_svg_a3)\"/>\n  <text x=\"150\" y=\"220\" font-size=\"11\" text-anchor=\"end\" fill=\"#c0392b\">端部</text>\n  <line x1=\"410\" y1=\"175\" x2=\"410\" y2=\"207\" stroke=\"#c0392b\" stroke-width=\"1.4\" marker-end=\"url(#fg_fig_ref_axial_film_svg_a3)\"/>\n  <text x=\"420\" y=\"198\" font-size=\"11\" fill=\"#c0392b\">中央(薄)</text>\n  <line x1=\"660\" y1=\"175\" x2=\"660\" y2=\"247\" stroke=\"#c0392b\" stroke-width=\"1.4\" marker-end=\"url(#fg_fig_ref_axial_film_svg_a3)\"/>\n\n  <text x=\"410\" y=\"350\" font-size=\"13\" text-anchor=\"middle\" fill=\"#444\">膜厚 h(z)：軸の樽/鼓・テーパで軸方向に非一様 → 中央が薄く、端部側方漏れで圧力降下</text>\n\n  <!-- pressure profile plot -->\n  <text x=\"140\" y=\"410\" font-size=\"13\" font-weight=\"700\" fill=\"#1a1a1a\">膜内圧 p(z)（模式）</text>\n  <line x1=\"160\" y1=\"520\" x2=\"680\" y2=\"520\" stroke=\"#333\" stroke-width=\"1.2\"/>\n  <line x1=\"160\" y1=\"520\" x2=\"160\" y2=\"420\" stroke=\"#333\" stroke-width=\"1.2\"/>\n  <text x=\"150\" y=\"425\" font-size=\"11\" text-anchor=\"end\" fill=\"#333\">p</text>\n  <text x=\"688\" y=\"524\" font-size=\"11\" fill=\"#333\">Z</text>\n  <!-- pressure hump, drops to ambient at ends -->\n  <path d=\"M 160,520 Q 290,440 410,440 Q 530,440 680,520\" fill=\"none\" stroke=\"#8e44ad\" stroke-width=\"3\"/>\n  <line x1=\"160\" y1=\"520\" x2=\"680\" y2=\"520\" stroke=\"#bbb\" stroke-width=\"0.8\" stroke-dasharray=\"4 4\"/>\n  <text x=\"420\" y=\"432\" font-size=\"11\" fill=\"#8e44ad\">中央で最大</text>\n  <text x=\"160\" y=\"540\" font-size=\"11\" fill=\"#777\">端=大気圧</text>\n  <text x=\"640\" y=\"540\" font-size=\"11\" fill=\"#777\">端=大気圧</text>\n</svg>"};</script>
+<script>
+const D = window.DATA, FIGSVG = window.FIGSVG || {};
+const $ = id => document.getElementById(id);
+const themeById = {}; D.themes.forEach(t=>themeById[t.key]=t);
+const THCOL = {fix:"#0F4C4C", thermal:"#9A5B2E", startup:"#B5822E", axial:"#4E7C7C"};
+function thBadge(key){const t=themeById[key];const c=THCOL[key]||"#0F4C4C";
+  return `<span class="tbadge" style="color:${c};border-color:${c}55;background:${c}14">${t?t.label:key}</span>`;}
+function gpLink(no){const n=no.startsWith("RE")?"US"+no:no;return "https://patents.google.com/patent/"+encodeURIComponent(n);}
+
+/* tabs */
+document.querySelectorAll(".tab").forEach(t=>t.addEventListener("click",()=>{
+  document.querySelectorAll(".tab").forEach(x=>x.classList.remove("on"));
+  document.querySelectorAll(".view").forEach(x=>x.classList.remove("on"));
+  t.classList.add("on");$("view-"+t.dataset.tab).classList.add("on");
+  window.scrollTo({top:0,behavior:"smooth"});
+}));
+function gotoTab(n){document.querySelectorAll(".tab").forEach(x=>x.classList.toggle("on",x.dataset.tab===n));
+  document.querySelectorAll(".view").forEach(x=>x.classList.remove("on"));$("view-"+n).classList.add("on");}
+
+/* ① landscape */
+function renderThemes(){
+  let html="";
+  D.themes.forEach(t=>{
+    const pats=D.patents.filter(p=>p.theme===t.key);
+    const cats=[...new Set(pats.map(p=>p.category))];
+    html+=`<div class="theme"><div class="th">
+      <div class="tname">${thBadge(t.key)} ${t.label} <span class="small">（${pats.length}件）</span></div>
+      <div class="tblurb">${t.blurb}</div>
+      <div class="chips">${(t.fi||[]).map(f=>`<span class="ficode">${f}</span>`).join("")}</div>
+    </div>`;
+    cats.forEach(cat=>{
+      const cp=pats.filter(p=>p.category===cat);
+      html+=`<div class="catblock"><div class="catname">▸ ${cat}<span class="small" style="color:var(--faint)"> ・${cp.length}件</span></div>`;
+      cp.forEach(p=>{
+        html+=`<div class="pat">
+          <a class="pno" href="${gpLink(p.no)}" target="_blank" rel="noopener">${p.no}</a>${p.applicant&&p.applicant!=="—"?`<span class="pap">${p.applicant}</span>`:""}
+          <div class="pcov">${p.covers}</div>
+          ${p.gap&&p.gap!=="—"?`<div class="pgap">${p.gap}</div>`:""}
+        </div>`;
+      });
+      html+=`</div>`;
+    });
+    html+=`</div>`;
+  });
+  $("themes").innerHTML=html;
+}
+
+/* figs */
+function renderFigs(){
+  $("figgrid").innerHTML=(D.refFigs||[]).map(f=>{
+    const id=f.id||f.path;
+    return `<div class="figcell" data-fig="${id}"><div class="gsvg">${FIGSVG[id]||""}</div><div class="gcap">${f.title}</div></div>`;
+  }).join("");
+  $("figgrid").querySelectorAll(".figcell").forEach(e=>e.addEventListener("click",()=>{
+    const f=(D.refFigs||[]).find(x=>(x.id||x.path)===e.dataset.fig);
+    $("lbbox").innerHTML=FIGSVG[e.dataset.fig]||"";$("lbcap").textContent=f?f.title:"";$("lb").classList.add("on");
+  }));
+}
+
+/* ② index */
+let tFilter="all", q="";
+function renderFilt(){
+  const cats=[["all","すべて"]].concat(D.themes.map(t=>[t.key,t.label]));
+  $("themefilt").innerHTML=cats.map(([k,l])=>`<button class="${tFilter===k?'on':''}" data-k="${k}">${l}</button>`).join("");
+  $("themefilt").querySelectorAll("button").forEach(b=>b.addEventListener("click",()=>{tFilter=b.dataset.k;renderFilt();renderIdx();}));
+}
+function renderIdx(){
+  const qq=q.trim().toLowerCase();
+  const list=D.patents.filter(p=>(tFilter==="all"||p.theme===tFilter)&&(!qq||
+    (p.no+" "+p.applicant+" "+p.category+" "+p.covers+" "+(p.tags||[]).join(" ")).toLowerCase().includes(qq)));
+  $("cnt").textContent=`${list.length} 件 / 全 ${D.patents.length} 件`;
+  $("patlist").innerHTML=list.map(p=>`<div class="prow">
+    <div class="top"><a class="pno" href="${gpLink(p.no)}" target="_blank" rel="noopener">${p.no}</a>
+      ${thBadge(p.theme)}${p.applicant&&p.applicant!=="—"?`<span class="pap">${p.applicant}</span>`:""}
+      <span class="cat">${p.category}</span></div>
+    <div class="pcov">${p.covers}</div>
+    ${p.gap&&p.gap!=="—"?`<div class="pgap"><b>残るギャップ</b> ${p.gap}</div>`:""}
+    <div class="chips">${(p.tags||[]).map(x=>`<span class="chip">${x}</span>`).join("")}</div>
+  </div>`).join("");
+}
+$("srch").addEventListener("input",e=>{q=e.target.value;renderIdx();});
+
+/* ③ crowding */
+function renderCrowd(){
+  // theme bars
+  const max=Math.max(...D.themes.map(t=>D.patents.filter(p=>p.theme===t.key).length),1);
+  $("themebars").innerHTML=D.themes.map(t=>{
+    const n=D.patents.filter(p=>p.theme===t.key).length;
+    return `<div class="barrow"><div class="bl">${t.label}</div>
+      <div class="bt" style="width:${Math.max(6,n/max*100)}%;background:${THCOL[t.key]}"></div>
+      <div class="bv">${n}</div></div>`;
+  }).join("");
+  // category crowding
+  const catMap={};
+  D.patents.forEach(p=>{catMap[p.category]=(catMap[p.category]||0)+1;});
+  const cats=Object.entries(catMap).sort((a,b)=>b[1]-a[1]);
+  $("catcrowd").innerHTML=cats.map(([c,n])=>`<span class="cpill ${n>=2?'hot':''}">${c} <b>${n}</b></span>`).join("");
+  // applicants
+  const apMap={};
+  D.patents.forEach(p=>{const a=(p.applicant&&p.applicant!=="—")?p.applicant:null;if(a)apMap[a]=(apMap[a]||0)+1;});
+  const aps=Object.entries(apMap).sort((a,b)=>b[1]-a[1]||a[0].localeCompare(b[0]));
+  $("apcrowd").innerHTML=aps.map(([a,n])=>`<span class="cpill ${n>=2?'hot':''}">${a} <b>${n}</b></span>`).join("");
+  // FI
+  const fiSet={};
+  D.themes.forEach(t=>(t.fi||[]).forEach(f=>fiSet[f]=(fiSet[f]||0)+1));
+  const fis=D.fiTerms||[];
+  $("ficrowd").innerHTML=fis.map(f=>`<span class="cpill"><b>${f.code}</b> ${f.label}</span>`).join("");
+}
+
+/* ④ problems */
+function renderProb(){
+  $("problist").innerHTML=D.problems.map(p=>`<div class="prob">
+    <div class="pt">${thBadge(p.theme)} ${p.title}</div>
+    <div class="ev">${p.evidence}</div>
+    <div class="gp">${p.gap}</div>
+  </div>`).join("");
+}
+
+/* lightbox close */
+$("lbx").addEventListener("click",()=>$("lb").classList.remove("on"));
+$("lb").addEventListener("click",e=>{if(e.target===$("lb"))$("lb").classList.remove("on");});
+
+/* meta */
+$("barmeta").textContent="PUBLIC · "+D.patents.length+"件 · "+D.meta.date;
+$("lede").innerHTML=D.meta.subtitle+'。公開済みの特許だけを俯瞰し、出願人・カバー範囲・残るギャップ・分類の当たりを整理します。<span class="small">自社の発明アイデア・戦略は含みません。</span>';
+$("foot").innerHTML="⚠️ "+D.meta.note+"&nbsp;&nbsp;"+D.meta.project+"／生成 "+D.meta.date;
+
+renderThemes();renderFigs();renderFilt();renderIdx();renderCrowd();renderProb();
+if(location.hash){const n=location.hash.slice(1);if($("view-"+n))gotoTab(n);}
+</script>
+</body>
+</html>
