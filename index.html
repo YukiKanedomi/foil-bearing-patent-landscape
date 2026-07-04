@@ -703,7 +703,7 @@ function detHTML(o){
       ${o.ef?`<div style="margin-top:4px;font-size:10.5px"><span style="color:#758D99;font-weight:700">主張される効果</span>　${o.ef}</div>`:""}
     </div>`:""}
     <div style="color:#758D99;font-size:10px;margin-top:6px">ファミリー ${o.mm} 公報 · ${o.ju} 法域 · 判定確度 ${o.cf}${o.as.length?` · ${o.as.join(" / ")}`:""}</div>
-    <div style="margin-top:7px"><a href="https://patents.google.com/patent/${o.gp}/ja" target="_blank" rel="noopener">Google Patents で原文を見る →</a></div>`;
+    <div style="margin-top:7px"><a href="https://patents.google.com/patent/${o.gp}/ja" target="_blank" rel="noopener">Google Patents で原文を見る（${o.gp}）→</a></div>`;
 }
 
 /* ================= db table ================= */
@@ -769,7 +769,7 @@ function renderZ(){
     $("lbbox").innerHTML=`<img src="figs/${o.id}.png"><div class="cap"><b>${pubDisp(o.rep)}</b>　${o.ja||o.t}<br>
       <span style="color:#758D99;font-size:10.5px">${o.as[0]||""} · ${o.yr||""}</span>
       ${o.c1?`<div style="font-size:11px;line-height:1.7;margin-top:6px;background:#F5F4EF;padding:7px 9px"><span style="font-size:9px;color:#758D99;font-weight:700">請求項1の骨子（機械要約）</span><br>${o.c1}</div>`:""}<br>
-      <a href="https://patents.google.com/patent/${o.gp}/ja" target="_blank" rel="noopener">Google Patents で原文を見る →</a></div>`;
+      <a href="https://patents.google.com/patent/${o.gp}/ja" target="_blank" rel="noopener">Google Patents で原文を見る（${o.gp}）→</a></div>`;
     $("lb").classList.add("on");
   }));
 }
