@@ -4,6 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>フォイル軸受 特許ランドスケープ</title>
+<link rel="icon" type="image/svg+xml" href="icon.svg">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#E3120B">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@500;700;900&family=IBM+Plex+Mono:wght@400;500;700&display=swap" rel="stylesheet">
@@ -281,7 +285,7 @@ table{border-collapse:collapse}
   <details class="about">
     <summary>データと方法 — 名寄せ・分類・コア選定のルール</summary>
     <div class="abody">
-      <p><b>データ源</b>　Google Patents Public Data（BigQuery 公式データセット）からフォイル軸受関連の公報を全期間分取得し、優先権で束ねたファミリー（同一発明の各国出願のまとまり）単位で集計しています。2025年以降は出願から公開まで最長18か月かかるため件数が未確定です。</p>
+      <p><b>データ源と検索式</b>　Google Patents Public Data（BigQuery 公式データセット `patents.publications`）から、<b>CPC分類 F16C17/024（フォイル型ジャーナル軸受）または F16C17/042（フォイル型スラスト軸受）が付与された全公報</b>（全期間・全法域）を取得し、優先権で束ねたファミリー（同一発明の各国出願のまとまり）単位で集計しています。この検索式の性質上、フォイル軸受を使っていてもCPCがシステム側（圧縮機・モータ等）にしか付いていない出願は含まれません＝各社の件数は下限値です。2025年以降は出願から公開まで最長18か月かかるため件数が未確定です。</p>
       <p><b>分類タグと要約</b>　構造・課題・解決手段・適用機器のタグと日本語1行要約は、発明の名称と要約（判定できない場合はクレーム冒頭も）をもとにした機械判定の一次情報です。原文確認を前提にお使いください。</p>
       <p><b>出願人の名寄せ</b>　同一出願人が別名でカウントされるのを防ぐため、次の表記を統合しています（社名変更・事業承継・翻訳ゆれ）。個人名義を会社へ寄せる推測的な統合は行っていません。</p>
       <table class="ctab">
