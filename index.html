@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@500;700;900&family=IBM+Plex+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
-:root{--red:#E3120B;--ink:#0C0C0C;--grey:#758D99;--g2:#B7C6CF;--g3:#DEE5E9;--beige:#F5F4EF;--rule:#DDDDDD;
+:root{--red:#E3120B;--blue:#006BA2;--ink:#0C0C0C;--grey:#758D99;--g2:#B7C6CF;--g3:#DEE5E9;--beige:#F5F4EF;--rule:#DDDDDD;
   --sans:'Zen Kaku Gothic New',sans-serif;--mono:'IBM Plex Mono',monospace}
 *{box-sizing:border-box;margin:0}
 html,body{background:#fff;color:var(--ink);font-family:var(--sans);-webkit-text-size-adjust:100%}
@@ -42,7 +42,7 @@ h2{font-size:15px;font-weight:900;margin:0 0 2px}
 /* year hist + range */
 .yh{display:flex;align-items:flex-end;gap:1px;height:74px}
 .yh i{flex:1;background:var(--g3);min-width:1px;transition:height .3s,background .3s}
-.yh i.in{background:var(--ink)}
+.yh i.in{background:var(--blue)}
 .yh i.pk{background:var(--red)}
 .rng{position:relative;height:24px;margin-top:2px}
 .rng .trk{position:absolute;top:11px;left:0;right:0;height:2px;background:var(--g3)}
@@ -265,7 +265,7 @@ table{border-collapse:collapse}
     <div class="zgrid" id="zgrid"></div>
   </section>
 
-  <p class="foot">⚠ 本サイトは<b>公開済み特許の客観分析のみ</b>を収載しています（発明アイデア・出願戦略は含みません）。分類・要約は機械判定の一次情報で、正確な内容は各公報の原文をご確認ください。件数はファミリー（同一発明の各国出願をまとめた単位）ベース。出典: Google Patents Public Data（BigQuery）／図: 各特許公報（パブリックドメイン）／生成 2026-07-04</p>
+  <p class="foot">⚠ 本サイトは<b>公開済み特許の客観分析のみ</b>を収載しています（発明アイデア・出願戦略は含みません）。分類・要約は機械判定の一次情報で、正確な内容は各公報の原文をご確認ください。件数はファミリー（同一発明の各国出願をまとめた単位）ベース。出願人は主要な社名変更・承継・表記ゆれを名寄せしています（例: 石川島播磨→IHI、UTC→RTX、Samsung Techwin→Hanwha PS、珠海格力の別表記→Gree）。出典: Google Patents Public Data（BigQuery）／図: 各特許公報（パブリックドメイン）／生成 2026-07-04</p>
 </div>
 
 <div class="lb" id="lb"><span class="x" id="lbx">✕</span><div class="box" id="lbbox"></div></div>
@@ -316,7 +316,7 @@ function heat(v,max){
   return[`rgb(${mix(245,227,t)},${mix(244,60,t)},${mix(239,40,t)})`,t>.58?'#fff':'#0C0C0C'];
 }
 /* assignee display name */
-const NMAP={"BOSCH GMBH ROBERT":"Bosch","IHI CORP":"IHI","GREE ELECTRIC APPLIANCES INC ZHUHAI":"Gree","HAMILTON SUNDSTRAND CORP":"Hamilton Sd","NTN TOYO BEARING CO LTD":"NTN","GARRETT CORP":"Garrett","HANON SYSTEMS":"Hanon","SCHAEFFLER TECHNOLOGIES AG":"Schaeffler","MITSUBISHI HEAVY IND LTD":"三菱重工","KAWASAKI HEAVY IND LTD":"川崎重工","IHI IND CO LTD":"IHI","HONEYWELL INT INC":"Honeywell","UNITED TECHNOLOGIES CORP":"UTC","MECH TECH INC":"MTI","MECHANICAL TECH INC":"MTI","SAMSUNG ELECTRONICS CO LTD":"Samsung","LG ELECTRONICS INC":"LG","HYUNDAI MOTOR CO LTD":"Hyundai","TOYOTA MOTOR CO LTD":"Toyota","AIR PROD & CHEM":"Air Products","ALLIED SIGNAL INC":"AlliedSignal","ALLIEDSIGNAL INC":"AlliedSignal","GEN ELECTRIC":"GE","XEROS":"Xeros","NEUROS CO LTD":"Neuros","XI AN JIAOTONG UNIV":"西安交通大","UNIV XIAN JIAOTONG":"西安交通大","UNIV HUNAN":"湖南大","UNIV HARBIN ENG":"哈爾浜工程大"};
+const NMAP={"BOSCH GMBH ROBERT":"Bosch","IHI CORP":"IHI","GREE ELECTRIC APPLIANCES INC ZHUHAI":"Gree","HAMILTON SUNDSTRAND CORP":"Hamilton Sd","NTN TOYO BEARING CO LTD":"NTN","GARRETT CORP":"Garrett","HANON SYSTEMS":"Hanon","SCHAEFFLER TECHNOLOGIES AG":"Schaeffler","MITSUBISHI HEAVY IND LTD":"三菱重工","KAWASAKI HEAVY IND LTD":"川崎重工","HONEYWELL INT INC":"Honeywell","RTX CORP":"RTX(旧UTC)","MECHANICAL TECH INC":"MTI","HANWHA POWER SYS CO LTD":"Hanwha PS","SAMSUNG ELECTRONICS CO LTD":"Samsung","LG ELECTRONICS INC":"LG","HYUNDAI MOTOR CO LTD":"Hyundai","HYUNDAI WIA CORP":"Hyundai Wia","TOYOTA MOTOR CO LTD":"Toyota","TOYOTA IND CORP":"豊田自動織機","HONDA MOTOR CO LTD":"Honda","AIR PROD & CHEM":"Air Products","ALLIED SIGNAL INC":"AlliedSignal","GEN ELECTRIC":"GE","NEUROS CO LTD":"Neuros","SHIMADZU CORP":"島津製作所","JTEKT CORP":"JTEKT","CAPSTONE TURBINE CORP":"Capstone","KOREA MACH & MATERIALS INST":"KIMM","KOREA INST SCI & TECH":"KIST","UNIV XI AN JIAOTONG":"西安交通大","UNIV HUNAN":"湖南大","YANTAI DONGDE IND CO LTD":"Yantai Dongde"};
 function shortNm(nm){
   if(NMAP[nm])return NMAP[nm];
   const w=nm.split(/\s+/);
@@ -484,7 +484,7 @@ function renderAT(){
     const cells=grid[ti].map(c=>{
       if(!c)return`<i style="background:#F1F1F1"></i>`;
       const t=.2+Math.pow(c/max,.6)*.8;
-      return`<i style="background:rgba(${old?'227,18,11':'12,12,12'},${t.toFixed(2)})" title="${c}件"></i>`;
+      return`<i style="background:rgba(${old?'227,18,11':'0,107,162'},${t.toFixed(2)})" title="${c}件"></i>`;
     }).join("");
     h+=`<div class="st ${A.as.has(nm)?'on':''}" data-as="${nm}"><span class="l" title="${nm}">${shortNm(nm)}</span><div class="cells">${cells}</div><span class="v">${v}</span></div>`;
   });
@@ -518,7 +518,7 @@ function renderAp(){
 function renderAs(){distBars("asb",null,null,o=>o.as[0],"as",A.as,true);}
 
 /* ================= structure stacked trend ================= */
-const SCOL={bump:"#0C0C0C",leaf:"#758D99",tension:"#B7C6CF",hybrid:"#E3120B",other:"#DEE5E9",unknown:"#F1EEE6"};
+const SCOL={bump:"#006BA2",leaf:"#758D99",tension:"#B7C6CF",hybrid:"#E3120B",other:"#DEE5E9",unknown:"#F1EEE6"};
 function renderStk(){
   const{step,arr}=buckets();
   const order=["bump","leaf","tension","hybrid","other","unknown"];
@@ -560,7 +560,7 @@ function renderLife(){
     <text x="404" y="222" font-size="9" fill="#758D99" text-anchor="end" font-family="IBM Plex Mono">出願人数 →</text>
     <text x="14" y="16" font-size="9" fill="#758D99" font-family="IBM Plex Mono" transform="rotate(-90 14 16)" text-anchor="end">件数 →</text>
     <path d="${path}" fill="none" stroke="#B7C6CF" stroke-width="1.6"/>
-    ${pts.map((p,i)=>`<circle cx="${X(p.a).toFixed(1)}" cy="${Y(p.n).toFixed(1)}" r="${i===pts.length-1?5:3}" fill="${i===pts.length-1?'#E3120B':'#0C0C0C'}"/>`).join("")}
+    ${pts.map((p,i)=>`<circle cx="${X(p.a).toFixed(1)}" cy="${Y(p.n).toFixed(1)}" r="${i===pts.length-1?5:3}" fill="${i===pts.length-1?'#E3120B':'#006BA2'}"/>`).join("")}
     ${lab.map(p=>`<text x="${(X(p.a)+7).toFixed(1)}" y="${(Y(p.n)-6).toFixed(1)}" font-size="9.5" font-family="IBM Plex Mono" fill="${p.y===2020?'#E3120B':'#758D99'}" font-weight="${p.y===2020?'700':'400'}">'${String(p.y).slice(2)}${p.y===2020?"–'24":""}</text>`).join("")}`;
 }
 
