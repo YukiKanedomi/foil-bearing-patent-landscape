@@ -662,7 +662,13 @@ function toggleDet(i){
       ${o.lv.map(l=>`<span class="tg">${LVJA[l]||l}</span>`).join("")}
       ${o.ap!=="general_unknown"?`<span class="tg">${APJA[o.ap]}</span>`:""}
     </div>
-    <div style="color:#758D99;font-size:10px">ファミリー ${o.mm} 公報 · ${o.ju} 法域 · 判定確度 ${o.cf}${o.as.length?` · ${o.as.join(" / ")}`:""}</div>
+    ${o.c1?`<div style="margin-top:8px;border-top:1px solid #DDD;padding-top:7px">
+      <div style="font-size:9px;color:#758D99;font-weight:700;letter-spacing:.05em">請求項1の骨子（機械要約・原文確認前提）</div>
+      <div style="margin-top:2px">${o.c1}</div>
+      ${o.el&&o.el.length?`<div class="tags" style="margin-top:5px">${o.el.map(e=>`<span class="tg" style="border-color:#006BA2;color:#006BA2">${e}</span>`).join("")}</div>`:""}
+      ${o.ef?`<div style="margin-top:4px;font-size:10.5px"><span style="color:#758D99;font-weight:700">主張される効果</span>　${o.ef}</div>`:""}
+    </div>`:""}
+    <div style="color:#758D99;font-size:10px;margin-top:6px">ファミリー ${o.mm} 公報 · ${o.ju} 法域 · 判定確度 ${o.cf}${o.as.length?` · ${o.as.join(" / ")}`:""}</div>
     <div style="margin-top:7px"><a href="https://patents.google.com/patent/${o.gp}/ja" target="_blank" rel="noopener">Google Patents で原文を見る →</a></div>`;
   d.classList.add("on");
 }
@@ -682,7 +688,8 @@ function renderZ(){
   $("zgrid").querySelectorAll(".zc").forEach(e=>e.addEventListener("click",()=>{
     const o=zfams.find(x=>x.id===e.dataset.id);
     $("lbbox").innerHTML=`<img src="figs/${o.id}.png"><div class="cap"><b>${pubDisp(o.rep)}</b>　${o.ja||o.t}<br>
-      <span style="color:#758D99;font-size:10.5px">${o.as[0]||""} · ${o.yr||""}</span><br>
+      <span style="color:#758D99;font-size:10.5px">${o.as[0]||""} · ${o.yr||""}</span>
+      ${o.c1?`<div style="font-size:11px;line-height:1.7;margin-top:6px;background:#F5F4EF;padding:7px 9px"><span style="font-size:9px;color:#758D99;font-weight:700">請求項1の骨子（機械要約）</span><br>${o.c1}</div>`:""}<br>
       <a href="https://patents.google.com/patent/${o.gp}/ja" target="_blank" rel="noopener">Google Patents で原文を見る →</a></div>`;
     $("lb").classList.add("on");
   }));
