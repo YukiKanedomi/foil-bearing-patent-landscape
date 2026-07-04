@@ -25,39 +25,76 @@ h1{font-size:clamp(20px,4.6vw,27px);font-weight:900;line-height:1.4;margin:4px 0
 .view{display:none;padding-top:16px}
 .view.on{display:block}
 h2{font-size:15px;font-weight:900;margin:0 0 2px}
-.cs{font-size:10.5px;color:var(--grey);margin-bottom:10px}
+.cs{font-size:10.5px;color:var(--grey);margin-bottom:10px;line-height:1.6}
 .src{font-size:9px;color:var(--grey);margin-top:8px;padding-top:5px;border-top:1px solid var(--rule)}
 .hr{border-top:1px solid var(--rule);margin:20px 0 16px}
-.kpi{display:flex;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);margin:6px 0 18px}
+.kpi{display:flex;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);margin:6px 0 12px}
 .kpi div{flex:1;padding:10px 4px;text-align:center}
 .kpi .n{font-size:20px;font-weight:900;font-family:var(--mono)}
 .kpi .l{font-size:8.5px;color:var(--grey);letter-spacing:.08em;margin-top:2px}
+/* filter bar */
+.fbar{display:flex;gap:5px;flex-wrap:wrap;align-items:center;margin:0 0 14px;min-height:26px}
+.fbar .none{font-size:10.5px;color:var(--grey)}
+.fchip{font-size:10px;background:var(--ink);color:#fff;padding:4px 8px;cursor:pointer;display:inline-flex;gap:6px;align-items:center}
+.fchip.red{background:var(--red)}
+.fchip b{font-weight:400;opacity:.75}
+.frst{font-size:10px;border:1px solid var(--ink);background:#fff;padding:3px 9px;cursor:pointer;font-family:var(--sans);font-weight:700}
+/* year hist + range */
+.yh{display:flex;align-items:flex-end;gap:1px;height:74px}
+.yh i{flex:1;background:var(--g3);min-width:1px;transition:height .3s,background .3s}
+.yh i.in{background:var(--ink)}
+.yh i.pk{background:var(--red)}
+.rng{position:relative;height:24px;margin-top:2px}
+.rng .trk{position:absolute;top:11px;left:0;right:0;height:2px;background:var(--g3)}
+.rng .trk i{position:absolute;top:0;height:2px;background:var(--ink)}
+.rng input{position:absolute;top:0;left:0;width:100%;height:24px;margin:0;-webkit-appearance:none;appearance:none;background:none;pointer-events:none}
+.rng input::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;pointer-events:auto;width:15px;height:15px;border-radius:0;background:#fff;border:2.5px solid var(--ink);cursor:ew-resize;margin-top:0}
+.rng input::-moz-range-thumb{pointer-events:auto;width:12px;height:12px;border-radius:0;background:#fff;border:2.5px solid var(--ink);cursor:ew-resize}
+.rlab{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px;margin:2px 0 4px}
+.rlab .yl2{font-size:11px;font-family:var(--mono);font-weight:700}
+.qchips{display:flex;gap:5px}
+/* heatmap */
 table{border-collapse:collapse}
 .hm{width:100%}
 .hm .rl{font-size:10px;text-align:right;padding-right:7px;font-weight:700;white-space:nowrap;cursor:pointer}
-.hm .cell{height:26px;text-align:center;font-size:9px;font-family:var(--mono);border:1px solid #fff;cursor:pointer;min-width:26px}
-.hm .yl{font-size:8.5px;color:var(--grey);text-align:center;padding-top:3px;font-family:var(--mono)}
+.hm .rl.on{color:var(--red)}
+.hm .cell{height:25px;text-align:center;font-size:9px;font-family:var(--mono);border:1px solid #fff;cursor:pointer;min-width:22px;transition:background .3s}
+.hm .yl{font-size:8px;color:var(--grey);text-align:center;padding-top:3px;font-family:var(--mono);white-space:nowrap}
 .hm .tot{font-size:10px;font-weight:700;padding-left:7px;font-family:var(--mono)}
+/* problem x lever matrix */
+.mx{width:100%}
+.mx th{writing-mode:vertical-rl;font-size:8.5px;color:var(--grey);font-weight:700;padding:2px 0 4px;height:64px;vertical-align:bottom;cursor:default}
+.mx .rl{font-size:9.5px;text-align:right;padding-right:6px;font-weight:700;white-space:nowrap}
+.mx .cell{height:22px;text-align:center;font-size:8.5px;font-family:var(--mono);border:1px solid #fff;cursor:pointer;min-width:20px;transition:background .3s}
+.mx .cell.sel{outline:2px solid var(--ink);outline-offset:-2px}
+/* assignee matrix */
 .st{display:grid;grid-template-columns:104px 1fr 34px;align-items:center;gap:8px;margin:4px 0;cursor:pointer}
 .st .l{font-size:10px;text-align:right;font-family:var(--mono);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.st.on .l{color:var(--red);font-weight:700}
 .st .v{font-size:10px;font-family:var(--mono);color:var(--grey)}
 .cells{display:flex;gap:2px}
-.cells i{flex:1;height:14px}
+.cells i{flex:1;height:14px;transition:background .3s}
+/* bars */
 .bar{display:grid;grid-template-columns:104px 1fr 34px;align-items:center;gap:8px;margin:5px 0;cursor:pointer}
-.bar .l{font-size:10.5px;font-weight:700;text-align:right;white-space:nowrap}
-.bar .t{height:13px;background:var(--g2)}
+.bar .l{font-size:10.5px;font-weight:700;text-align:right;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bar .t{height:13px;background:var(--g2);transition:width .45s cubic-bezier(.2,.8,.2,1)}
 .bar.hot .t{background:var(--red)}
+.bar.hot .l{color:var(--red)}
 .bar .v{font-size:10px;font-family:var(--mono);color:var(--grey)}
 .bar.hot .v{color:var(--red);font-weight:700}
-.stk{display:flex;gap:2px;align-items:flex-end;height:110px;margin-top:4px}
+/* stacked */
+.stk{display:flex;gap:2px;align-items:flex-end;height:96px;margin-top:4px}
 .stk .col{flex:1;display:flex;flex-direction:column-reverse}
-.stk .col i{display:block}
+.stk .col i{display:block;transition:height .35s}
 .stkx{display:flex;gap:2px;margin-top:3px}
-.stkx span{flex:1;font-size:8px;color:var(--grey);text-align:center;font-family:var(--mono)}
+.stkx span{flex:1;font-size:7.5px;color:var(--grey);text-align:center;font-family:var(--mono);white-space:nowrap;overflow:hidden}
 .lgd{display:flex;gap:12px;flex-wrap:wrap;font-size:9.5px;color:var(--grey);margin-top:8px}
 .lgd i{width:10px;height:10px;display:inline-block;margin-right:4px;vertical-align:-1px}
-.note{font-size:10.5px;background:var(--beige);padding:9px 11px;line-height:1.7;margin-top:12px}
+.lgd span{cursor:pointer}
+.lgd span.on{color:var(--red);font-weight:700}
+.note{font-size:10.5px;background:var(--beige);padding:9px 11px;line-height:1.7;margin-top:16px}
 .note b{color:var(--red)}
+/* find */
 .sbox{width:100%;border:1.5px solid var(--ink);padding:10px 12px;font-family:var(--sans);font-size:13px;margin-bottom:9px}
 .sbox:focus{outline:2px solid var(--red)}
 .frow{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:6px;align-items:center}
@@ -83,6 +120,7 @@ table{border-collapse:collapse}
 .more{display:block;width:100%;border:1.5px solid var(--ink);background:#fff;padding:11px;font-family:var(--sans);
   font-size:12.5px;font-weight:700;cursor:pointer;margin-top:12px}
 .more:active{background:var(--beige)}
+/* zukan */
 .zgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
 .zc{border:1px solid var(--rule);cursor:pointer}
 .zc .im{padding:8px;display:flex;align-items:center;justify-content:center;height:130px;background:#fff}
@@ -100,11 +138,26 @@ table{border-collapse:collapse}
 .lb .x{position:fixed;top:12px;right:16px;color:#fff;font-size:26px;cursor:pointer;font-weight:700}
 .foot{font-size:10px;color:var(--grey);line-height:1.8;margin-top:26px;border-top:2px solid var(--ink);padding-top:10px}
 .hscroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.life{width:100%;max-width:420px;display:block}
+@media(hover:hover){
+  .cell:hover,.bar:hover .t,.st:hover .cells i.h0{outline:1.5px solid var(--ink);outline-offset:-1.5px}
+  .chip:hover{border-color:var(--ink)}
+}
+/* ---- PC layout ---- */
+@media(min-width:1020px){
+  .wrap{max-width:1140px}
+  .dgrid{display:grid;grid-template-columns:1fr 1fr;gap:0 44px;align-items:start}
+  .zgrid{grid-template-columns:repeat(auto-fill,minmax(180px,1fr))}
+  .findwrap{max-width:820px}
+  .yh{height:90px}
+}
 @media(max-width:560px){
   .wrap{padding:0 12px 50px}
   .hm .rl{font-size:8px;padding-right:4px}
-  .hm .cell{min-width:23px;height:24px;font-size:8px}
+  .hm .cell{min-width:18px;height:23px;font-size:7.5px}
   .hm .tot{font-size:9px;padding-left:4px}
+  .mx .rl{font-size:8px;padding-right:4px}
+  .mx .cell{min-width:16px;height:20px;font-size:7.5px}
   .kpi .n{font-size:16px}
   .st{grid-template-columns:74px 1fr 28px;gap:6px}
   .bar{grid-template-columns:86px 1fr 28px;gap:6px}
@@ -127,43 +180,82 @@ table{border-collapse:collapse}
   <!-- ============ DASH ============ -->
   <section class="view on" id="v-dash">
     <div class="kpi" id="kpi"></div>
+    <div class="fbar" id="fbar"></div>
 
-    <h2>課題 × 年代 — 出願はどこに集まってきたか</h2>
-    <div class="cs">ファミリー数、優先年5年区切り。セルをタップ→その条件の一覧へ</div>
-    <div class="hscroll"><table class="hm" id="hm"></table></div>
-    <div class="src">出典: Google Patents Public Data（BigQuery）。分類は要約ベースの一次判定（原文確認前提）</div>
+    <h2>年次推移 — 期間を絞ると全グラフが連動する</h2>
+    <div class="cs">優先年ベース・1年刻み。スライダーで期間を選択（<span style="color:var(--red);font-weight:700">赤</span>＝期間内ピーク年）</div>
+    <div class="yh" id="yh"></div>
+    <div class="rng" id="rng">
+      <div class="trk"><i id="trksel"></i></div>
+      <input type="range" id="r0" min="1955" max="2026" value="1955">
+      <input type="range" id="r1" min="1955" max="2026" value="2026">
+    </div>
+    <div class="rlab">
+      <span class="yl2" id="ylab"></span>
+      <span class="qchips">
+        <span class="chip" data-q="all">全期間</span><span class="chip" data-q="2000">2000〜</span><span class="chip" data-q="2010">2010〜</span><span class="chip" data-q="2020">2020〜</span>
+      </span>
+    </div>
 
-    <div class="hr"></div>
-    <h2>主要出願人の参入 — 世代交代</h2>
-    <div class="cs">5年区切りのファミリー数（濃いほど多い）。行をタップ→その社の一覧へ</div>
-    <div id="at"></div>
-    <div class="lgd"><span><i style="background:#0C0C0C"></i>現役世代</span><span><i style="background:#E3120B"></i>創成期（'75以前含む）</span></div>
+    <div class="dgrid">
+      <div>
+        <div class="hr"></div>
+        <h2>課題 × 年 — 出願はどこに集まっているか</h2>
+        <div class="cs">期間を30年以下に絞ると<b>1年刻み</b>に切り替わる。行ラベル＝課題で絞り込み、セル＝課題＋期間で絞り込み（再タップで解除）</div>
+        <div class="hscroll"><table class="hm" id="hm"></table></div>
 
-    <div class="hr"></div>
-    <h2>2020年代、空調とFCVが牽引する</h2>
-    <div class="cs">適用機器が明記されたファミリー、2020–26年。タップ→一覧へ</div>
-    <div id="apps"></div>
+        <div class="hr"></div>
+        <h2>課題 × 解決手段 — 空白セルが「文献の薄い組み合わせ」</h2>
+        <div class="cs">どの課題をどの手段で解いてきたか。セルをタップ→その組み合わせに絞り込み</div>
+        <div class="hscroll"><table class="mx" id="mx"></table></div>
 
-    <div class="hr"></div>
-    <h2>構造の勢力図 — バンプ型の一強へ</h2>
-    <div class="cs">5年区切り、構造種別の構成</div>
-    <div class="stk" id="stk"></div>
-    <div class="stkx" id="stkx"></div>
-    <div class="lgd" id="stklg"></div>
+        <div class="hr"></div>
+        <h2>技術ライフサイクル — まだ成長期のさなか</h2>
+        <div class="cs">5年ごとの「出願人数（横）×ファミリー数（縦）」の軌跡。右上へ向かう間は成長期。'25以降は公開が追いつかず件数未確定のため除外（期間スライダー非連動）</div>
+        <svg class="life" id="life" viewBox="0 0 420 240"></svg>
+      </div>
+      <div>
+        <div class="hr"></div>
+        <h2>出願人 × 年 — 各社はいつ動いたか</h2>
+        <div class="cs">絞り込み後の上位10社。<span style="color:var(--red);font-weight:700">赤</span>＝創成期からの出願人（初出願が1990年より前）。行をタップで絞り込み</div>
+        <div id="at"></div>
 
-    <div class="note"><b>読みどころ</b>　2020年代は5年で414ファミリーと史上最多ペース。空調（Gree・Hanon）と燃料電池が波を作り、荷重容量と固定・組立に出願が集中。一方で公差ロバスト・追従は70年間で計112件と薄く、文献が疎な領域として残っている。</div>
+        <div class="hr"></div>
+        <h2>構造の内訳と勢力図</h2>
+        <div class="cs">バーをタップで絞り込み。下は期間内の構成推移</div>
+        <div id="stb"></div>
+        <div class="stk" id="stk"></div>
+        <div class="stkx" id="stkx"></div>
+        <div class="lgd" id="stklg"></div>
+
+        <div class="hr"></div>
+        <h2>適用機器 — 何に載せるための特許か</h2>
+        <div class="cs">機器が明記されたファミリーのみ。タップで絞り込み</div>
+        <div id="apb"></div>
+
+        <div class="hr"></div>
+        <h2>出願人ランキング</h2>
+        <div class="cs">絞り込み後の上位。タップで絞り込み（第一出願人ベース）</div>
+        <div id="asb"></div>
+      </div>
+    </div>
+
+    <button class="more" id="tolist">この条件の特許一覧を見る →</button>
+    <div class="note"><b>読みどころ</b>　2020年代は414ファミリーと史上最多ペース。空調（Gree・Hanon）と燃料電池が波を作り、荷重容量と固定・組立に出願が集中する。一方で公差ロバスト・追従は70年間で計112件と薄く、課題×解決手段マップの空白セルとともに「文献が疎な領域」として残る。</div>
+    <div class="src">出典: Google Patents Public Data（BigQuery）。分類は要約ベースの一次判定（原文確認前提）。件数はファミリー単位</div>
   </section>
 
   <!-- ============ FIND ============ -->
-  <section class="view" id="v-find">
+  <section class="view" id="v-find"><div class="findwrap">
     <input class="sbox" id="q" placeholder="検索：番号・出願人・技術語（例 IHI スリット 固定）">
-    <div class="frow"><span class="flabel">構造</span><span class="chip" data-f="st" data-k="bump">バンプ</span><span class="chip" data-f="st" data-k="leaf">リーフ</span><span class="chip" data-f="st" data-k="tension">テンション</span><span class="chip" data-f="st" data-k="hybrid">ハイブリッド</span><span class="chip" data-f="st" data-k="other">その他</span></div>
+    <div class="frow"><span class="flabel">構造（複数選択可・ダッシュボードと連動）</span><span class="chip" data-f="st" data-k="bump">バンプ</span><span class="chip" data-f="st" data-k="leaf">リーフ</span><span class="chip" data-f="st" data-k="tension">テンション</span><span class="chip" data-f="st" data-k="hybrid">ハイブリッド</span><span class="chip" data-f="st" data-k="other">その他</span><span class="chip" data-f="st" data-k="unknown">判定不能</span></div>
     <div class="frow"><span class="flabel">課題</span><span class="chip red" data-f="pr" data-k="load_capacity">荷重容量</span><span class="chip red" data-f="pr" data-k="assembly_fixation">固定・組立</span><span class="chip red" data-f="pr" data-k="stability_whirl">安定性</span><span class="chip red" data-f="pr" data-k="startstop_wear">起動停止</span><span class="chip red" data-f="pr" data-k="damping">減衰</span><span class="chip red" data-f="pr" data-k="thermal">熱</span><span class="chip red" data-f="pr" data-k="tolerance_robust">公差</span><span class="chip red" data-f="pr" data-k="misalignment_conformity">追従</span></div>
-    <div class="frow"><span class="flabel">その他</span><span class="chip" data-f="fg" data-k="1">図あり</span><span class="chip" data-f="gr" data-k="1">成立のみ</span><span class="chip" data-f="era" data-k="2010">2010年以降</span></div>
-    <div class="cnt"><span id="cnt"></span><select id="sort"><option value="new">新しい順</option><option value="ju">法域数順</option><option value="old">古い順</option></select></div>
+    <div class="frow"><span class="flabel">解決手段</span><span class="chip" data-f="lv" data-k="pitch_height_thickness">バンプ形状</span><span class="chip" data-f="lv" data-k="segmentation_slit">分割・スリット</span><span class="chip" data-f="lv" data-k="multizone_multipad">多ゾーン</span><span class="chip" data-f="lv" data-k="stacking">積層</span><span class="chip" data-f="lv" data-k="preload">予圧</span><span class="chip" data-f="lv" data-k="material_coating">材料・被膜</span><span class="chip" data-f="lv" data-k="adaptive_geometry">適応形状</span><span class="chip" data-f="lv" data-k="cooling_flow">冷却流</span><span class="chip" data-f="lv" data-k="fixation_design">固定設計</span></div>
+    <div class="frow"><span class="flabel">その他</span><span class="chip" data-f="fg" data-k="1">図あり</span><span class="chip" data-f="gr" data-k="1">成立のみ</span><span class="chip" data-f="era" data-k="2010">2010年以降</span><span class="chip" data-f="era" data-k="2020">2020年以降</span></div>
+    <div class="cnt"><span id="cnt"></span><span style="display:flex;gap:8px;align-items:center"><button class="frst" id="rst2">リセット</button><select id="sort"><option value="new">新しい順</option><option value="ju">法域数順</option><option value="old">古い順</option></select></span></div>
     <div id="list"></div>
     <button class="more" id="more" style="display:none">さらに表示</button>
-  </section>
+  </div></section>
 
   <!-- ============ ZUKAN ============ -->
   <section class="view" id="v-zukan">
@@ -183,13 +275,60 @@ table{border-collapse:collapse}
 const D=window.LS,$=id=>document.getElementById(id);
 const PLJA={load_capacity:"荷重容量",assembly_fixation:"固定・組立",stability_whirl:"安定性",startstop_wear:"起動停止",damping:"減衰",thermal:"熱",tolerance_robust:"公差ロバスト",misalignment_conformity:"追従"};
 const LVJA={pitch_height_thickness:"バンプ形状",segmentation_slit:"分割・スリット",multizone_multipad:"多ゾーン",stacking:"積層",preload:"予圧",material_coating:"材料・被膜",adaptive_geometry:"適応形状",cooling_flow:"冷却流",fixation_design:"固定設計",other:"その他"};
-const STJA={bump:"バンプ型",leaf:"リーフ型",tension:"テンション型",hybrid:"ハイブリッド",other:"その他",unknown:"—"};
+const LVS=Object.keys(LVJA).filter(k=>k!=="other");
+const STJA={bump:"バンプ型",leaf:"リーフ型",tension:"テンション型",hybrid:"ハイブリッド",other:"その他",unknown:"判定不能"};
 const FMJA={radial:"ラジアル",thrust:"スラスト",combo:"複合",conical:"円錐",unknown:""};
 const APJA={fc_compressor:"燃料電池",turbocharger:"ターボチャージャ",blower_fan:"ブロワ",hvac_chiller:"空調・チラー",acm:"航空機ACM",micro_turbine:"マイクロGT",turbo_expander_cryo:"膨張タービン",motor_spindle:"高速モータ",general_unknown:"—"};
-const YRS=["'75","'80","'85","'90","'95","'00","'05","'10","'15","'20"];
-$("dek").textContent=`公知特許 ${D.meta.total.toLocaleString()} ファミリー・70年分（1955–2026、優先年ベース）を課題・構造・出願人で俯瞰する`;
+const MINY=1955,MAXY=2026;
+$("dek").textContent=`公知特許 ${D.meta.total.toLocaleString()} ファミリー・70年分（1955–2026、優先年ベース）を課題・構造・出願人で分析する。グラフはタップで絞り込み、もう一度タップで解除`;
 
-/* ---- tabs ---- */
+/* ================= shared filter state ================= */
+const A={q:"",st:new Set(),pr:new Set(),lv:new Set(),ap:new Set(),as:new Set(),y0:MINY,y1:MAXY,fg:false,gr:false};
+function pass(o,skip){
+  skip=skip||"";
+  if(!skip.includes("yr")&&(A.y0>MINY||A.y1<MAXY)){if(!o.yr||o.yr<A.y0||o.yr>A.y1)return false;}
+  if(!skip.includes("st")&&A.st.size&&!A.st.has(o.st))return false;
+  if(!skip.includes("pr")&&A.pr.size&&!o.pr.some(p=>A.pr.has(p)))return false;
+  if(!skip.includes("lv")&&A.lv.size&&!o.lv.some(l=>A.lv.has(l)))return false;
+  if(!skip.includes("ap")&&A.ap.size&&!A.ap.has(o.ap))return false;
+  if(!skip.includes("as")&&A.as.size&&!(o.as[0]&&A.as.has(o.as[0])))return false;
+  if(A.fg&&!o.fg)return false;
+  if(A.gr&&!o.gr)return false;
+  if(A.q){const hay=(o.rep+" "+o.t+" "+o.ja+" "+o.as.join(" ")).toLowerCase();
+    for(const w of A.q.toLowerCase().split(/\s+/))if(w&&!hay.includes(w))return false;}
+  return true;
+}
+function resetA(){A.q="";A.st.clear();A.pr.clear();A.lv.clear();A.ap.clear();A.as.clear();A.y0=MINY;A.y1=MAXY;A.fg=false;A.gr=false;$("q").value="";shown=60;}
+function tgl(set,k){set.has(k)?set.delete(k):set.add(k);shown=60;renderAll();}
+
+/* time buckets: yearly when span<=30, else 5-year */
+function buckets(){
+  const span=A.y1-A.y0+1,step=span<=30?1:5;
+  const b0=step===1?A.y0:Math.floor(A.y0/5)*5;
+  const arr=[];for(let y=b0;y<=A.y1;y+=step)arr.push(y);
+  return{step,arr};
+}
+function blab(y,step){return step===1?"'"+String(y).slice(2):"'"+String(y).slice(2)}
+function heat(v,max){
+  if(!v)return['#fff','#B7C6CF'];
+  const t=Math.pow(v/max,.55);
+  const mix=(a,b,tt)=>Math.round(a+(b-a)*tt);
+  return[`rgb(${mix(245,227,t)},${mix(244,60,t)},${mix(239,40,t)})`,t>.58?'#fff':'#0C0C0C'];
+}
+/* assignee display name */
+const NMAP={"BOSCH GMBH ROBERT":"Bosch","IHI CORP":"IHI","GREE ELECTRIC APPLIANCES INC ZHUHAI":"Gree","HAMILTON SUNDSTRAND CORP":"Hamilton Sd","NTN TOYO BEARING CO LTD":"NTN","GARRETT CORP":"Garrett","HANON SYSTEMS":"Hanon","SCHAEFFLER TECHNOLOGIES AG":"Schaeffler","MITSUBISHI HEAVY IND LTD":"三菱重工","KAWASAKI HEAVY IND LTD":"川崎重工","IHI IND CO LTD":"IHI","HONEYWELL INT INC":"Honeywell","UNITED TECHNOLOGIES CORP":"UTC","MECH TECH INC":"MTI","MECHANICAL TECH INC":"MTI","SAMSUNG ELECTRONICS CO LTD":"Samsung","LG ELECTRONICS INC":"LG","HYUNDAI MOTOR CO LTD":"Hyundai","TOYOTA MOTOR CO LTD":"Toyota","AIR PROD & CHEM":"Air Products","ALLIED SIGNAL INC":"AlliedSignal","ALLIEDSIGNAL INC":"AlliedSignal","GEN ELECTRIC":"GE","XEROS":"Xeros","NEUROS CO LTD":"Neuros","XI AN JIAOTONG UNIV":"西安交通大","UNIV XIAN JIAOTONG":"西安交通大","UNIV HUNAN":"湖南大","UNIV HARBIN ENG":"哈爾浜工程大"};
+function shortNm(nm){
+  if(NMAP[nm])return NMAP[nm];
+  const w=nm.split(/\s+/);
+  let s=(w[0]==="UNIV"&&w.length>1)?"Univ "+w[1]:(w[0].length>=4||w.length===1?w[0]:w.slice(0,2).join(" "));
+  s=s.split(" ").map(x=>x.charAt(0)+x.slice(1).toLowerCase()).join(" ");
+  return s.length>12?s.slice(0,11)+"…":s;
+}
+/* founding-era assignees (first family before 1990) — precomputed once */
+const FIRSTY={};
+D.fams.forEach(o=>{const a=o.as[0];if(!a||!o.yr)return;if(!(a in FIRSTY)||o.yr<FIRSTY[a])FIRSTY[a]=o.yr;});
+
+/* ================= tabs ================= */
 document.querySelectorAll(".tab").forEach(t=>t.addEventListener("click",()=>showView(t.dataset.v)));
 function showView(v){
   document.querySelectorAll(".tab").forEach(x=>x.classList.toggle("on",x.dataset.v===v));
@@ -198,109 +337,261 @@ function showView(v){
   window.scrollTo({top:0,behavior:"smooth"});
 }
 
-/* ---- dash ---- */
-$("kpi").innerHTML=`<div><div class="n">${D.meta.total.toLocaleString()}</div><div class="l">ファミリー</div></div>
-<div><div class="n">${D.meta.bump}</div><div class="l">バンプ型</div></div>
-<div><div class="n">${D.meta.figs}</div><div class="l">代表図</div></div>
-<div><div class="n">70<span style="font-size:12px">年</span></div><div class="l">1955–2026</div></div>`;
-
-function heat(v,max){
-  if(!v)return['#fff','#B7C6CF'];
-  const t=Math.pow(v/max,.5);
-  if(v>=100)return['#E3120B','#fff'];
-  const mix=(a,b,tt)=>Math.round(a+(b-a)*tt);
-  return[`rgb(${mix(245,227,t)},${mix(244,120,t)},${mix(239,110,t)})`,t>.62?'#fff':'#0C0C0C'];
+/* ================= KPI ================= */
+function renderKPI(){
+  const f=D.fams.filter(o=>pass(o));
+  const gr=f.filter(o=>o.gr).length;
+  const asn=new Set(f.map(o=>o.as[0]).filter(Boolean)).size;
+  const yc={};f.forEach(o=>{if(o.yr)yc[o.yr]=(yc[o.yr]||0)+1;});
+  let pk="—",pv=0;for(const y in yc)if(yc[y]>pv){pv=yc[y];pk=y;}
+  $("kpi").innerHTML=`<div><div class="n">${f.length.toLocaleString()}</div><div class="l">ファミリー</div></div>
+  <div><div class="n">${gr.toLocaleString()}</div><div class="l">成立あり</div></div>
+  <div><div class="n">${asn.toLocaleString()}</div><div class="l">出願人</div></div>
+  <div><div class="n">${pk}</div><div class="l">ピーク年（${pv}件）</div></div>`;
 }
-let h='';
-D.HM.forEach((row,i)=>{
-  h+=`<tr><td class="rl" data-pi="${i}">${PLJA[D.PROBS[i]]}</td>`;
-  row.forEach((v,bi)=>{const[bg,fg]=heat(v,161);h+=`<td class="cell" data-pi="${i}" data-bi="${bi}" style="background:${bg};color:${fg}">${v||''}</td>`;});
-  h+=`<td class="tot">${row.reduce((a,b)=>a+b,0)}</td></tr>`;
-});
-h+=`<tr><td></td>${YRS.map(y=>`<td class="yl">${y}</td>`).join('')}<td></td></tr>`;
-$("hm").innerHTML=h;
-$("hm").querySelectorAll(".cell,.rl").forEach(c=>c.addEventListener("click",()=>{
-  resetFilters();
-  F.pr=D.PROBS[+c.dataset.pi];
-  if(c.dataset.bi!==undefined){F.y0=1975+(+c.dataset.bi)*5;F.y1=F.y0+4;}
-  syncChips();showView("find");renderList();
+
+/* ================= filter bar ================= */
+function renderFbar(){
+  const chips=[];
+  A.st.forEach(k=>chips.push(["st",k,"構造",STJA[k]]));
+  A.pr.forEach(k=>chips.push(["pr",k,"課題",PLJA[k],1]));
+  A.lv.forEach(k=>chips.push(["lv",k,"手段",LVJA[k]]));
+  A.ap.forEach(k=>chips.push(["ap",k,"機器",APJA[k]]));
+  A.as.forEach(k=>chips.push(["as",k,"出願人",shortNm(k)]));
+  if(A.y0>MINY||A.y1<MAXY)chips.push(["yr","","期間",`${A.y0}–${A.y1}`]);
+  if(A.fg)chips.push(["fg","","","図あり"]);
+  if(A.gr)chips.push(["gr","","","成立のみ"]);
+  if(A.q)chips.push(["q","","検索",A.q]);
+  if(!chips.length){$("fbar").innerHTML=`<span class="none">絞り込みなし — グラフの要素をタップすると全体が連動します</span>`;return;}
+  $("fbar").innerHTML=chips.map(([f,k,pre,lab,red])=>`<span class="fchip ${red?'red':''}" data-f="${f}" data-k="${k}">${pre?`<b>${pre}</b>`:""}${lab} ✕</span>`).join("")+`<button class="frst" id="rst">リセット</button>`;
+  $("fbar").querySelectorAll(".fchip").forEach(c=>c.addEventListener("click",()=>{
+    const f=c.dataset.f,k=c.dataset.k;
+    if(f==="yr"){A.y0=MINY;A.y1=MAXY;}
+    else if(f==="fg")A.fg=false;else if(f==="gr")A.gr=false;
+    else if(f==="q"){A.q="";$("q").value="";}
+    else A[f].delete(k);
+    shown=60;renderAll();
+  }));
+  $("rst").addEventListener("click",()=>{resetA();renderAll();});
+}
+
+/* ================= year histogram + range ================= */
+function renderYear(){
+  const yc=new Array(MAXY-MINY+1).fill(0);
+  D.fams.forEach(o=>{if(o.yr&&pass(o,"yr"))yc[o.yr-MINY]++;});
+  let pkI=-1,pkV=0;
+  yc.forEach((v,i)=>{const y=MINY+i;if(y>=A.y0&&y<=A.y1&&v>pkV){pkV=v;pkI=i;}});
+  const max=Math.max(...yc,1);
+  $("yh").innerHTML=yc.map((v,i)=>{
+    const y=MINY+i,inr=y>=A.y0&&y<=A.y1;
+    return`<i class="${i===pkI?'pk':inr?'in':''}" style="height:${Math.max(v/max*100,v?3:1)}%" title="${y}: ${v}件"></i>`;
+  }).join("");
+  $("r0").value=A.y0;$("r1").value=A.y1;
+  const p0=(A.y0-MINY)/(MAXY-MINY)*100,p1=(A.y1-MINY)/(MAXY-MINY)*100;
+  $("trksel").style.left=p0+"%";$("trksel").style.width=(p1-p0)+"%";
+  $("ylab").textContent=`${A.y0} – ${A.y1}`;
+  document.querySelectorAll(".qchips .chip").forEach(c=>{
+    const q=c.dataset.q;
+    c.classList.toggle("on",(q==="all"&&A.y0===MINY&&A.y1===MAXY)||(q!=="all"&&A.y0===+q&&A.y1===MAXY));
+  });
+}
+$("r0").addEventListener("input",()=>{A.y0=Math.min(+$("r0").value,A.y1);shown=60;renderAll();});
+$("r1").addEventListener("input",()=>{A.y1=Math.max(+$("r1").value,A.y0);shown=60;renderAll();});
+document.querySelectorAll(".qchips .chip").forEach(c=>c.addEventListener("click",()=>{
+  const q=c.dataset.q;
+  if(q==="all"){A.y0=MINY;A.y1=MAXY;}else{A.y0=+q;A.y1=MAXY;}
+  shown=60;renderAll();
 }));
 
-let a='';
-D.TOPS.forEach((nm,i)=>{
-  const old=D.APRE[i]>3;
-  const tot=D.ATIME[i].reduce((x,y)=>x+y,0)+D.APRE[i];
-  const cells=D.ATIME[i].map(v=>{
-    if(!v)return `<i style="background:#F1F1F1"></i>`;
-    const t=.2+Math.pow(v/38,.6)*.8;
-    return `<i style="background:rgba(${old?'227,18,11':'12,12,12'},${t.toFixed(2)})"></i>`;
-  }).join('');
-  a+=`<div class="st" data-as="${nm}"><span class="l">${nm.split(' ')[0]}</span><div class="cells">${cells}</div><span class="v">${tot}</span></div>`;
-});
-a+=`<div class="st"><span></span><div class="cells">${YRS.map(y=>`<i style="height:auto;font-size:8px;color:#758D99;text-align:center;font-family:var(--mono)">${y}</i>`).join('')}</div><span></span></div>`;
-$("at").innerHTML=a;
-$("at").querySelectorAll(".st[data-as]").forEach(e=>e.addEventListener("click",()=>{
-  resetFilters();$("q").value=e.dataset.as.split(' ')[0];showView("find");renderList();
-}));
+/* ================= heatmap 課題×年 ================= */
+function renderHM(){
+  const{step,arr}=buckets();
+  const cnt=D.PROBS.map(()=>arr.map(()=>0));
+  D.fams.forEach(o=>{
+    if(!o.yr||!pass(o,"pr"))return;
+    const bi=step===1?o.yr-arr[0]:Math.floor((o.yr-arr[0])/5);
+    if(bi<0||bi>=arr.length)return;
+    o.pr.forEach(p=>{const pi=D.PROBS.indexOf(p);if(pi>=0)cnt[pi][bi]++;});
+  });
+  const max=Math.max(1,...cnt.flat());
+  const lblEvery=step===1?(arr.length>18?5:2):1;
+  let h='';
+  D.PROBS.forEach((p,i)=>{
+    h+=`<tr><td class="rl ${A.pr.has(p)?'on':''}" data-p="${p}">${PLJA[p]}</td>`;
+    cnt[i].forEach((v,bi)=>{
+      const[bg,fg]=heat(v,max);
+      const y=arr[bi];
+      h+=`<td class="cell" data-p="${p}" data-y="${y}" data-s="${step}" style="background:${bg};color:${fg}" title="${PLJA[p]} ${y}${step>1?'–'+(y+4):''}: ${v}件">${v||''}</td>`;
+    });
+    h+=`<td class="tot">${cnt[i].reduce((a,b)=>a+b,0)}</td></tr>`;
+  });
+  h+=`<tr><td></td>${arr.map((y,bi)=>`<td class="yl">${(step===1&&y%lblEvery!==0)?'':blab(y,step)}</td>`).join('')}<td></td></tr>`;
+  $("hm").innerHTML=h;
+  $("hm").querySelectorAll(".rl").forEach(c=>c.addEventListener("click",()=>tgl(A.pr,c.dataset.p)));
+  $("hm").querySelectorAll(".cell").forEach(c=>c.addEventListener("click",()=>{
+    const p=c.dataset.p,y=+c.dataset.y,s=+c.dataset.s,y1=Math.min(y+s-1,MAXY);
+    if(A.pr.has(p)&&A.y0===y&&A.y1===y1){A.pr.delete(p);A.y0=MINY;A.y1=MAXY;}
+    else{A.pr.clear();A.pr.add(p);A.y0=y;A.y1=y1;}
+    shown=60;renderAll();
+  }));
+}
 
-const appRows=Object.entries(D.APPS).map(([k,arr])=>[k,arr[9]]).filter(x=>x[1]>0).sort((x,y)=>y[1]-x[1]);
-const amax=appRows.length?appRows[0][1]:1;
-$("apps").innerHTML=appRows.map(([k,v],i)=>`<div class="bar ${i<2?'hot':''}" data-ap="${k}">
-  <span class="l">${APJA[k]}</span><div class="t" style="width:${(v/amax*100).toFixed(0)}%"></div><span class="v">${v}</span></div>`).join('');
-$("apps").querySelectorAll(".bar").forEach(e=>e.addEventListener("click",()=>{
-  resetFilters();F.ap=e.dataset.ap;F.y0=2020;F.y1=2026;showView("find");renderList();
-}));
+/* ================= matrix 課題×解決手段 ================= */
+function renderMX(){
+  const cnt=D.PROBS.map(()=>LVS.map(()=>0));
+  D.fams.forEach(o=>{
+    if(!pass(o,"pr,lv"))return;
+    o.pr.forEach(p=>{const pi=D.PROBS.indexOf(p);if(pi<0)return;
+      o.lv.forEach(l=>{const li=LVS.indexOf(l);if(li>=0)cnt[pi][li]++;});});
+  });
+  const max=Math.max(1,...cnt.flat());
+  let h=`<tr><th></th>${LVS.map(l=>`<th>${LVJA[l]}</th>`).join("")}</tr>`;
+  D.PROBS.forEach((p,i)=>{
+    h+=`<tr><td class="rl">${PLJA[p]}</td>`;
+    LVS.forEach((l,li)=>{
+      const v=cnt[i][li],[bg,fg]=heat(v,max);
+      const sel=A.pr.has(p)&&A.lv.has(l);
+      h+=`<td class="cell ${sel?'sel':''}" data-p="${p}" data-l="${l}" style="background:${bg};color:${fg}" title="${PLJA[p]} × ${LVJA[l]}: ${v}件">${v||''}</td>`;
+    });
+    h+=`</tr>`;
+  });
+  $("mx").innerHTML=h;
+  $("mx").querySelectorAll(".cell").forEach(c=>c.addEventListener("click",()=>{
+    const p=c.dataset.p,l=c.dataset.l;
+    if(A.pr.has(p)&&A.lv.has(l)){A.pr.delete(p);A.lv.delete(l);}
+    else{A.pr.clear();A.lv.clear();A.pr.add(p);A.lv.add(l);}
+    shown=60;renderAll();
+  }));
+}
 
+/* ================= assignee × time ================= */
+function renderAT(){
+  const{step,arr}=buckets();
+  const tot=new Map();
+  D.fams.forEach(o=>{if(pass(o,"as")&&o.as[0])tot.set(o.as[0],(tot.get(o.as[0])||0)+1);});
+  const top=[...tot.entries()].sort((a,b)=>b[1]-a[1]).slice(0,10);
+  const grid=top.map(()=>arr.map(()=>0));
+  D.fams.forEach(o=>{
+    if(!o.yr||!pass(o,"as"))return;
+    const ti=top.findIndex(t=>t[0]===o.as[0]);if(ti<0)return;
+    const bi=step===1?o.yr-arr[0]:Math.floor((o.yr-arr[0])/5);
+    if(bi>=0&&bi<arr.length)grid[ti][bi]++;
+  });
+  const max=Math.max(1,...grid.flat());
+  let h='';
+  top.forEach(([nm,v],ti)=>{
+    const old=(FIRSTY[nm]||9999)<1990;
+    const cells=grid[ti].map(c=>{
+      if(!c)return`<i style="background:#F1F1F1"></i>`;
+      const t=.2+Math.pow(c/max,.6)*.8;
+      return`<i style="background:rgba(${old?'227,18,11':'12,12,12'},${t.toFixed(2)})" title="${c}件"></i>`;
+    }).join("");
+    h+=`<div class="st ${A.as.has(nm)?'on':''}" data-as="${nm}"><span class="l" title="${nm}">${shortNm(nm)}</span><div class="cells">${cells}</div><span class="v">${v}</span></div>`;
+  });
+  const lblEvery=step===1?(arr.length>18?5:2):(arr.length>12?2:1);
+  h+=`<div class="st" style="cursor:default"><span></span><div class="cells">${arr.map((y,i)=>`<i style="height:auto;font-size:7.5px;color:#758D99;text-align:center;font-family:var(--mono);background:none">${(step===1?(y%lblEvery===0):(i%lblEvery===0))?blab(y,step):''}</i>`).join('')}</div><span></span></div>`;
+  $("at").innerHTML=h;
+  $("at").querySelectorAll(".st[data-as]").forEach(e=>e.addEventListener("click",()=>tgl(A.as,e.dataset.as)));
+}
+
+/* ================= distribution bars ================= */
+function distBars(el,keys,labels,getK,dim,set,hotSel){
+  const m=new Map();
+  D.fams.forEach(o=>{if(!pass(o,dim))return;const k=getK(o);if(k)m.set(k,(m.get(k)||0)+1);});
+  const rows=keys?keys.map(k=>[k,m.get(k)||0]):[...m.entries()].sort((a,b)=>b[1]-a[1]).slice(0,12);
+  const max=Math.max(1,...rows.map(r=>r[1]));
+  $(el).innerHTML=rows.map(([k,v])=>`<div class="bar ${(hotSel?set.has(k):false)?'hot':''}" data-k="${k}">
+    <span class="l" title="${k}">${labels?labels[k]:shortNm(k)}</span><div class="t" style="width:${(v/max*100).toFixed(1)}%"></div><span class="v">${v}</span></div>`).join("");
+  $(el).querySelectorAll(".bar").forEach(e=>e.addEventListener("click",()=>tgl(set,e.dataset.k)));
+}
+function renderSt(){distBars("stb",["bump","leaf","hybrid","tension","other","unknown"],STJA,o=>o.st,"st",A.st,true);}
+function renderAp(){
+  const keys=Object.keys(APJA).filter(k=>k!=="general_unknown");
+  const m=new Map();
+  D.fams.forEach(o=>{if(!pass(o,"ap"))return;if(o.ap&&o.ap!=="general_unknown")m.set(o.ap,(m.get(o.ap)||0)+1);});
+  const rows=keys.map(k=>[k,m.get(k)||0]).sort((a,b)=>b[1]-a[1]);
+  const max=Math.max(1,...rows.map(r=>r[1]));
+  $("apb").innerHTML=rows.map(([k,v])=>`<div class="bar ${A.ap.has(k)?'hot':''}" data-k="${k}">
+    <span class="l">${APJA[k]}</span><div class="t" style="width:${(v/max*100).toFixed(1)}%"></div><span class="v">${v}</span></div>`).join("");
+  $("apb").querySelectorAll(".bar").forEach(e=>e.addEventListener("click",()=>tgl(A.ap,e.dataset.k)));
+}
+function renderAs(){distBars("asb",null,null,o=>o.as[0],"as",A.as,true);}
+
+/* ================= structure stacked trend ================= */
 const SCOL={bump:"#0C0C0C",leaf:"#758D99",tension:"#B7C6CF",hybrid:"#E3120B",other:"#DEE5E9",unknown:"#F1EEE6"};
-const colTot=Array(10).fill(0);
-D.STREND.forEach(row=>row.forEach((v,i)=>colTot[i]+=v));
-const cmax=Math.max(...colTot);
-let sk='';
-for(let bi=0;bi<10;bi++){
-  let col='';
-  D.STK.forEach((s,si)=>{const v=D.STREND[si][bi];if(!v)return;col+=`<i style="height:${(v/cmax*108).toFixed(1)}px;background:${SCOL[s]}"></i>`;});
-  sk+=`<div class="col">${col}</div>`;
+function renderStk(){
+  const{step,arr}=buckets();
+  const order=["bump","leaf","tension","hybrid","other","unknown"];
+  const grid=order.map(()=>arr.map(()=>0));
+  D.fams.forEach(o=>{
+    if(!o.yr||!pass(o,"st"))return;
+    const bi=step===1?o.yr-arr[0]:Math.floor((o.yr-arr[0])/5);
+    if(bi<0||bi>=arr.length)return;
+    const si=order.indexOf(o.st);if(si>=0)grid[si][bi]++;
+  });
+  const colTot=arr.map((_,bi)=>order.reduce((s,_2,si)=>s+grid[si][bi],0));
+  const cmax=Math.max(1,...colTot);
+  $("stk").innerHTML=arr.map((_,bi)=>{
+    let col='';
+    order.forEach((s,si)=>{const v=grid[si][bi];if(!v)return;col+=`<i style="height:${(v/cmax*94).toFixed(1)}px;background:${SCOL[s]}"></i>`;});
+    return`<div class="col">${col}</div>`;
+  }).join("");
+  const lblEvery=step===1?(arr.length>18?5:2):(arr.length>12?2:1);
+  $("stkx").innerHTML=arr.map((y,i)=>`<span>${(step===1?(y%lblEvery===0):(i%lblEvery===0))?blab(y,step):''}</span>`).join("");
+  $("stklg").innerHTML=["bump","leaf","hybrid","tension"].map(s=>`<span class="${A.st.has(s)?'on':''}" data-s="${s}"><i style="background:${SCOL[s]}"></i>${STJA[s]}</span>`).join("")+`<span style="cursor:default"><i style="background:#F1EEE6;border:1px solid #DDD"></i>判定不能ほか</span>`;
+  $("stklg").querySelectorAll("span[data-s]").forEach(e=>e.addEventListener("click",()=>tgl(A.st,e.dataset.s)));
 }
-$("stk").innerHTML=sk;
-$("stkx").innerHTML=YRS.map(y=>`<span>${y}</span>`).join('');
-$("stklg").innerHTML=["bump","leaf","hybrid","tension"].map(s=>`<span><i style="background:${SCOL[s]}"></i>${STJA[s]}</span>`).join('')+`<span><i style="background:#F1EEE6;border:1px solid #DDD"></i>判定不能ほか</span>`;
 
-/* ---- find ---- */
-const F={st:null,pr:null,ap:null,fg:null,gr:null,y0:null,y1:null};
+/* ================= technology lifecycle ================= */
+function renderLife(){
+  const pts=[];
+  for(let y=1955;y<=2020;y+=5){
+    const set=new Set();let n=0;
+    D.fams.forEach(o=>{if(!o.yr||o.yr<y||o.yr>y+4||!pass(o,"yr"))return;n++;if(o.as[0])set.add(o.as[0]);});
+    if(n)pts.push({y,n,a:set.size});
+  }
+  if(pts.length<2){$("life").innerHTML="";return;}
+  const mx=Math.max(...pts.map(p=>p.a)),myv=Math.max(...pts.map(p=>p.n));
+  const X=a=>36+a/mx*360,Y=n=>206-n/myv*180;
+  let path=pts.map((p,i)=>`${i?'L':'M'}${X(p.a).toFixed(1)},${Y(p.n).toFixed(1)}`).join(" ");
+  const lab=pts.filter((p,i)=>i===pts.length-1||p.y===1975||p.y===2000||p.y===2010);
+  $("life").innerHTML=`
+    <line x1="36" y1="206" x2="404" y2="206" stroke="#DDD"/><line x1="36" y1="206" x2="36" y2="16" stroke="#DDD"/>
+    <text x="404" y="222" font-size="9" fill="#758D99" text-anchor="end" font-family="IBM Plex Mono">出願人数 →</text>
+    <text x="14" y="16" font-size="9" fill="#758D99" font-family="IBM Plex Mono" transform="rotate(-90 14 16)" text-anchor="end">件数 →</text>
+    <path d="${path}" fill="none" stroke="#B7C6CF" stroke-width="1.6"/>
+    ${pts.map((p,i)=>`<circle cx="${X(p.a).toFixed(1)}" cy="${Y(p.n).toFixed(1)}" r="${i===pts.length-1?5:3}" fill="${i===pts.length-1?'#E3120B':'#0C0C0C'}"/>`).join("")}
+    ${lab.map(p=>`<text x="${(X(p.a)+7).toFixed(1)}" y="${(Y(p.n)-6).toFixed(1)}" font-size="9.5" font-family="IBM Plex Mono" fill="${p.y===2020?'#E3120B':'#758D99'}" font-weight="${p.y===2020?'700':'400'}">'${String(p.y).slice(2)}${p.y===2020?"–'24":""}</text>`).join("")}`;
+}
+
+/* ================= find ================= */
 let shown=60;
-function resetFilters(){Object.keys(F).forEach(k=>F[k]=null);$("q").value="";shown=60;
-  document.querySelectorAll("#v-find .chip").forEach(c=>c.classList.remove("on"));}
-function syncChips(){
+function syncFindChips(){
   document.querySelectorAll("#v-find .chip").forEach(c=>{
     const f=c.dataset.f,k=c.dataset.k;
-    c.classList.toggle("on",(f==="st"&&F.st===k)||(f==="pr"&&F.pr===k)||(f==="fg"&&F.fg==="1")||(f==="gr"&&F.gr==="1")||(f==="era"&&F.y0===2010&&F.y1===null));
+    let on=false;
+    if(f==="st")on=A.st.has(k);else if(f==="pr")on=A.pr.has(k);else if(f==="lv")on=A.lv.has(k);
+    else if(f==="fg")on=A.fg;else if(f==="gr")on=A.gr;
+    else if(f==="era")on=(A.y0===+k&&A.y1===MAXY);
+    c.classList.toggle("on",on);
   });
 }
 document.querySelectorAll("#v-find .chip").forEach(c=>c.addEventListener("click",()=>{
   const f=c.dataset.f,k=c.dataset.k;
-  if(f==="era"){if(F.y0===2010&&F.y1===null){F.y0=null;}else{F.y0=2010;F.y1=null;}}
-  else F[f]=(F[f]===k?null:k);
-  shown=60;syncChips();renderList();
+  if(f==="era"){if(A.y0===+k&&A.y1===MAXY){A.y0=MINY;}else{A.y0=+k;A.y1=MAXY;}}
+  else if(f==="fg")A.fg=!A.fg;
+  else if(f==="gr")A.gr=!A.gr;
+  else if(f==="st")A.st.has(k)?A.st.delete(k):A.st.add(k);
+  else if(f==="pr")A.pr.has(k)?A.pr.delete(k):A.pr.add(k);
+  else if(f==="lv")A.lv.has(k)?A.lv.delete(k):A.lv.add(k);
+  shown=60;renderAll();
 }));
-$("q").addEventListener("input",()=>{shown=60;renderList();});
+$("q").addEventListener("input",()=>{A.q=$("q").value.trim();shown=60;renderAll();});
 $("sort").addEventListener("change",()=>renderList());
 $("more").addEventListener("click",()=>{shown+=80;renderList();});
+$("rst2").addEventListener("click",()=>{resetA();renderAll();});
+$("tolist").addEventListener("click",()=>showView("find"));
 
-function match(o){
-  if(F.st&&o.st!==F.st)return false;
-  if(F.pr&&!o.pr.includes(F.pr))return false;
-  if(F.ap&&o.ap!==F.ap)return false;
-  if(F.fg&&!o.fg)return false;
-  if(F.gr&&!o.gr)return false;
-  if(F.y0&&(!o.yr||o.yr<F.y0))return false;
-  if(F.y1&&(!o.yr||o.yr>F.y1))return false;
-  const q=$("q").value.trim().toLowerCase();
-  if(q){
-    const hay=(o.rep+" "+o.t+" "+o.ja+" "+o.as.join(" ")).toLowerCase();
-    for(const w of q.split(/\s+/))if(!hay.includes(w))return false;
-  }
-  return true;
-}
 function pubDisp(rep){return rep.replace(/-/g," ")}
 function rowHTML(o,i){
   return `<div class="li ${o.fg?'':'nofig'}" data-i="${i}">
@@ -315,15 +606,16 @@ function rowHTML(o,i){
 }
 let cur=[];
 function renderList(){
-  cur=D.fams.filter(match);
+  cur=D.fams.filter(o=>pass(o));
   const s=$("sort").value;
   if(s==="new")cur.sort((a,b)=>(b.yr||0)-(a.yr||0)||b.ju-a.ju);
   if(s==="old")cur.sort((a,b)=>(a.yr||9999)-(b.yr||9999));
   if(s==="ju")cur.sort((a,b)=>b.ju-a.ju||(b.yr||0)-(a.yr||0));
-  $("cnt").firstElementChild?$("cnt").firstElementChild.textContent=`${cur.length} / ${D.fams.length} 件`:$("cnt").insertAdjacentHTML("afterbegin",`<span>${cur.length} / ${D.fams.length} 件</span>`);
+  $("cnt").textContent=`${cur.length} / ${D.fams.length} 件`;
   $("list").innerHTML=cur.slice(0,shown).map((o,i)=>rowHTML(o,i)).join("");
   $("more").style.display=cur.length>shown?"block":"none";
   $("list").querySelectorAll(".li").forEach(e=>e.addEventListener("click",()=>toggleDet(+e.dataset.i)));
+  $("tolist").textContent=`この条件の特許一覧を見る（${cur.length}件）→`;
 }
 function toggleDet(i){
   const o=cur[i],d=$("det-"+i);
@@ -340,7 +632,7 @@ function toggleDet(i){
   d.classList.add("on");
 }
 
-/* ---- zukan ---- */
+/* ================= zukan ================= */
 let zf="all";
 const zfams=D.fams.filter(o=>o.fg);
 function renderZ(){
@@ -363,8 +655,14 @@ function renderZ(){
 $("lbx").addEventListener("click",()=>$("lb").classList.remove("on"));
 $("lb").addEventListener("click",e=>{if(e.target===$("lb"))$("lb").classList.remove("on");});
 
+/* ================= render all ================= */
+function renderAll(){
+  renderKPI();renderFbar();renderYear();renderHM();renderMX();renderAT();
+  renderSt();renderAp();renderAs();renderStk();renderLife();
+  syncFindChips();renderList();
+}
 $("zn").textContent=zfams.length;
-renderList();renderZ();
+renderAll();renderZ();
 if(location.hash==="#find")showView("find");
 if(location.hash==="#zukan")showView("zukan");
 </script>
