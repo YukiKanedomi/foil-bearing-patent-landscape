@@ -246,6 +246,12 @@ table{border-collapse:collapse}
         <div class="hscroll"><table class="mx" id="mx"></table></div>
 
         <div class="hr"></div>
+        <h2>主要法域への展開 — 中国が主戦場に</h2>
+        <div class="cs">その法域に出願されたファミリー数の推移。凡例タップで絞り込み（複数法域のファミリーは各線に計上）。公開が追いつかない直近分は非表示</div>
+        <svg class="life" id="juline" viewBox="0 0 440 230" style="max-width:460px"></svg>
+        <div class="lgd" id="julg"></div>
+
+        <div class="hr"></div>
         <h2>技術ライフサイクル — まだ成長期のさなか</h2>
         <div class="cs">5年ごとの「出願人数（横）×ファミリー数（縦）」の軌跡。右上へ向かう間は成長期。'25以降は公開が追いつかず件数未確定のため除外（期間スライダー非連動）</div>
         <svg class="life" id="life" viewBox="0 0 420 240"></svg>
@@ -255,6 +261,11 @@ table{border-collapse:collapse}
         <h2>出願人 × 年 — 各社はいつ動いたか</h2>
         <div class="cs">絞り込み後の上位10社。<span style="color:var(--red);font-weight:700">赤</span>＝創成期からの出願人（初出願が1990年より前）。行をタップで絞り込み</div>
         <div id="at"></div>
+
+        <div class="hr"></div>
+        <h2>出願人 × 課題 — 各社は何を攻めているか</h2>
+        <div class="cs">絞り込み後の上位10社。セルをタップ→その社×課題に絞り込み（再タップで解除）</div>
+        <div class="hscroll"><table class="mx" id="ac"></table></div>
 
         <div class="hr"></div>
         <h2>構造の内訳と勢力図</h2>
@@ -305,10 +316,11 @@ table{border-collapse:collapse}
 
   <!-- ============ ZUKAN ============ -->
   <section class="view" id="v-zukan">
-    <h2>代表図の図鑑 — コア特許<span id="zn"></span>件</h2>
-    <div class="cs">法域展開・成立・タグから選定したコア特許の公報代表図。タップで拡大</div>
-    <div class="frow" id="zfilter"></div>
+    <h2>代表図の図鑑 — <span id="zn"></span>件</h2>
+    <div class="cs">コア特許の公報代表図。絞り込みは全タブ共有（ダッシュボードや一覧表で絞ってから来ると効きます）。タップで拡大</div>
+    <div class="fbar" id="fbar3"></div>
     <div class="zgrid" id="zgrid"></div>
+    <button class="more" id="morez" style="display:none">さらに表示</button>
   </section>
 
   <p class="foot">⚠ 本サイトは<b>公開済み特許の客観分析のみ</b>を収載しています（発明アイデア・出願戦略は含みません）。分類・要約は機械判定の一次情報で、正確な内容は各公報の原文をご確認ください。件数はファミリー（同一発明の各国出願をまとめた単位）ベース。出願人は主要な社名変更・承継・表記ゆれを名寄せしています（詳細は下の「データと方法」）。出典: Google Patents Public Data（BigQuery）／図: 各特許公報（パブリックドメイン）／生成 2026-07-04</p>
@@ -354,7 +366,7 @@ const MINY=1955,MAXY=2026;
 $("dek").textContent=`公知特許 ${D.meta.total.toLocaleString()} ファミリー（1900–2026、優先年ベース。年表チャートは1955年以降）を課題・構造・出願人で分析する。グラフはタップで絞り込み、もう一度タップで解除`;
 
 /* ================= shared filter state ================= */
-const A={q:"",st:new Set(),fm:new Set(),pr:new Set(),lv:new Set(),ap:new Set(),as:new Set(),y0:MINY,y1:MAXY,fg:false,gr:false};
+const A={q:"",st:new Set(),fm:new Set(),pr:new Set(),lv:new Set(),ap:new Set(),as:new Set(),ju:new Set(),y0:MINY,y1:MAXY,fg:false,gr:false};
 const FMP={radial:"ラジアル",thrust:"スラスト",combo:"複合",conical:"円錐",unknown:"—"};
 function pass(o,skip){
   skip=skip||"";
@@ -365,13 +377,14 @@ function pass(o,skip){
   if(!skip.includes("lv")&&A.lv.size&&!o.lv.some(l=>A.lv.has(l)))return false;
   if(!skip.includes("ap")&&A.ap.size&&!A.ap.has(o.ap))return false;
   if(!skip.includes("as")&&A.as.size&&!(o.as[0]&&A.as.has(o.as[0])))return false;
+  if(!skip.includes("ju")&&A.ju.size&&!(o.jl||[]).some(j=>A.ju.has(j)))return false;
   if(A.fg&&!o.fg)return false;
   if(A.gr&&!o.gr)return false;
-  if(A.q){const hay=(o.rep+" "+o.t+" "+o.ja+" "+o.as.join(" ")).toLowerCase();
+  if(A.q){const hay=(o.rep+" "+o.t+" "+o.ja+" "+o.as.join(" ")+" "+(o.c1||"")+" "+(o.el||[]).join(" ")).toLowerCase();
     for(const w of A.q.toLowerCase().split(/\s+/))if(w&&!hay.includes(w))return false;}
   return true;
 }
-function resetA(){A.q="";A.st.clear();A.fm.clear();A.pr.clear();A.lv.clear();A.ap.clear();A.as.clear();A.y0=MINY;A.y1=MAXY;A.fg=false;A.gr=false;$("q").value="";shown=60;}
+function resetA(){A.q="";A.st.clear();A.fm.clear();A.pr.clear();A.lv.clear();A.ap.clear();A.as.clear();A.ju.clear();A.y0=MINY;A.y1=MAXY;A.fg=false;A.gr=false;$("q").value="";shown=60;}
 function tgl(set,k){set.has(k)?set.delete(k):set.add(k);shown=60;renderAll();}
 
 /* time buckets: yearly when span<=30, else 5-year */
@@ -432,13 +445,14 @@ function renderFbar(){
   A.lv.forEach(k=>chips.push(["lv",k,"手段",LVJA[k]]));
   A.ap.forEach(k=>chips.push(["ap",k,"機器",APJA[k]]));
   A.as.forEach(k=>chips.push(["as",k,"出願人",shortNm(k)]));
+  A.ju.forEach(k=>chips.push(["ju",k,"法域",k]));
   if(A.y0>MINY||A.y1<MAXY)chips.push(["yr","","期間",`${A.y0}–${A.y1}`]);
   if(A.fg)chips.push(["fg","","","図あり"]);
   if(A.gr)chips.push(["gr","","","成立のみ"]);
   if(A.q)chips.push(["q","","検索",A.q]);
   const empty=`<span class="none">絞り込みなし — グラフの要素をタップすると全体が連動します</span>`;
   const html=chips.length?chips.map(([f,k,pre,lab,red])=>`<span class="fchip ${red?'red':''}" data-f="${f}" data-k="${k}">${pre?`<b>${pre}</b>`:""}${lab} ✕</span>`).join("")+`<button class="frst rstA">リセット</button>`:empty;
-  ["fbar","fbar2"].forEach(id=>{
+  ["fbar","fbar2","fbar3"].forEach(id=>{
     const el=$(id);if(!el)return;
     el.innerHTML=html;
     el.querySelectorAll(".fchip").forEach(c=>c.addEventListener("click",()=>{
@@ -446,7 +460,7 @@ function renderFbar(){
       if(f==="yr"){A.y0=MINY;A.y1=MAXY;}
       else if(f==="fg")A.fg=false;else if(f==="gr")A.gr=false;
       else if(f==="q"){A.q="";$("q").value="";$("qdb").value="";}
-      else A[f].delete(k);
+      else if(A[f])A[f].delete(k);
       shown=60;renderAll();
     }));
     el.querySelectorAll(".rstA").forEach(b=>b.addEventListener("click",()=>{resetA();$("qdb").value="";renderAll();}));
@@ -618,6 +632,72 @@ function renderStk(){
   $("stkx").innerHTML=arr.map((y,i)=>`<span>${(step===1?(y%lblEvery===0):(i%lblEvery===0))?blab(y,step):''}</span>`).join("");
   $("stklg").innerHTML=["bump","leaf","hybrid","tension"].map(s=>`<span class="${A.st.has(s)?'on':''}" data-s="${s}"><i style="background:${SCOL[s]}"></i>${STJA[s]}</span>`).join("")+`<span style="cursor:default"><i style="background:#F1EEE6;border:1px solid #DDD"></i>判定不能ほか</span>`;
   $("stklg").querySelectorAll("span[data-s]").forEach(e=>e.addEventListener("click",()=>tgl(A.st,e.dataset.s)));
+}
+
+/* ================= assignee × problem matrix ================= */
+function renderAC(){
+  const tot=new Map();
+  D.fams.forEach(o=>{if(pass(o,"as")&&o.as[0])tot.set(o.as[0],(tot.get(o.as[0])||0)+1);});
+  const top=[...tot.entries()].sort((a,b)=>b[1]-a[1]).slice(0,10);
+  const cnt=top.map(()=>D.PROBS.map(()=>0));
+  D.fams.forEach(o=>{
+    if(!pass(o,"as,pr"))return;
+    const ti=top.findIndex(t=>t[0]===o.as[0]);if(ti<0)return;
+    o.pr.forEach(p=>{const pi=D.PROBS.indexOf(p);if(pi>=0)cnt[ti][pi]++;});
+  });
+  const max=Math.max(1,...cnt.flat());
+  let h=`<tr><th></th>${D.PROBS.map(p=>`<th>${PLJA[p]}</th>`).join("")}<th></th></tr>`;
+  top.forEach(([nm,v],ti)=>{
+    h+=`<tr><td class="rl" data-as="${nm}" style="cursor:pointer;${A.as.has(nm)?'color:var(--red)':''}" title="${nm}">${shortNm(nm)}</td>`;
+    D.PROBS.forEach((p,pi)=>{
+      const c=cnt[ti][pi],[bg,fg]=heat(c,max);
+      const sel=A.as.has(nm)&&A.pr.has(p);
+      h+=`<td class="cell ${sel?'sel':''}" data-as="${nm}" data-p="${p}" style="background:${bg};color:${fg}" title="${shortNm(nm)} × ${PLJA[p]}: ${c}件">${c||''}</td>`;
+    });
+    h+=`<td class="tot">${v}</td></tr>`;
+  });
+  $("ac").innerHTML=h;
+  $("ac").querySelectorAll(".rl[data-as]").forEach(c=>c.addEventListener("click",()=>tgl(A.as,c.dataset.as)));
+  $("ac").querySelectorAll(".cell").forEach(c=>c.addEventListener("click",()=>{
+    const nm=c.dataset.as,p=c.dataset.p;
+    if(A.as.has(nm)&&A.pr.has(p)){A.as.delete(nm);A.pr.delete(p);}
+    else{A.as.clear();A.pr.clear();A.as.add(nm);A.pr.add(p);}
+    shown=60;shownDB=300;renderAll();
+  }));
+}
+
+/* ================= jurisdiction lines ================= */
+const JUS=[["CN","#E3120B"],["JP","#006BA2"],["US","#0C0C0C"],["KR","#758D99"],["EP","#B7C6CF"]];
+function renderJU(){
+  let{step,arr}=buckets();
+  // 公開ラグで未確定の末尾バケット（'25以降）は線から除外
+  arr=arr.filter(y=>step===1?y<=2024:y<=2020);
+  if(arr.length<2){$("juline").innerHTML="";$("julg").innerHTML="";return;}
+  const series=JUS.map(([j])=>arr.map(()=>0));
+  D.fams.forEach(o=>{
+    if(!o.yr||!pass(o,"ju"))return;
+    const bi=step===1?o.yr-arr[0]:Math.floor((o.yr-arr[0])/5);
+    if(bi<0||bi>=arr.length)return;
+    JUS.forEach(([j],si)=>{if((o.jl||[]).includes(j))series[si][bi]++;});
+  });
+  const max=Math.max(1,...series.flat());
+  const W=440,x0=30,x1=390,y0=200,y1=16;
+  const X=i=>x0+(i/(arr.length-1))*(x1-x0);
+  const Y=v=>y0-(v/max)*(y0-y1);
+  let g=`<line x1="${x0}" y1="${y0}" x2="${x1}" y2="${y0}" stroke="#DDD"/>`;
+  const lblEvery=step===1?(arr.length>18?10:5):(arr.length>12?2:1);
+  arr.forEach((y,i)=>{if((step===1?y%lblEvery===0:i%lblEvery===0))g+=`<text x="${X(i)}" y="${y0+13}" font-size="8.5" fill="#758D99" text-anchor="middle" font-family="IBM Plex Mono">${blab(y,step)}</text>`;});
+  // 右端ラベルの重なり回避（縦に最低12pxずつ離す）
+  const lab=JUS.map(([j,col],si)=>({j,col,si,y:Y(series[si][arr.length-1])})).sort((a,b)=>a.y-b.y);
+  for(let i=1;i<lab.length;i++)if(lab[i].y-lab[i-1].y<12)lab[i].y=lab[i-1].y+12;
+  JUS.forEach(([j,col],si)=>{
+    const pts=series[si].map((v,i)=>`${X(i).toFixed(1)},${Y(v).toFixed(1)}`).join(" ");
+    g+=`<polyline points="${pts}" fill="none" stroke="${col}" stroke-width="${j==="CN"?2.6:1.8}" opacity="${A.ju.size&&!A.ju.has(j)?.25:1}"/>`;
+  });
+  lab.forEach(l=>{g+=`<text x="${x1+6}" y="${(l.y+3).toFixed(1)}" font-size="10" font-weight="700" fill="${l.col}" font-family="IBM Plex Mono" opacity="${A.ju.size&&!A.ju.has(l.j)?.3:1}">${l.j}</text>`;});
+  $("juline").innerHTML=g;
+  $("julg").innerHTML=JUS.map(([j,col])=>`<span class="${A.ju.has(j)?'on':''}" data-j="${j}"><i style="background:${col}"></i>${j}</span>`).join("");
+  $("julg").querySelectorAll("span[data-j]").forEach(e=>e.addEventListener("click",()=>tgl(A.ju,e.dataset.j)));
 }
 
 /* ================= technology lifecycle ================= */
@@ -841,20 +921,19 @@ document.addEventListener("click",e=>{
 });
 $("qdb").addEventListener("input",()=>{A.q=$("qdb").value.trim();$("q").value=$("qdb").value;shown=60;shownDB=300;renderAll();});
 
-/* ================= zukan ================= */
-let zf="all";
-const zfams=D.fams.filter(o=>o.fg);
+/* ================= zukan（全タブ共有フィルタ連動） ================= */
+let shownZ=120;
+let zlist=[];
 function renderZ(){
-  const cats=[["all","すべて"],["bump","バンプ型"],["leaf","リーフ型"],["assembly_fixation","固定・組立"],["startstop_wear","起動停止"],["thermal","熱"]];
-  $("zfilter").innerHTML=cats.map(([k,l])=>`<span class="chip ${zf===k?'on':''}" data-z="${k}">${l}</span>`).join("");
-  $("zfilter").querySelectorAll(".chip").forEach(c=>c.addEventListener("click",()=>{zf=c.dataset.z;renderZ();}));
-  const list=zfams.filter(o=>zf==="all"||o.st===zf||o.pr.includes(zf));
-  $("zgrid").innerHTML=list.map(o=>`<div class="zc" data-id="${o.id}">
+  zlist=D.fams.filter(o=>o.fg&&pass(o));
+  $("zn").textContent=`${zlist.length}`;
+  $("zgrid").innerHTML=zlist.slice(0,shownZ).map(o=>`<div class="zc" data-id="${o.id}">
     <div class="im"><img loading="lazy" src="figs/${o.id}.png"></div>
-    <div class="cp"><div class="no">${pubDisp(o.rep)}</div><div class="ja">${o.ja||o.t}</div><div class="mt">${o.as[0]||"—"} · ${o.yr||"—"}</div></div>
+    <div class="cp"><div class="no">${pubDisp(o.rep)}</div><div class="ja">${o.ja||o.t}</div><div class="mt">${o.as[0]?shortNm(o.as[0]):"—"} · ${o.yr||"—"}</div></div>
   </div>`).join("");
+  $("morez").style.display=zlist.length>shownZ?"block":"none";
   $("zgrid").querySelectorAll(".zc").forEach(e=>e.addEventListener("click",()=>{
-    const o=zfams.find(x=>x.id===e.dataset.id);
+    const o=zlist.find(x=>x.id===e.dataset.id);
     $("lbbox").innerHTML=`<img src="figs/${o.id}.png"><div class="cap"><b>${pubDisp(o.rep)}</b>　${o.ja||o.t}<br>
       <span style="color:#758D99;font-size:10.5px">${o.as[0]||""} · ${o.yr||""}</span>
       ${o.c1?`<div style="font-size:11px;line-height:1.7;margin-top:6px;background:#F5F4EF;padding:7px 9px"><span style="font-size:9px;color:#758D99;font-weight:700">請求項1の骨子（機械要約）</span><br>${o.c1}</div>`:""}<br>
@@ -864,16 +943,16 @@ function renderZ(){
 }
 $("lbx").addEventListener("click",()=>$("lb").classList.remove("on"));
 $("lb").addEventListener("click",e=>{if(e.target===$("lb"))$("lb").classList.remove("on");});
+$("morez").addEventListener("click",()=>{shownZ+=200;renderZ();});
 
 /* ================= render all ================= */
 function renderAll(){
-  renderKPI();renderFbar();renderYear();renderHM();renderMX();renderAT();
+  renderKPI();renderFbar();renderYear();renderHM();renderMX();renderAT();renderAC();renderJU();
   renderSt();renderAp();renderAs();renderStk();renderLife();
-  syncFindChips();renderList();renderDB();
+  syncFindChips();renderList();renderDB();renderZ();
   if(popSpec)renderPop();
 }
-$("zn").textContent=zfams.length;
-renderAll();renderZ();
+renderAll();
 if(location.hash==="#find")showView("find");
 if(location.hash==="#db")showView("db");
 if(location.hash==="#zukan")showView("zukan");
