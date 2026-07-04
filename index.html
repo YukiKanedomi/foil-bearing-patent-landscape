@@ -125,6 +125,18 @@ table{border-collapse:collapse}
   font-size:12.5px;font-weight:700;cursor:pointer;margin-top:12px}
 .more:active{background:var(--beige)}
 /* zukan */
+/* db table */
+.dbt{width:100%;font-size:10px}
+.dbt th{position:sticky;top:0;background:#fff;border-bottom:2px solid var(--ink);padding:6px 7px;font-size:9px;color:var(--grey);letter-spacing:.05em;text-align:left;white-space:nowrap;cursor:pointer;user-select:none}
+.dbt th.srt{color:var(--red)}
+.dbt td{border-bottom:1px solid var(--rule);padding:5px 7px;white-space:nowrap;vertical-align:top}
+.dbt tr.r{cursor:pointer}
+.dbt tr.r:hover td{background:var(--beige)}
+.dbt .pn{font-family:var(--mono);color:var(--red);font-size:9.5px}
+.dbt .as2{max-width:110px;overflow:hidden;text-overflow:ellipsis}
+.dbt .num{font-family:var(--mono);color:var(--grey)}
+.dbt .ttl{max-width:340px;overflow:hidden;text-overflow:ellipsis;font-weight:700}
+.dbt .dbdet td{white-space:normal;background:var(--beige);font-size:11px;line-height:1.75;padding:10px 12px}
 .zgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
 .zc{border:1px solid var(--rule);cursor:pointer}
 .zc .im{padding:8px;display:flex;align-items:center;justify-content:center;height:130px;background:#fff}
@@ -189,6 +201,7 @@ table{border-collapse:collapse}
   <div class="tabs">
     <button class="tab on" data-v="dash">ダッシュボード</button>
     <button class="tab" data-v="find">特許検索</button>
+    <button class="tab" data-v="db">一覧表</button>
     <button class="tab" data-v="zukan">図鑑</button>
   </div>
 
@@ -271,6 +284,15 @@ table{border-collapse:collapse}
     <div id="list"></div>
     <button class="more" id="more" style="display:none">さらに表示</button>
   </div></section>
+
+  <!-- ============ DB ============ -->
+  <section class="view" id="v-db">
+    <input class="sbox" id="qdb" placeholder="検索：番号・出願人・技術語（絞り込みは全タブ共有）">
+    <div class="fbar" id="fbar2"></div>
+    <div class="cnt"><span id="cntdb"></span><span style="font-size:9.5px">列見出しタップで並べ替え／行タップで詳細</span></div>
+    <div class="hscroll"><table class="dbt" id="dbt"></table></div>
+    <button class="more" id="moredb" style="display:none">さらに表示</button>
+  </section>
 
   <!-- ============ ZUKAN ============ -->
   <section class="view" id="v-zukan">
@@ -401,17 +423,21 @@ function renderFbar(){
   if(A.fg)chips.push(["fg","","","図あり"]);
   if(A.gr)chips.push(["gr","","","成立のみ"]);
   if(A.q)chips.push(["q","","検索",A.q]);
-  if(!chips.length){$("fbar").innerHTML=`<span class="none">絞り込みなし — グラフの要素をタップすると全体が連動します</span>`;return;}
-  $("fbar").innerHTML=chips.map(([f,k,pre,lab,red])=>`<span class="fchip ${red?'red':''}" data-f="${f}" data-k="${k}">${pre?`<b>${pre}</b>`:""}${lab} ✕</span>`).join("")+`<button class="frst" id="rst">リセット</button>`;
-  $("fbar").querySelectorAll(".fchip").forEach(c=>c.addEventListener("click",()=>{
-    const f=c.dataset.f,k=c.dataset.k;
-    if(f==="yr"){A.y0=MINY;A.y1=MAXY;}
-    else if(f==="fg")A.fg=false;else if(f==="gr")A.gr=false;
-    else if(f==="q"){A.q="";$("q").value="";}
-    else A[f].delete(k);
-    shown=60;renderAll();
-  }));
-  $("rst").addEventListener("click",()=>{resetA();renderAll();});
+  const empty=`<span class="none">絞り込みなし — グラフの要素をタップすると全体が連動します</span>`;
+  const html=chips.length?chips.map(([f,k,pre,lab,red])=>`<span class="fchip ${red?'red':''}" data-f="${f}" data-k="${k}">${pre?`<b>${pre}</b>`:""}${lab} ✕</span>`).join("")+`<button class="frst rstA">リセット</button>`:empty;
+  ["fbar","fbar2"].forEach(id=>{
+    const el=$(id);if(!el)return;
+    el.innerHTML=html;
+    el.querySelectorAll(".fchip").forEach(c=>c.addEventListener("click",()=>{
+      const f=c.dataset.f,k=c.dataset.k;
+      if(f==="yr"){A.y0=MINY;A.y1=MAXY;}
+      else if(f==="fg")A.fg=false;else if(f==="gr")A.gr=false;
+      else if(f==="q"){A.q="";$("q").value="";$("qdb").value="";}
+      else A[f].delete(k);
+      shown=60;renderAll();
+    }));
+    el.querySelectorAll(".rstA").forEach(b=>b.addEventListener("click",()=>{resetA();$("qdb").value="";renderAll();}));
+  });
 }
 
 /* ================= year histogram + range ================= */
@@ -625,7 +651,7 @@ document.querySelectorAll("#v-find .chip").forEach(c=>c.addEventListener("click"
   else if(f==="lv")A.lv.has(k)?A.lv.delete(k):A.lv.add(k);
   shown=60;renderAll();
 }));
-$("q").addEventListener("input",()=>{A.q=$("q").value.trim();shown=60;renderAll();});
+$("q").addEventListener("input",()=>{A.q=$("q").value.trim();$("qdb").value=$("q").value;shown=60;renderAll();});
 $("sort").addEventListener("change",()=>renderList());
 $("more").addEventListener("click",()=>{shown+=80;renderList();});
 $("rst2").addEventListener("click",()=>{resetA();renderAll();});
@@ -659,7 +685,11 @@ function renderList(){
 function toggleDet(i){
   const o=cur[i],d=$("det-"+i);
   if(d.classList.contains("on")){d.classList.remove("on");return;}
-  d.innerHTML=`${o.t?`<div class="en">${o.t}</div>`:""}
+  d.innerHTML=detHTML(o);
+  d.classList.add("on");
+}
+function detHTML(o){
+  return `${o.t?`<div class="en">${o.t}</div>`:""}
     <div class="tags">
       <span class="tg">${STJA[o.st]}</span>${o.fm&&FMJA[o.fm]?`<span class="tg">${FMJA[o.fm]}</span>`:""}
       ${o.pr.map(p=>`<span class="tg">${PLJA[p]}</span>`).join("")}
@@ -674,8 +704,53 @@ function toggleDet(i){
     </div>`:""}
     <div style="color:#758D99;font-size:10px;margin-top:6px">ファミリー ${o.mm} 公報 · ${o.ju} 法域 · 判定確度 ${o.cf}${o.as.length?` · ${o.as.join(" / ")}`:""}</div>
     <div style="margin-top:7px"><a href="https://patents.google.com/patent/${o.gp}/ja" target="_blank" rel="noopener">Google Patents で原文を見る →</a></div>`;
-  d.classList.add("on");
 }
+
+/* ================= db table ================= */
+let shownDB=300;
+const DBS={key:"yr",dir:-1};
+const PRS={load_capacity:"荷重",assembly_fixation:"固定",stability_whirl:"安定",startstop_wear:"起停",damping:"減衰",thermal:"熱",tolerance_robust:"公差",misalignment_conformity:"追従"};
+function renderDB(){
+  const list=D.fams.filter(o=>pass(o));
+  const k=DBS.key,dd=DBS.dir;
+  list.sort((a,b)=>{
+    let va,vb;
+    if(k==="yr"){va=a.yr||0;vb=b.yr||0;}
+    else if(k==="ju"){va=a.ju;vb=b.ju;}
+    else if(k==="as"){va=a.as[0]||"～";vb=b.as[0]||"～";}
+    else{va=a.st;vb=b.st;}
+    return (va<vb?-1:va>vb?1:0)*dd||(b.yr||0)-(a.yr||0);
+  });
+  $("cntdb").textContent=`${list.length} / ${D.fams.length} 件`;
+  const heads=[["公報",""],["出願人","as"],["年","yr"],["名称・要約",""],["構造","st"],["課題",""],["法域","ju"],["成",""],["図",""]];
+  let h="<tr>"+heads.map(([lab,key])=>`<th data-k="${key}" class="${key&&DBS.key===key?'srt':''}">${lab}${key&&DBS.key===key?(dd<0?" ↓":" ↑"):""}</th>`).join("")+"</tr>";
+  list.slice(0,shownDB).forEach((o,i)=>{
+    h+=`<tr class="r" data-i="${i}">
+      <td class="pn">${o.rep.replace(/-/g," ")}</td>
+      <td class="as2" title="${o.as[0]||""}">${o.as[0]?shortNm(o.as[0]):"—"}</td>
+      <td class="num">${o.yr||""}</td>
+      <td class="ttl">${(o.ja||o.t||"").slice(0,42)}</td>
+      <td>${STJA[o.st]}</td>
+      <td>${o.pr.map(p=>PRS[p]).join("·")}</td>
+      <td class="num">${o.ju}</td>
+      <td>${o.gr?"●":""}</td>
+      <td>${o.fg?"図":""}</td></tr>
+    <tr class="dbdet" id="dbd-${i}" style="display:none"><td colspan="9"></td></tr>`;
+  });
+  $("dbt").innerHTML=h;
+  $("dbt").querySelectorAll("th").forEach(th=>{
+    const key=th.dataset.k;if(!key)return;
+    th.addEventListener("click",()=>{if(DBS.key===key)DBS.dir*=-1;else{DBS.key=key;DBS.dir=key==="as"?1:-1;}renderDB();});
+  });
+  $("dbt").querySelectorAll("tr.r").forEach(tr=>tr.addEventListener("click",()=>{
+    const i=+tr.dataset.i,o=list[i],d=$("dbd-"+i);
+    if(d.style.display!=="none"){d.style.display="none";return;}
+    d.firstElementChild.innerHTML=detHTML(o);d.style.display="";
+  }));
+  $("moredb").style.display=list.length>shownDB?"block":"none";
+}
+$("moredb").addEventListener("click",()=>{shownDB+=500;renderDB();});
+$("qdb").addEventListener("input",()=>{A.q=$("qdb").value.trim();$("q").value=$("qdb").value;shown=60;shownDB=300;renderAll();});
 
 /* ================= zukan ================= */
 let zf="all";
@@ -705,11 +780,12 @@ $("lb").addEventListener("click",e=>{if(e.target===$("lb"))$("lb").classList.rem
 function renderAll(){
   renderKPI();renderFbar();renderYear();renderHM();renderMX();renderAT();
   renderSt();renderAp();renderAs();renderStk();renderLife();
-  syncFindChips();renderList();
+  syncFindChips();renderList();renderDB();
 }
 $("zn").textContent=zfams.length;
 renderAll();renderZ();
 if(location.hash==="#find")showView("find");
+if(location.hash==="#db")showView("db");
 if(location.hash==="#zukan")showView("zukan");
 </script>
 </body>
