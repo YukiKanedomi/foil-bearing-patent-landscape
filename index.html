@@ -137,6 +137,17 @@ table{border-collapse:collapse}
 .lb .cap a{color:var(--red);font-weight:700}
 .lb .x{position:fixed;top:12px;right:16px;color:#fff;font-size:26px;cursor:pointer;font-weight:700}
 .foot{font-size:10px;color:var(--grey);line-height:1.8;margin-top:26px;border-top:2px solid var(--ink);padding-top:10px}
+.about{margin-top:14px;border:1px solid var(--rule)}
+.about summary{font-size:11.5px;font-weight:700;padding:10px 12px;cursor:pointer;list-style:none}
+.about summary::before{content:"＋ ";color:var(--red)}
+.about[open] summary::before{content:"− "}
+.abody{padding:0 12px 12px;font-size:10.5px;line-height:1.8;color:var(--ink)}
+.abody p{margin:8px 0}
+.abody b{background:var(--beige);padding:1px 5px}
+.ctab{width:100%;font-size:9.5px;margin:6px 0}
+.ctab td{border-top:1px solid var(--rule);padding:4px 6px;vertical-align:top}
+.ctab td:first-child{font-family:var(--mono);font-size:8.5px;color:var(--grey)}
+.ctab td:nth-child(2){font-weight:700;white-space:nowrap}
 .hscroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
 .life{width:100%;max-width:420px;display:block}
 @media(hover:hover){
@@ -265,7 +276,31 @@ table{border-collapse:collapse}
     <div class="zgrid" id="zgrid"></div>
   </section>
 
-  <p class="foot">⚠ 本サイトは<b>公開済み特許の客観分析のみ</b>を収載しています（発明アイデア・出願戦略は含みません）。分類・要約は機械判定の一次情報で、正確な内容は各公報の原文をご確認ください。件数はファミリー（同一発明の各国出願をまとめた単位）ベース。出願人は主要な社名変更・承継・表記ゆれを名寄せしています（例: 石川島播磨→IHI、UTC→RTX、Samsung Techwin→Hanwha PS、珠海格力の別表記→Gree）。出典: Google Patents Public Data（BigQuery）／図: 各特許公報（パブリックドメイン）／生成 2026-07-04</p>
+  <p class="foot">⚠ 本サイトは<b>公開済み特許の客観分析のみ</b>を収載しています（発明アイデア・出願戦略は含みません）。分類・要約は機械判定の一次情報で、正確な内容は各公報の原文をご確認ください。件数はファミリー（同一発明の各国出願をまとめた単位）ベース。出願人は主要な社名変更・承継・表記ゆれを名寄せしています（詳細は下の「データと方法」）。出典: Google Patents Public Data（BigQuery）／図: 各特許公報（パブリックドメイン）／生成 2026-07-04</p>
+
+  <details class="about">
+    <summary>データと方法 — 名寄せ・分類・コア選定のルール</summary>
+    <div class="abody">
+      <p><b>データ源</b>　Google Patents Public Data（BigQuery 公式データセット）からフォイル軸受関連の公報を全期間分取得し、優先権で束ねたファミリー（同一発明の各国出願のまとまり）単位で集計しています。2025年以降は出願から公開まで最長18か月かかるため件数が未確定です。</p>
+      <p><b>分類タグと要約</b>　構造・課題・解決手段・適用機器のタグと日本語1行要約は、発明の名称と要約（判定できない場合はクレーム冒頭も）をもとにした機械判定の一次情報です。原文確認を前提にお使いください。</p>
+      <p><b>出願人の名寄せ</b>　同一出願人が別名でカウントされるのを防ぐため、次の表記を統合しています（社名変更・事業承継・翻訳ゆれ）。個人名義を会社へ寄せる推測的な統合は行っていません。</p>
+      <table class="ctab">
+        <tr><td>ROBERT BOSCH CO LTD</td><td>→ Bosch</td><td>表記ゆれ</td></tr>
+        <tr><td>ISHIKAWAJIMA HARIMA HEAVY IND</td><td>→ IHI</td><td>2007年 社名変更</td></tr>
+        <tr><td>PEARL HAIGE ELECTRIC APPLIANCE</td><td>→ Gree</td><td>珠海格力の英訳ゆれ（原文で確認）</td></tr>
+        <tr><td>GARRETT TRANSPORTATION I</td><td>→ Garrett</td><td>2018年 スピンオフ後の名義</td></tr>
+        <tr><td>TOYOTA JIDOSHOKKI KK</td><td>→ 豊田自動織機</td><td>和英の表記ゆれ</td></tr>
+        <tr><td>LIEBHERR-AEROSPACE TOULOUSE</td><td>→ Liebherr Aerospace</td><td>ハイフンの表記ゆれ</td></tr>
+        <tr><td>UNITED TECHNOLOGIES ／ RAYTHEON TECH</td><td>→ RTX</td><td>UTC→Raytheon→RTX の社名変更</td></tr>
+        <tr><td>MITSUBISHI HEAVY IND ENGINE &amp; TURBOCHARGER</td><td>→ 三菱重工</td><td>グループ内子会社</td></tr>
+        <tr><td>KOYO SEIKO</td><td>→ JTEKT</td><td>2006年 合併</td></tr>
+        <tr><td>SAMSUNG TECHWIN</td><td>→ Hanwha PS</td><td>2015年 事業承継</td></tr>
+        <tr><td>MECH TECH INC</td><td>→ MTI</td><td>表記ゆれ</td></tr>
+        <tr><td>ALLIEDSIGNAL INC</td><td>→ AlliedSignal</td><td>スペースの表記ゆれ</td></tr>
+      </table>
+      <p><b>コア特許の選定</b>　代表図・詳細情報を付けるコア特許は、①法域展開数・成立有無・ファミリー規模による客観スコアの上位、②課題・構造・年代・主要出願人のカバレッジ補完、③主要メーカー（名寄せ後15ファミリー以上の企業）は全件、の3段で選んでいます。</p>
+    </div>
+  </details>
 </div>
 
 <div class="lb" id="lb"><span class="x" id="lbx">✕</span><div class="box" id="lbbox"></div></div>
