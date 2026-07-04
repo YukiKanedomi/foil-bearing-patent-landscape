@@ -126,6 +126,14 @@ table{border-collapse:collapse}
 .more:active{background:var(--beige)}
 /* zukan */
 /* db table */
+.thf{display:inline-block;margin-left:4px;border:1px solid var(--g2);font-size:7px;padding:1px 4px;cursor:pointer;color:var(--grey);background:#fff;vertical-align:1px}
+.thf.on{background:var(--red);color:#fff;border-color:var(--red)}
+.pop{position:absolute;background:#fff;border:1.5px solid var(--ink);box-shadow:5px 5px 0 rgba(12,12,12,.14);padding:10px 12px;z-index:60;min-width:190px;max-width:260px;max-height:320px;overflow:auto}
+.pop label{display:flex;gap:7px;align-items:center;font-size:11px;padding:3px 0;cursor:pointer}
+.pop .cnt2{margin-left:auto;color:var(--grey);font-family:var(--mono);font-size:9px}
+.pop .psearch{width:100%;border:1px solid var(--g2);padding:5px 7px;font-family:var(--sans);font-size:11px;margin-bottom:6px}
+.pop .yrin{width:64px;border:1px solid var(--g2);padding:4px;font-family:var(--mono);font-size:11px}
+.pop .pbtns{display:flex;gap:6px;margin-top:9px}
 .dbt{width:100%;font-size:10px}
 .dbt th{position:sticky;top:0;background:#fff;border-bottom:2px solid var(--ink);padding:6px 7px;font-size:9px;color:var(--grey);letter-spacing:.05em;text-align:left;white-space:nowrap;cursor:pointer;user-select:none}
 .dbt th.srt{color:var(--red)}
@@ -229,7 +237,7 @@ table{border-collapse:collapse}
       <div>
         <div class="hr"></div>
         <h2>課題 × 年 — 出願はどこに集まっているか</h2>
-        <div class="cs">期間を30年以下に絞ると<b>1年刻み</b>に切り替わる。行ラベル＝課題で絞り込み、セル＝課題＋期間で絞り込み（再タップで解除）</div>
+        <div class="cs">期間を30年以下に絞ると<b>1年刻み</b>に切り替わる。行ラベル＝課題で絞り込み、セル＝課題＋期間で絞り込み（再タップで解除）。課題タグは1件に最大3つ付くため、複数課題の特許は各行に計上</div>
         <div class="hscroll"><table class="hm" id="hm"></table></div>
 
         <div class="hr"></div>
@@ -329,6 +337,7 @@ table{border-collapse:collapse}
   </details>
 </div>
 
+<div class="pop" id="pop" style="display:none"></div>
 <div class="lb" id="lb"><span class="x" id="lbx">✕</span><div class="box" id="lbbox"></div></div>
 
 <script src="data.js"></script>
@@ -722,8 +731,9 @@ function renderDB(){
     return (va<vb?-1:va>vb?1:0)*dd||(b.yr||0)-(a.yr||0);
   });
   $("cntdb").textContent=`${list.length} / ${D.fams.length} 件`;
-  const heads=[["公報",""],["出願人","as"],["年","yr"],["名称・要約",""],["構造","st"],["課題",""],["法域","ju"],["成",""],["図",""]];
-  let h="<tr>"+heads.map(([lab,key])=>`<th data-k="${key}" class="${key&&DBS.key===key?'srt':''}">${lab}${key&&DBS.key===key?(dd<0?" ↓":" ↑"):""}</th>`).join("")+"</tr>";
+  const fActive={as:A.as.size>0,st:A.st.size>0,pr:A.pr.size>0,ap:A.ap.size>0,yr:A.y0>MINY||A.y1<MAXY,gr:A.gr,fg:A.fg};
+  const heads=[["公報","",""],["出願人","as","as"],["年","yr","yr"],["名称・要約","",""],["構造","st","st"],["課題","","pr"],["機器","","ap"],["法域","ju",""],["成","","gr"],["図","","fg"]];
+  let h="<tr>"+heads.map(([lab,key,fk])=>`<th data-k="${key}" class="${key&&DBS.key===key?'srt':''}">${lab}${key&&DBS.key===key?(dd<0?" ↓":" ↑"):""}${fk?`<span class="thf ${fActive[fk]?'on':''}" data-pf="${fk}">▼</span>`:""}</th>`).join("")+"</tr>";
   list.slice(0,shownDB).forEach((o,i)=>{
     h+=`<tr class="r" data-i="${i}">
       <td class="pn">${o.rep.replace(/-/g," ")}</td>
@@ -732,16 +742,25 @@ function renderDB(){
       <td class="ttl">${(o.ja||o.t||"").slice(0,42)}</td>
       <td>${STJA[o.st]}</td>
       <td>${o.pr.map(p=>PRS[p]).join("·")}</td>
+      <td>${o.ap!=="general_unknown"?APJA[o.ap]:""}</td>
       <td class="num">${o.ju}</td>
       <td>${o.gr?"●":""}</td>
       <td>${o.fg?"図":""}</td></tr>
-    <tr class="dbdet" id="dbd-${i}" style="display:none"><td colspan="9"></td></tr>`;
+    <tr class="dbdet" id="dbd-${i}" style="display:none"><td colspan="10"></td></tr>`;
   });
   $("dbt").innerHTML=h;
   $("dbt").querySelectorAll("th").forEach(th=>{
     const key=th.dataset.k;if(!key)return;
     th.addEventListener("click",()=>{if(DBS.key===key)DBS.dir*=-1;else{DBS.key=key;DBS.dir=key==="as"?1:-1;}renderDB();});
   });
+  $("dbt").querySelectorAll(".thf").forEach(b=>b.addEventListener("click",e=>{
+    e.stopPropagation();
+    const f=b.dataset.pf;
+    if(popSpec===f){closePop();return;}
+    const r=b.getBoundingClientRect();
+    popSpec=f;popXY=[r.left+window.scrollX,r.bottom+window.scrollY+4];
+    renderPop();
+  }));
   $("dbt").querySelectorAll("tr.r").forEach(tr=>tr.addEventListener("click",()=>{
     const i=+tr.dataset.i,o=list[i],d=$("dbd-"+i);
     if(d.style.display!=="none"){d.style.display="none";return;}
@@ -750,6 +769,69 @@ function renderDB(){
   $("moredb").style.display=list.length>shownDB?"block":"none";
 }
 $("moredb").addEventListener("click",()=>{shownDB+=500;renderDB();});
+
+/* ---- 列ヘッダーフィルタ（Excel風ポップオーバー） ---- */
+let popSpec=null,popXY=null;
+function closePop(){popSpec=null;$("pop").style.display="none";}
+function popCnt(get,skip){const m=new Map();D.fams.forEach(o=>{if(!pass(o,skip))return;const k=get(o);if(k)m.set(k,(m.get(k)||0)+1);});return m;}
+function popHTML(f){
+  const btns=`<div class="pbtns"><button class="frst" data-act="clear">クリア</button><button class="frst" data-act="close">閉じる</button></div>`;
+  const cList=(pairs,set,search)=>(search?`<input class="psearch" placeholder="絞り込み検索">`:"")+
+    pairs.map(([k,l,c])=>`<label><input type="checkbox" data-k="${k}" ${set.has(k)?"checked":""}>${l}<span class="cnt2">${c}</span></label>`).join("")+btns;
+  if(f==="st"){const m=popCnt(o=>o.st,"st");return cList(["bump","leaf","hybrid","tension","other","unknown"].map(k=>[k,STJA[k],m.get(k)||0]),A.st);}
+  if(f==="pr"){const m=new Map();D.fams.forEach(o=>{if(pass(o,"pr"))o.pr.forEach(p=>m.set(p,(m.get(p)||0)+1));});return cList(D.PROBS.map(k=>[k,PLJA[k],m.get(k)||0]),A.pr);}
+  if(f==="ap"){const m=popCnt(o=>o.ap==="general_unknown"?null:o.ap,"ap");return cList(Object.keys(APJA).filter(k=>k!=="general_unknown").map(k=>[k,APJA[k],m.get(k)||0]).sort((a,b)=>b[2]-a[2]),A.ap);}
+  if(f==="as"){const m=popCnt(o=>o.as[0],"as");const top=[...m.entries()].sort((a,b)=>b[1]-a[1]).slice(0,60);
+    return cList(top.map(([k,c])=>[k,shortNm(k),c]),A.as,true);}
+  if(f==="yr")return `
+    ${[["all","全期間"],["2000","2000年〜"],["2010","2010年〜"],["2020","2020年〜"]].map(([k,l])=>{
+      const on=(k==="all"&&A.y0===MINY&&A.y1===MAXY)||(k!=="all"&&A.y0===+k&&A.y1===MAXY);
+      return `<label><input type="radio" name="yrp" data-y="${k}" ${on?"checked":""}>${l}</label>`;}).join("")}
+    <div style="display:flex;gap:5px;align-items:center;margin-top:7px;font-size:11px">
+      <input class="yrin" id="py0" type="number" value="${A.y0}"> – <input class="yrin" id="py1" type="number" value="${A.y1}">
+      <button class="frst" data-act="yrapply">適用</button></div>${btns}`;
+  if(f==="gr")return `<label><input type="checkbox" data-k="_gr" ${A.gr?"checked":""}>成立ありのみ表示</label>`+btns;
+  if(f==="fg")return `<label><input type="checkbox" data-k="_fg" ${A.fg?"checked":""}>代表図ありのみ表示</label>`+btns;
+  return "";
+}
+function renderPop(){
+  if(!popSpec)return;
+  const el=$("pop");
+  el.style.display="block";
+  el.style.left=Math.max(8,Math.min(popXY[0],window.innerWidth-270+window.scrollX))+"px";
+  el.style.top=popXY[1]+"px";
+  el.innerHTML=popHTML(popSpec);
+  el.querySelectorAll("input[type=checkbox]").forEach(c=>c.addEventListener("change",()=>{
+    const k=c.dataset.k;
+    if(k==="_gr")A.gr=c.checked;
+    else if(k==="_fg")A.fg=c.checked;
+    else{const set=A[popSpec];set.has(k)?set.delete(k):set.add(k);}
+    shown=60;shownDB=300;renderAll();
+  }));
+  el.querySelectorAll("input[type=radio]").forEach(r=>r.addEventListener("change",()=>{
+    const y=r.dataset.y;
+    if(y==="all"){A.y0=MINY;A.y1=MAXY;}else{A.y0=+y;A.y1=MAXY;}
+    shown=60;shownDB=300;renderAll();
+  }));
+  el.querySelector("[data-act=yrapply]")?.addEventListener("click",()=>{
+    const a=+el.querySelector("#py0").value,b=+el.querySelector("#py1").value;
+    if(a&&b){A.y0=Math.max(MINY,Math.min(a,b));A.y1=Math.min(MAXY,Math.max(a,b));shown=60;shownDB=300;renderAll();}
+  });
+  el.querySelector("[data-act=clear]")?.addEventListener("click",()=>{
+    if(popSpec==="yr"){A.y0=MINY;A.y1=MAXY;}
+    else if(popSpec==="gr")A.gr=false;else if(popSpec==="fg")A.fg=false;
+    else A[popSpec].clear();
+    shown=60;shownDB=300;renderAll();
+  });
+  el.querySelector("[data-act=close]")?.addEventListener("click",closePop);
+  el.querySelector(".psearch")?.addEventListener("input",e=>{
+    const q=e.target.value.toLowerCase();
+    el.querySelectorAll("label").forEach(l=>{l.style.display=l.textContent.toLowerCase().includes(q)?"":"none";});
+  });
+}
+document.addEventListener("click",e=>{
+  if(popSpec&&!e.target.closest("#pop")&&!e.target.closest(".thf"))closePop();
+});
 $("qdb").addEventListener("input",()=>{A.q=$("qdb").value.trim();$("q").value=$("qdb").value;shown=60;shownDB=300;renderAll();});
 
 /* ================= zukan ================= */
@@ -781,6 +863,7 @@ function renderAll(){
   renderKPI();renderFbar();renderYear();renderHM();renderMX();renderAT();
   renderSt();renderAp();renderAs();renderStk();renderLife();
   syncFindChips();renderList();renderDB();
+  if(popSpec)renderPop();
 }
 $("zn").textContent=zfams.length;
 renderAll();renderZ();
