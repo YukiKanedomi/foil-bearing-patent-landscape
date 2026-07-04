@@ -233,6 +233,11 @@ table{border-collapse:collapse}
       </span>
     </div>
 
+    <div class="hr"></div>
+    <h2>プレイヤーマップ — 物量の中国、国際派の日米欧</h2>
+    <div class="cs">絞り込み後の主要出願人。横=国際展開度（平均法域数）、縦=直近の勢い（2018年以降の比率）、バブル面積=ファミリー数。色: <b style="color:#E3120B">中国</b>／<b style="color:#006BA2">日本</b>／<b style="color:#5E8CA7">韓国</b>／<b style="color:#0C0C0C">欧米</b>。バブルをタップ→その社に絞り込み</div>
+    <svg id="pmap" viewBox="0 0 800 440" style="width:100%"></svg>
+
     <div class="dgrid">
       <div>
         <div class="hr"></div>
@@ -244,6 +249,11 @@ table{border-collapse:collapse}
         <h2>課題 × 解決手段 — 空白セルが「文献の薄い組み合わせ」</h2>
         <div class="cs">どの課題をどの手段で解いてきたか。セルをタップ→その組み合わせに絞り込み</div>
         <div class="hscroll"><table class="mx" id="mx"></table></div>
+
+        <div class="hr"></div>
+        <h2>課題と手段の対応フロー — 太い川が定石</h2>
+        <div class="cs">リボンの太さ=その組み合わせの件数（主要な流れのみ表示）。リボンをタップ→その課題×手段に絞り込み。川が無い場所=文献の薄い組み合わせ</div>
+        <svg id="sankey" viewBox="0 0 460 430" style="width:100%"></svg>
 
         <div class="hr"></div>
         <h2>主要法域への展開 — 中国が主戦場に</h2>
@@ -300,7 +310,7 @@ table{border-collapse:collapse}
     <div class="frow"><span class="flabel">課題</span><span class="chip red" data-f="pr" data-k="load_capacity">荷重容量</span><span class="chip red" data-f="pr" data-k="assembly_fixation">固定・組立</span><span class="chip red" data-f="pr" data-k="stability_whirl">安定性</span><span class="chip red" data-f="pr" data-k="startstop_wear">起動停止</span><span class="chip red" data-f="pr" data-k="damping">減衰</span><span class="chip red" data-f="pr" data-k="thermal">熱</span><span class="chip red" data-f="pr" data-k="tolerance_robust">公差</span><span class="chip red" data-f="pr" data-k="misalignment_conformity">追従</span></div>
     <div class="frow"><span class="flabel">解決手段</span><span class="chip" data-f="lv" data-k="pitch_height_thickness">バンプ形状</span><span class="chip" data-f="lv" data-k="segmentation_slit">分割・スリット</span><span class="chip" data-f="lv" data-k="multizone_multipad">多ゾーン</span><span class="chip" data-f="lv" data-k="stacking">積層</span><span class="chip" data-f="lv" data-k="preload">予圧</span><span class="chip" data-f="lv" data-k="material_coating">材料・被膜</span><span class="chip" data-f="lv" data-k="adaptive_geometry">適応形状</span><span class="chip" data-f="lv" data-k="cooling_flow">冷却流</span><span class="chip" data-f="lv" data-k="fixation_design">固定設計</span></div>
     <div class="frow"><span class="flabel">その他</span><span class="chip" data-f="fg" data-k="1">図あり</span><span class="chip" data-f="gr" data-k="1">成立のみ</span><span class="chip" data-f="era" data-k="2010">2010年以降</span><span class="chip" data-f="era" data-k="2020">2020年以降</span></div>
-    <div class="cnt"><span id="cnt"></span><span style="display:flex;gap:8px;align-items:center"><button class="frst" id="rst2">リセット</button><select id="sort"><option value="new">新しい順</option><option value="ju">法域数順</option><option value="old">古い順</option></select></span></div>
+    <div class="cnt"><span id="cnt"></span><span style="display:flex;gap:8px;align-items:center"><button class="frst" id="rst2">リセット</button><select id="sort"><option value="new">新しい順</option><option value="ju">法域数順</option><option value="ct">被引用順</option><option value="old">古い順</option></select></span></div>
     <div id="list"></div>
     <button class="more" id="more" style="display:none">さらに表示</button>
   </div></section>
@@ -634,6 +644,91 @@ function renderStk(){
   $("stklg").querySelectorAll("span[data-s]").forEach(e=>e.addEventListener("click",()=>tgl(A.st,e.dataset.s)));
 }
 
+/* ================= player map ================= */
+const region=n=>/IHI|NTN|SHIMADZU|JTEKT|TOYOTA|HONDA|MITSUBISHI|KAWASAKI|DAIKIN|KOMATSU|NIPPON/.test(n)?"JP":
+ /HANWHA|HANON|^LG |LG ELEC|HYUNDAI|NEUROS|KOREA|TNE |KUNWOO|SAMSUNG|KIA |IUCF/.test(n)?"KR":
+ /BOSCH|GARRETT|HAMILTON|RTX|SCHAEFFLER|MECHANICAL|HONEYWELL|ALLIED|GEN ELECTRIC|CAPSTONE|LIEBHERR|BORGWARNER|COPELAND|WILLIAMS|MOHAWK|AIR PROD|R & D|AMPEX|ABG|DAIMLER/.test(n)?"WEST":"CN";
+const RC={JP:"#006BA2",KR:"#5E8CA7",CN:"#E3120B",WEST:"#0C0C0C"};
+function renderPM(){
+  const stat=new Map();
+  D.fams.forEach(o=>{const a=o.as[0];if(!a||!pass(o,"as"))return;
+    if(!stat.has(a))stat.set(a,{n:0,ju:0,recent:0});
+    const s=stat.get(a);s.n++;s.ju+=o.ju;if(o.yr>=2018)s.recent++;});
+  const all=[...stat.entries()].sort((a,b)=>b[1].n-a[1].n);
+  const minN=all.length&&all[0][1].n>=12?Math.max(6,Math.min(12,all[19]?.[1].n||6)):2;
+  const rows=all.filter(([a,s])=>s.n>=minN).slice(0,24).map(([a,s])=>({a,n:s.n,x:s.ju/s.n,y:s.recent/s.n,r:region(a)}));
+  if(rows.length<2){$("pmap").innerHTML=`<text x="20" y="30" font-size="13" fill="#758D99">絞り込みが強すぎて表示できる出願人がいません</text>`;return;}
+  const x0=60,x1=760,y0=380,y1=36;
+  const xmax=Math.max(...rows.map(r=>r.x))*1.12;
+  const X=v=>x0+(v/xmax)*(x1-x0),Y=v=>y0-v*(y0-y1);
+  let g="";
+  for(let i=0;i<=4;i++){const yy=Y(i/4);g+=`<line x1="${x0}" y1="${yy}" x2="${x1}" y2="${yy}" stroke="#EEE"/><text x="${x0-8}" y="${yy+3}" font-size="10" fill="#758D99" text-anchor="end" font-family="IBM Plex Mono">${i*25}%</text>`;}
+  for(let v=1;v<=Math.floor(xmax);v++){const xx=X(v);g+=`<text x="${xx}" y="${y0+16}" font-size="10" fill="#758D99" text-anchor="middle" font-family="IBM Plex Mono">${v}</text>`;}
+  g+=`<text x="${x1}" y="${y0+32}" font-size="11" fill="#758D99" text-anchor="end">国際展開度（平均法域数）→</text>
+  <text x="${x0-42}" y="${y1-16}" font-size="11" fill="#758D99">↑ 直近の勢い（2018年以降の比率）</text>`;
+  rows.forEach(p=>{
+    const r=4+Math.sqrt(p.n)*1.6;
+    const dim=A.as.size&&!A.as.has(p.a);
+    g+=`<circle class="pmb" data-as="${p.a}" cx="${X(p.x).toFixed(1)}" cy="${Y(p.y).toFixed(1)}" r="${r.toFixed(1)}" fill="${RC[p.r]}" opacity="${dim?.2:.8}" style="cursor:pointer"><title>${p.a}: ${p.n}件</title></circle>`;
+  });
+  // ラベル重なり回避（近接ラベルを縦にずらす）
+  const labs=rows.map(p=>({p,x:X(p.x),y:Y(p.y)-(4+Math.sqrt(p.n)*1.6)-4})).sort((a,b)=>a.x-b.x);
+  for(let i=1;i<labs.length;i++){
+    for(let k=0;k<i;k++){
+      if(Math.abs(labs[i].x-labs[k].x)<58&&Math.abs(labs[i].y-labs[k].y)<11)labs[i].y=labs[k].y-11;
+    }
+  }
+  labs.forEach(({p,x,y})=>{
+    const dim=A.as.size&&!A.as.has(p.a);
+    g+=`<text x="${x.toFixed(1)}" y="${y.toFixed(1)}" font-size="${p.n>=40?11.5:9.5}" font-weight="${p.n>=40?900:700}" fill="${RC[p.r]}" text-anchor="middle" opacity="${dim?.25:1}" style="cursor:pointer" class="pml" data-as="${p.a}">${shortNm(p.a)}</text>`;
+  });
+  $("pmap").innerHTML=g;
+  $("pmap").querySelectorAll(".pmb,.pml").forEach(e=>e.addEventListener("click",()=>tgl(A.as,e.dataset.as)));
+}
+
+/* ================= sankey 課題→手段 ================= */
+function renderSK(){
+  const PC={load_capacity:"#E3120B",assembly_fixation:"#0C0C0C",stability_whirl:"#006BA2",startstop_wear:"#C46A32",damping:"#5E8CA7",thermal:"#8C1A11",tolerance_robust:"#7A6A9E",misalignment_conformity:"#3E7A5E"};
+  const links=[],pt={},lt={};
+  D.fams.forEach(o=>{if(!pass(o,"pr,lv"))return;
+    o.pr.forEach(p=>{o.lv.forEach(l=>{if(!LVJA[l]||l==="other")return;
+      const e=links.find(x=>x.p===p&&x.l===l);
+      if(e)e.v++;else links.push({p,l,v:1});
+      pt[p]=(pt[p]||0)+1;lt[l]=(lt[l]||0)+1;});});});
+  const big=links.sort((a,b)=>b.v-a.v).slice(0,26);
+  const LX=118,RX=340,H=430;
+  const totP=D.PROBS.reduce((s,p)=>s+(pt[p]||0),0);
+  if(!totP){$("sankey").innerHTML="";return;}
+  const LVS2=LVS.slice().sort((a,b)=>(lt[b]||0)-(lt[a]||0));
+  const totL=LVS2.reduce((s,l)=>s+(lt[l]||0),0);
+  const scale=(H-70-5*9)/Math.max(totP,totL);
+  let y=26;const py={};D.PROBS.forEach(p=>{const h=(pt[p]||0)*scale;py[p]={y,h,used:0};y+=h+5;});
+  y=26;const ly={};LVS2.forEach(l=>{const h=(lt[l]||0)*scale;ly[l]={y,h,used:0};y+=h+5;});
+  let g="";
+  big.forEach(e=>{
+    const sp=py[e.p],tl=ly[e.l];if(!sp||!tl)return;
+    const h=Math.max(e.v*scale,.8);
+    const sy=sp.y+sp.used+h/2,ty=tl.y+tl.used+h/2;
+    sp.used+=h;tl.used+=h;
+    const sel=A.pr.has(e.p)&&A.lv.has(e.l);
+    g+=`<path class="skr" data-p="${e.p}" data-l="${e.l}" d="M ${LX},${sy.toFixed(1)} C ${(LX+RX)/2},${sy.toFixed(1)} ${(LX+RX)/2},${ty.toFixed(1)} ${RX},${ty.toFixed(1)}" stroke="${PC[e.p]}" stroke-width="${h.toFixed(1)}" fill="none" opacity="${sel?.85:.4}" style="cursor:pointer"><title>${PLJA[e.p]} × ${LVJA[e.l]}: ${e.v}件</title></path>`;
+  });
+  D.PROBS.forEach(p=>{const s=py[p];if(!s.h)return;
+    g+=`<rect x="${LX-7}" y="${s.y}" width="7" height="${s.h.toFixed(1)}" fill="${PC[p]}"/>
+    <text x="${LX-12}" y="${(s.y+s.h/2+3).toFixed(1)}" font-size="9.5" font-weight="900" text-anchor="end" fill="#0C0C0C">${PLJA[p]}</text>`;});
+  LVS2.forEach(l=>{const s=ly[l];if(!s.h)return;
+    g+=`<rect x="${RX}" y="${s.y}" width="7" height="${s.h.toFixed(1)}" fill="#B7C6CF"/>
+    <text x="${RX+12}" y="${(s.y+s.h/2+3).toFixed(1)}" font-size="9.5" font-weight="900" fill="#0C0C0C">${LVJA[l]}</text>`;});
+  g+=`<text x="${LX-7}" y="14" font-size="9.5" fill="#758D99" text-anchor="end" font-weight="700">課題</text><text x="${RX}" y="14" font-size="9.5" fill="#758D99" font-weight="700">解決手段</text>`;
+  $("sankey").innerHTML=g;
+  $("sankey").querySelectorAll(".skr").forEach(e=>e.addEventListener("click",()=>{
+    const p=e.dataset.p,l=e.dataset.l;
+    if(A.pr.has(p)&&A.lv.has(l)){A.pr.delete(p);A.lv.delete(l);}
+    else{A.pr.clear();A.lv.clear();A.pr.add(p);A.lv.add(l);}
+    shown=60;shownDB=300;renderAll();
+  }));
+}
+
 /* ================= assignee × problem matrix ================= */
 function renderAC(){
   const tot=new Map();
@@ -770,6 +865,7 @@ function renderList(){
   if(s==="new")cur.sort((a,b)=>(b.yr||0)-(a.yr||0)||b.ju-a.ju);
   if(s==="old")cur.sort((a,b)=>(a.yr||9999)-(b.yr||9999));
   if(s==="ju")cur.sort((a,b)=>b.ju-a.ju||(b.yr||0)-(a.yr||0));
+  if(s==="ct")cur.sort((a,b)=>(b.ct||0)-(a.ct||0)||(b.yr||0)-(a.yr||0));
   $("cnt").textContent=`${cur.length} / ${D.fams.length} 件`;
   $("list").innerHTML=cur.slice(0,shown).map((o,i)=>rowHTML(o,i)).join("");
   $("more").style.display=cur.length>shown?"block":"none";
@@ -796,7 +892,7 @@ function detHTML(o){
       ${o.el&&o.el.length?`<div class="tags" style="margin-top:5px">${o.el.map(e=>`<span class="tg" style="border-color:#006BA2;color:#006BA2">${e}</span>`).join("")}</div>`:""}
       ${o.ef?`<div style="margin-top:4px;font-size:10.5px"><span style="color:#758D99;font-weight:700">主張される効果</span>　${o.ef}</div>`:""}
     </div>`:""}
-    <div style="color:#758D99;font-size:10px;margin-top:6px">ファミリー ${o.mm} 公報 · ${o.ju} 法域 · 判定確度 ${o.cf}${o.as.length?` · ${o.as.join(" / ")}`:""}</div>
+    <div style="color:#758D99;font-size:10px;margin-top:6px">ファミリー ${o.mm} 公報 · ${o.ju} 法域${o.ct?` · 被引用 ${o.ct}`:""} · 判定確度 ${o.cf}${o.as.length?` · ${o.as.join(" / ")}`:""}</div>
     <div style="margin-top:7px"><a href="https://patents.google.com/patent/${o.gp}/ja" target="_blank" rel="noopener">Google Patents で原文を見る（${o.gp}）→</a></div>`;
 }
 
@@ -811,13 +907,14 @@ function renderDB(){
     let va,vb;
     if(k==="yr"){va=a.yr||0;vb=b.yr||0;}
     else if(k==="ju"){va=a.ju;vb=b.ju;}
+    else if(k==="ct"){va=a.ct||0;vb=b.ct||0;}
     else if(k==="as"){va=a.as[0]||"～";vb=b.as[0]||"～";}
     else{va=a.st;vb=b.st;}
     return (va<vb?-1:va>vb?1:0)*dd||(b.yr||0)-(a.yr||0);
   });
   $("cntdb").textContent=`${list.length} / ${D.fams.length} 件`;
   const fActive={as:A.as.size>0,st:A.st.size>0,fm:A.fm.size>0,pr:A.pr.size>0,ap:A.ap.size>0,yr:A.y0>MINY||A.y1<MAXY,gr:A.gr,fg:A.fg};
-  const heads=[["公報","",""],["出願人","as","as"],["年","yr","yr"],["名称・要約","",""],["構造","st","st"],["形式","","fm"],["課題","","pr"],["機器","","ap"],["法域","ju",""],["成","","gr"],["図","","fg"]];
+  const heads=[["公報","",""],["出願人","as","as"],["年","yr","yr"],["名称・要約","",""],["構造","st","st"],["形式","","fm"],["課題","","pr"],["機器","","ap"],["法域","ju",""],["被引用","ct",""],["成","","gr"],["図","","fg"]];
   let h="<tr>"+heads.map(([lab,key,fk])=>`<th data-k="${key}" class="${key&&DBS.key===key?'srt':''}">${lab}${key&&DBS.key===key?(dd<0?" ↓":" ↑"):""}${fk?`<span class="thf ${fActive[fk]?'on':''}" data-pf="${fk}">▼</span>`:""}</th>`).join("")+"</tr>";
   list.slice(0,shownDB).forEach((o,i)=>{
     h+=`<tr class="r" data-i="${i}">
@@ -830,9 +927,10 @@ function renderDB(){
       <td>${o.pr.map(p=>PRS[p]).join("·")}</td>
       <td>${o.ap!=="general_unknown"?APJA[o.ap]:""}</td>
       <td class="num">${o.ju}</td>
+      <td class="num">${o.ct||""}</td>
       <td>${o.gr?"●":""}</td>
       <td>${o.fg?"図":""}</td></tr>
-    <tr class="dbdet" id="dbd-${i}" style="display:none"><td colspan="11"></td></tr>`;
+    <tr class="dbdet" id="dbd-${i}" style="display:none"><td colspan="12"></td></tr>`;
   });
   $("dbt").innerHTML=h;
   $("dbt").querySelectorAll("th").forEach(th=>{
@@ -947,7 +1045,7 @@ $("morez").addEventListener("click",()=>{shownZ+=200;renderZ();});
 
 /* ================= render all ================= */
 function renderAll(){
-  renderKPI();renderFbar();renderYear();renderHM();renderMX();renderAT();renderAC();renderJU();
+  renderKPI();renderFbar();renderYear();renderPM();renderHM();renderMX();renderSK();renderAT();renderAC();renderJU();
   renderSt();renderAp();renderAs();renderStk();renderLife();
   syncFindChips();renderList();renderDB();renderZ();
   if(popSpec)renderPop();
