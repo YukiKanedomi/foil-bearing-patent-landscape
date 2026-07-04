@@ -6,3 +6,6 @@ Thumbs.db
 # ビルド道具はローカルのみ（公開物は index.html ＋ data.json ＋ fig）
 build.mjs
 template.html
+
+# パイプライン一式はローカルのみ（公開しない）
+pipeline/

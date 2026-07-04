@@ -3,330 +3,370 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>フォイル式ガス軸受 公開特許ランドスケープ</title>
+<title>フォイル軸受 特許ランドスケープ</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=Shippori+Mincho:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@500;700;900&family=IBM+Plex+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
-  :root{
-    --paper:#F8F5EE; --card:#FFFDF8; --ink:#3A2E20; --ink2:#4a3e2e;
-    --dim:#9a8f7c; --faint:#bcb09a; --rule:#e0d9cb; --rule2:#ece4d4;
-    --teal:#0F4C4C; --teal2:#4E7C7C; --oxblood:#4A0404; --gold:#B5822E; --rust:#9A5B2E;
-    --mono:'IBM Plex Mono',ui-monospace,Menlo,Consolas,monospace;
-    --jp:'Shippori Mincho','Hiragino Mincho ProN','Yu Mincho',serif;
-  }
-  *{box-sizing:border-box}
-  html,body{margin:0;padding:0;background:var(--paper);color:var(--ink);
-    font-family:var(--mono);font-variant-numeric:tabular-nums;
-    -webkit-font-smoothing:antialiased;-webkit-text-size-adjust:100%;}
-  .wrap{max-width:980px;margin:0 auto;padding:26px 22px 70px;}
-
-  .bar{display:flex;justify-content:space-between;align-items:center;gap:10px;
-    font-size:11px;letter-spacing:.08em;color:var(--teal);border:1px solid var(--rule);
-    border-radius:6px;padding:8px 12px;background:rgba(15,76,76,.04)}
-  .bar .dotted::before{content:'● ';color:var(--teal)}
-  .bar .r{color:var(--dim);letter-spacing:.04em;text-align:right}
-  h1{font-family:var(--mono);font-weight:600;font-size:clamp(21px,4.6vw,31px);
-    letter-spacing:-.01em;margin:20px 0 4px;line-height:1.14}
-  .path{font-family:var(--mono);font-size:11.5px;color:var(--dim);letter-spacing:.02em}
-  .lede{font-family:var(--jp);font-size:14.5px;line-height:1.9;color:var(--ink2);max-width:680px;margin:14px 0 2px}
-  .lede .small{font-family:var(--mono);font-size:11px;color:var(--dim);letter-spacing:.02em}
-  .small{font-size:11px;color:var(--dim);letter-spacing:.01em}
-  .jp{font-family:var(--jp)}
-
-  .tabs{display:flex;gap:0;overflow-x:auto;margin:20px 0 0;border-bottom:1px solid var(--rule);
-    position:sticky;top:0;background:var(--paper);z-index:5;padding-top:2px}
-  .tab{flex:0 0 auto;background:none;border:0;border-bottom:2px solid transparent;color:var(--dim);
-    padding:10px 15px 9px;font-family:var(--mono);font-size:12.5px;font-weight:500;letter-spacing:.03em;
-    cursor:pointer;white-space:nowrap;margin-bottom:-1px}
-  .tab:hover{color:var(--ink)}
-  .tab.on{color:var(--teal);border-bottom-color:var(--teal);font-weight:600}
-  .view{display:none}
-  .view.on{display:block}
-
-  .card{background:var(--card);border:1px solid var(--rule);border-radius:11px;padding:16px 16px 15px;margin:16px 0;box-shadow:0 2px 10px rgba(58,46,32,.04)}
-  .card h2{font-family:var(--mono);font-size:12.5px;font-weight:600;margin:0 0 12px;color:var(--teal);letter-spacing:.04em;display:flex;align-items:center;gap:8px}
-  .card h2::before{content:'';width:7px;height:7px;background:var(--teal);display:inline-block;flex:0 0 auto}
-
-  /* theme section */
-  .theme{border:1px solid var(--rule);border-radius:10px;background:var(--card);margin:12px 0;overflow:hidden}
-  .theme>.th{padding:12px 14px;border-bottom:1px solid var(--rule);background:rgba(15,76,76,.03)}
-  .theme .tname{font-family:var(--mono);font-weight:600;font-size:14px;display:flex;align-items:center;gap:9px;flex-wrap:wrap}
-  .theme .tblurb{font-family:var(--jp);font-size:12px;color:var(--ink2);margin-top:5px;line-height:1.7}
-  .ficode{font-family:var(--mono);font-size:10px;color:var(--teal);border:1px solid var(--rule);border-radius:4px;padding:1px 6px;letter-spacing:.02em;background:var(--paper)}
-  .catblock{padding:11px 14px;border-top:1px dashed var(--rule2)}
-  .catblock:first-of-type{border-top:0}
-  .catname{font-family:var(--mono);font-size:11.5px;color:var(--rust);font-weight:600;letter-spacing:.02em;margin-bottom:7px}
-  .pat{display:block;border-left:2px solid var(--rule);padding:6px 0 6px 11px;margin:8px 0}
-  .pat .pno{font-family:var(--mono);font-size:12px;font-weight:600;color:var(--teal);text-decoration:none;border-bottom:1px dotted var(--teal)}
-  .pat .pap{font-family:var(--mono);font-size:10px;color:var(--dim);margin-left:7px}
-  .pat .pcov{font-family:var(--jp);font-size:12px;color:var(--ink2);margin-top:4px;line-height:1.7}
-  .pat .pgap{font-family:var(--jp);font-size:11.5px;color:var(--dim);margin-top:3px;line-height:1.65}
-  .pat .pgap::before{content:'残るギャップ：';color:var(--rust);font-family:var(--mono);font-size:9.5px}
-
-  /* badges / chips */
-  .tbadge{font-family:var(--mono);font-size:9.5px;font-weight:600;border-radius:4px;padding:2px 7px;letter-spacing:.02em;border:1px solid}
-  .chip{font-family:var(--mono);font-size:10px;background:rgba(15,76,76,.05);border:1px solid var(--rule);border-radius:4px;padding:2px 8px;color:var(--teal);letter-spacing:.02em}
-  .chips{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px}
-
-  /* patent index */
-  .filt{display:flex;flex-wrap:wrap;gap:7px;align-items:center;margin-bottom:6px}
-  .filt button{background:var(--card);border:1px solid var(--rule);color:var(--dim);border-radius:6px;padding:5px 11px;font-family:var(--mono);font-size:11px;cursor:pointer;letter-spacing:.02em}
-  .filt button.on{background:var(--teal);color:var(--paper);border-color:var(--teal)}
-  .srch{width:100%;margin:8px 0 4px;background:var(--paper);color:var(--ink);border:1px solid var(--rule);border-radius:8px;padding:10px 12px;font-family:var(--mono);font-size:12.5px}
-  .srch::placeholder{color:var(--faint)}
-  .cnt{font-family:var(--mono);font-size:11px;color:var(--dim);margin:4px 0 10px}
-  .prow{border:1px solid var(--rule);border-radius:9px;padding:11px 13px;margin:9px 0;background:var(--card)}
-  .prow:hover{box-shadow:0 2px 9px rgba(58,46,32,.06)}
-  .prow .top{display:flex;align-items:center;gap:9px;flex-wrap:wrap}
-  .prow .pno{font-family:var(--mono);font-size:13px;font-weight:600;color:var(--teal);text-decoration:none;border-bottom:1px dotted var(--teal)}
-  .prow .pap{font-family:var(--mono);font-size:10.5px;color:var(--dim)}
-  .prow .cat{font-family:var(--mono);font-size:10px;color:var(--rust);margin-left:auto}
-  .prow .pcov{font-family:var(--jp);font-size:12.5px;color:var(--ink2);margin-top:6px;line-height:1.75}
-  .prow .pgap{font-family:var(--jp);font-size:11.5px;color:var(--dim);margin-top:4px;line-height:1.65}
-  .prow .pgap b{font-family:var(--mono);font-size:9.5px;color:var(--rust);font-weight:600}
-
-  /* crowding */
-  .barrow{display:grid;grid-template-columns:130px 1fr 30px;align-items:center;gap:10px;margin:7px 0}
-  .barrow .bl{font-family:var(--mono);font-size:11.5px;color:var(--ink2)}
-  .barrow .bt{height:14px;border-radius:4px;background:var(--teal);opacity:.85}
-  .barrow .bv{font-family:var(--mono);font-size:11px;color:var(--dim);text-align:right}
-  .crowd{display:flex;flex-wrap:wrap;gap:7px;margin-top:4px}
-  .crowd .cpill{font-family:var(--mono);font-size:11px;border:1px solid var(--rule);border-radius:6px;padding:5px 10px;background:var(--card);color:var(--ink2)}
-  .crowd .cpill b{color:var(--teal)}
-  .crowd .cpill.hot{border-color:rgba(154,91,46,.45);background:rgba(154,91,46,.05)}
-  .crowd .cpill.hot b{color:var(--rust)}
-
-  /* problems */
-  .prob{border:1px solid var(--rule);border-left:3px solid var(--rust);border-radius:8px;padding:11px 13px;margin:9px 0;background:var(--card)}
-  .prob .pt{font-family:var(--mono);font-size:12.5px;font-weight:600;color:var(--ink);display:flex;align-items:center;gap:9px;flex-wrap:wrap}
-  .prob .ev{font-family:var(--jp);font-size:12px;color:var(--ink2);margin-top:6px;line-height:1.75}
-  .prob .ev::before{content:'根拠：';font-family:var(--mono);font-size:9.5px;color:var(--teal)}
-  .prob .gp{font-family:var(--jp);font-size:12px;color:var(--ink2);margin-top:4px;line-height:1.75}
-  .prob .gp::before{content:'残るギャップ：';font-family:var(--mono);font-size:9.5px;color:var(--rust)}
-
-  /* ref figs */
-  .figgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:6px}
-  .figcell{border:1px solid var(--rule);border-radius:9px;overflow:hidden;background:#fff;cursor:pointer}
-  .figcell:hover{box-shadow:0 3px 12px rgba(58,46,32,.08)}
-  .figcell .gsvg{padding:7px}
-  .figcell .gcap{font-family:var(--jp);font-size:11px;color:#2a2118;background:#f4efe4;padding:7px 10px;border-top:1px solid var(--rule)}
-  svg{width:100%;height:auto;display:block}
-
-  .foot{font-family:var(--jp);color:var(--dim);font-size:11px;line-height:1.85;margin-top:22px;border-top:1px solid var(--rule);padding-top:14px}
-
-  .lb{position:fixed;inset:0;background:rgba(40,32,20,.78);display:none;align-items:center;justify-content:center;z-index:50;padding:18px;backdrop-filter:blur(3px)}
-  .lb.on{display:flex}
-  .lb .box{background:#fff;border-radius:12px;max-width:96vw;max-height:92vh;overflow:auto;padding:10px}
-  .lb .cap{font-family:var(--jp);font-size:12px;color:#2a2118;text-align:center;padding:7px}
-  .lb .x{position:fixed;top:14px;right:18px;color:var(--paper);font-size:26px;cursor:pointer;font-weight:600}
-
-  @media(max-width:640px){
-    .figgrid{grid-template-columns:1fr}
-    .barrow{grid-template-columns:104px 1fr 28px}
-    .prow .cat{margin-left:0}
-    .wrap{padding:22px 16px 60px}
-  }
+:root{--red:#E3120B;--ink:#0C0C0C;--grey:#758D99;--g2:#B7C6CF;--g3:#DEE5E9;--beige:#F5F4EF;--rule:#DDDDDD;
+  --sans:'Zen Kaku Gothic New',sans-serif;--mono:'IBM Plex Mono',monospace}
+*{box-sizing:border-box;margin:0}
+html,body{background:#fff;color:var(--ink);font-family:var(--sans);-webkit-text-size-adjust:100%}
+.topline{height:3px;background:var(--red)}
+.tag{width:52px;height:12px;background:var(--red)}
+.wrap{max-width:760px;margin:0 auto;padding:0 18px 60px}
+.kicker{font-size:11px;color:var(--grey);letter-spacing:.08em;font-weight:700;margin-top:12px}
+h1{font-size:clamp(20px,4.6vw,27px);font-weight:900;line-height:1.4;margin:4px 0 2px}
+.dek{font-size:12px;color:var(--grey);margin-bottom:10px;line-height:1.6}
+.tabs{display:flex;gap:0;border-bottom:2px solid var(--ink);margin:10px 0 0;overflow-x:auto}
+.tab{background:none;border:0;padding:10px 14px 8px;font-family:var(--sans);font-size:13px;font-weight:700;
+  color:var(--grey);cursor:pointer;white-space:nowrap;border-bottom:3px solid transparent;margin-bottom:-2px}
+.tab.on{color:var(--ink);border-bottom-color:var(--red)}
+.view{display:none;padding-top:16px}
+.view.on{display:block}
+h2{font-size:15px;font-weight:900;margin:0 0 2px}
+.cs{font-size:10.5px;color:var(--grey);margin-bottom:10px}
+.src{font-size:9px;color:var(--grey);margin-top:8px;padding-top:5px;border-top:1px solid var(--rule)}
+.hr{border-top:1px solid var(--rule);margin:20px 0 16px}
+.kpi{display:flex;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);margin:6px 0 18px}
+.kpi div{flex:1;padding:10px 4px;text-align:center}
+.kpi .n{font-size:20px;font-weight:900;font-family:var(--mono)}
+.kpi .l{font-size:8.5px;color:var(--grey);letter-spacing:.08em;margin-top:2px}
+table{border-collapse:collapse}
+.hm{width:100%}
+.hm .rl{font-size:10px;text-align:right;padding-right:7px;font-weight:700;white-space:nowrap;cursor:pointer}
+.hm .cell{height:26px;text-align:center;font-size:9px;font-family:var(--mono);border:1px solid #fff;cursor:pointer;min-width:26px}
+.hm .yl{font-size:8.5px;color:var(--grey);text-align:center;padding-top:3px;font-family:var(--mono)}
+.hm .tot{font-size:10px;font-weight:700;padding-left:7px;font-family:var(--mono)}
+.st{display:grid;grid-template-columns:104px 1fr 34px;align-items:center;gap:8px;margin:4px 0;cursor:pointer}
+.st .l{font-size:10px;text-align:right;font-family:var(--mono);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.st .v{font-size:10px;font-family:var(--mono);color:var(--grey)}
+.cells{display:flex;gap:2px}
+.cells i{flex:1;height:14px}
+.bar{display:grid;grid-template-columns:104px 1fr 34px;align-items:center;gap:8px;margin:5px 0;cursor:pointer}
+.bar .l{font-size:10.5px;font-weight:700;text-align:right;white-space:nowrap}
+.bar .t{height:13px;background:var(--g2)}
+.bar.hot .t{background:var(--red)}
+.bar .v{font-size:10px;font-family:var(--mono);color:var(--grey)}
+.bar.hot .v{color:var(--red);font-weight:700}
+.stk{display:flex;gap:2px;align-items:flex-end;height:110px;margin-top:4px}
+.stk .col{flex:1;display:flex;flex-direction:column-reverse}
+.stk .col i{display:block}
+.stkx{display:flex;gap:2px;margin-top:3px}
+.stkx span{flex:1;font-size:8px;color:var(--grey);text-align:center;font-family:var(--mono)}
+.lgd{display:flex;gap:12px;flex-wrap:wrap;font-size:9.5px;color:var(--grey);margin-top:8px}
+.lgd i{width:10px;height:10px;display:inline-block;margin-right:4px;vertical-align:-1px}
+.note{font-size:10.5px;background:var(--beige);padding:9px 11px;line-height:1.7;margin-top:12px}
+.note b{color:var(--red)}
+.sbox{width:100%;border:1.5px solid var(--ink);padding:10px 12px;font-family:var(--sans);font-size:13px;margin-bottom:9px}
+.sbox:focus{outline:2px solid var(--red)}
+.frow{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:6px;align-items:center}
+.flabel{font-size:9px;color:var(--grey);font-weight:700;letter-spacing:.06em;width:100%;margin-top:4px}
+.chip{font-size:10px;border:1px solid var(--g2);background:#fff;padding:4px 9px;cursor:pointer;font-family:var(--sans);color:var(--ink)}
+.chip.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.chip.red.on{background:var(--red);border-color:var(--red)}
+.cnt{font-size:11px;font-family:var(--mono);color:var(--grey);margin:10px 0 6px;display:flex;justify-content:space-between;align-items:center}
+.cnt select{font-family:var(--sans);font-size:11px;border:1px solid var(--g2);padding:3px 6px;background:#fff}
+.li{display:grid;grid-template-columns:64px 1fr;gap:10px;padding:11px 0;border-top:1px solid var(--rule);cursor:pointer}
+.li.nofig{grid-template-columns:1fr}
+.li img{max-width:100%;max-height:58px;mix-blend-mode:multiply}
+.li .no{font-size:10.5px;font-family:var(--mono);color:var(--red);font-weight:500}
+.li .no small{color:var(--grey);margin-left:8px;font-weight:400}
+.li .tt{font-size:12.5px;font-weight:700;line-height:1.5;margin-top:2px}
+.li .mt{font-size:9.5px;color:var(--grey);margin-top:3px;line-height:1.5}
+.det{display:none;background:var(--beige);padding:10px 12px;margin:0 0 4px;font-size:11px;line-height:1.75}
+.det.on{display:block}
+.det .en{color:var(--grey);font-size:10.5px;margin-bottom:5px}
+.det .tags{display:flex;gap:4px;flex-wrap:wrap;margin:5px 0}
+.det .tg{font-size:9px;border:1px solid var(--g2);padding:1px 7px;background:#fff}
+.det a{color:var(--red);font-weight:700;text-decoration:none;border-bottom:1px solid var(--red);font-size:11px}
+.more{display:block;width:100%;border:1.5px solid var(--ink);background:#fff;padding:11px;font-family:var(--sans);
+  font-size:12.5px;font-weight:700;cursor:pointer;margin-top:12px}
+.more:active{background:var(--beige)}
+.zgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+.zc{border:1px solid var(--rule);cursor:pointer}
+.zc .im{padding:8px;display:flex;align-items:center;justify-content:center;height:130px;background:#fff}
+.zc img{max-width:100%;max-height:114px;mix-blend-mode:multiply}
+.zc .cp{border-top:1px solid var(--rule);padding:7px 9px}
+.zc .no{font-size:9px;font-family:var(--mono);color:var(--red)}
+.zc .ja{font-size:10.5px;font-weight:700;line-height:1.5;margin-top:2px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.zc .mt{font-size:8.5px;color:var(--grey);margin-top:2px}
+.lb{position:fixed;inset:0;background:rgba(12,12,12,.86);display:none;align-items:center;justify-content:center;z-index:50;padding:16px}
+.lb.on{display:flex}
+.lb .box{background:#fff;max-width:96vw;max-height:88vh;overflow:auto;padding:14px}
+.lb img{max-width:100%;display:block}
+.lb .cap{font-size:12px;padding:8px 2px 2px;line-height:1.6}
+.lb .cap a{color:var(--red);font-weight:700}
+.lb .x{position:fixed;top:12px;right:16px;color:#fff;font-size:26px;cursor:pointer;font-weight:700}
+.foot{font-size:10px;color:var(--grey);line-height:1.8;margin-top:26px;border-top:2px solid var(--ink);padding-top:10px}
+.hscroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+@media(max-width:560px){
+  .wrap{padding:0 12px 50px}
+  .hm .rl{font-size:8px;padding-right:4px}
+  .hm .cell{min-width:23px;height:24px;font-size:8px}
+  .hm .tot{font-size:9px;padding-left:4px}
+  .kpi .n{font-size:16px}
+  .st{grid-template-columns:74px 1fr 28px;gap:6px}
+  .bar{grid-template-columns:86px 1fr 28px;gap:6px}
+}
 </style>
 </head>
 <body>
+<div class="topline"></div><div class="tag"></div>
 <div class="wrap">
-  <div class="bar"><span class="dotted">公開特許ランドスケープ</span><span class="r" id="barmeta"></span></div>
-  <h1>フォイル式ガス軸受 公開特許ランドスケープ</h1>
-  <div class="path">~/counsel/landscape · 公知特許の調査・分析（一次サーフェス）</div>
-  <p class="lede" id="lede"></p>
+  <div class="kicker">フォイル式ガス軸受 特許ランドスケープ</div>
+  <h1 id="head">出願の主戦場は荷重容量と固定。<br>公差と追従はまだ空いている</h1>
+  <div class="dek" id="dek"></div>
 
   <div class="tabs">
-    <button class="tab on" data-tab="land">① アプローチ俯瞰</button>
-    <button class="tab" data-tab="idx">② 特許インデックス</button>
-    <button class="tab" data-tab="crowd">③ 混雑マップ</button>
-    <button class="tab" data-tab="prob">④ 未解決の課題</button>
+    <button class="tab on" data-v="dash">ダッシュボード</button>
+    <button class="tab" data-v="find">特許検索</button>
+    <button class="tab" data-v="zukan">図鑑</button>
   </div>
 
-  <section class="view on" id="view-land">
-    <div class="card">
-      <h2>テーマ別の俯瞰 — アプローチ → 代表文献 → 残るギャップ</h2>
-      <p class="small jp" style="margin:-4px 0 6px;line-height:1.7">各テーマで、公知のアプローチをカテゴリに分け、代表的な公開特許と「文献が触れていない／残しているギャップ」を客観的に並べます。番号タップで Google Patents が開きます。</p>
-      <div id="themes"></div>
-    </div>
-    <div class="card">
-      <h2>参照図 — 典型構造（一般的な模式図）</h2>
-      <div class="figgrid" id="figgrid"></div>
-      <p class="small jp" style="margin-top:10px;line-height:1.7">一般的なバンプ型フォイル軸受の構造を示す模式図です（特定特許の図面ではありません）。</p>
-    </div>
+  <!-- ============ DASH ============ -->
+  <section class="view on" id="v-dash">
+    <div class="kpi" id="kpi"></div>
+
+    <h2>課題 × 年代 — 出願はどこに集まってきたか</h2>
+    <div class="cs">ファミリー数、優先年5年区切り。セルをタップ→その条件の一覧へ</div>
+    <div class="hscroll"><table class="hm" id="hm"></table></div>
+    <div class="src">出典: Google Patents Public Data（BigQuery）。分類は要約ベースの一次判定（原文確認前提）</div>
+
+    <div class="hr"></div>
+    <h2>主要出願人の参入 — 世代交代</h2>
+    <div class="cs">5年区切りのファミリー数（濃いほど多い）。行をタップ→その社の一覧へ</div>
+    <div id="at"></div>
+    <div class="lgd"><span><i style="background:#0C0C0C"></i>現役世代</span><span><i style="background:#E3120B"></i>創成期（'75以前含む）</span></div>
+
+    <div class="hr"></div>
+    <h2>2020年代、空調とFCVが牽引する</h2>
+    <div class="cs">適用機器が明記されたファミリー、2020–26年。タップ→一覧へ</div>
+    <div id="apps"></div>
+
+    <div class="hr"></div>
+    <h2>構造の勢力図 — バンプ型の一強へ</h2>
+    <div class="cs">5年区切り、構造種別の構成</div>
+    <div class="stk" id="stk"></div>
+    <div class="stkx" id="stkx"></div>
+    <div class="lgd" id="stklg"></div>
+
+    <div class="note"><b>読みどころ</b>　2020年代は5年で414ファミリーと史上最多ペース。空調（Gree・Hanon）と燃料電池が波を作り、荷重容量と固定・組立に出願が集中。一方で公差ロバスト・追従は70年間で計112件と薄く、文献が疎な領域として残っている。</div>
   </section>
 
-  <section class="view" id="view-idx">
-    <div class="card">
-      <h2>特許インデックス — 番号・出願人・カバー範囲</h2>
-      <div class="filt" id="themefilt"></div>
-      <input class="srch" id="srch" placeholder="番号・出願人・キーワードで絞り込み（例：wing foil, NTN, スリット）">
-      <div class="cnt" id="cnt"></div>
-      <div id="patlist"></div>
-    </div>
+  <!-- ============ FIND ============ -->
+  <section class="view" id="v-find">
+    <input class="sbox" id="q" placeholder="検索：番号・出願人・技術語（例 IHI スリット 固定）">
+    <div class="frow"><span class="flabel">構造</span><span class="chip" data-f="st" data-k="bump">バンプ</span><span class="chip" data-f="st" data-k="leaf">リーフ</span><span class="chip" data-f="st" data-k="tension">テンション</span><span class="chip" data-f="st" data-k="hybrid">ハイブリッド</span><span class="chip" data-f="st" data-k="other">その他</span></div>
+    <div class="frow"><span class="flabel">課題</span><span class="chip red" data-f="pr" data-k="load_capacity">荷重容量</span><span class="chip red" data-f="pr" data-k="assembly_fixation">固定・組立</span><span class="chip red" data-f="pr" data-k="stability_whirl">安定性</span><span class="chip red" data-f="pr" data-k="startstop_wear">起動停止</span><span class="chip red" data-f="pr" data-k="damping">減衰</span><span class="chip red" data-f="pr" data-k="thermal">熱</span><span class="chip red" data-f="pr" data-k="tolerance_robust">公差</span><span class="chip red" data-f="pr" data-k="misalignment_conformity">追従</span></div>
+    <div class="frow"><span class="flabel">その他</span><span class="chip" data-f="fg" data-k="1">図あり</span><span class="chip" data-f="gr" data-k="1">成立のみ</span><span class="chip" data-f="era" data-k="2010">2010年以降</span></div>
+    <div class="cnt"><span id="cnt"></span><select id="sort"><option value="new">新しい順</option><option value="ju">法域数順</option><option value="old">古い順</option></select></div>
+    <div id="list"></div>
+    <button class="more" id="more" style="display:none">さらに表示</button>
   </section>
 
-  <section class="view" id="view-crowd">
-    <div class="card">
-      <h2>テーマ別の件数</h2>
-      <div id="themebars"></div>
-    </div>
-    <div class="card">
-      <h2>アプローチ・カテゴリの混雑 — 複数文献＝先行が密集</h2>
-      <p class="small jp" style="margin:-4px 0 8px;line-height:1.7">同じカテゴリに公開特許が重なるほど、その周辺は先行が混んでいるサイン（客観）。</p>
-      <div class="crowd" id="catcrowd"></div>
-    </div>
-    <div class="card">
-      <h2>登場する出願人 / FI（分類）の当たり</h2>
-      <div class="crowd" id="apcrowd" style="margin-bottom:12px"></div>
-      <div class="crowd" id="ficrowd"></div>
-    </div>
+  <!-- ============ ZUKAN ============ -->
+  <section class="view" id="v-zukan">
+    <h2>代表図の図鑑 — コア特許<span id="zn"></span>件</h2>
+    <div class="cs">法域展開・成立・タグから選定したコア特許の公報代表図。タップで拡大</div>
+    <div class="frow" id="zfilter"></div>
+    <div class="zgrid" id="zgrid"></div>
   </section>
 
-  <section class="view" id="view-prob">
-    <div class="card">
-      <h2>未解決そうな課題 — 文献が残しているギャップ</h2>
-      <p class="small jp" style="margin:-4px 0 8px;line-height:1.7">公開特許の俯瞰から見える「各社が繰り返し触れるが残している」客観的なギャップです。未解決の断定ではなく一次調査の仮説で、網羅調査で覆りえます。</p>
-      <div id="problist"></div>
-    </div>
-  </section>
-
-  <p class="foot" id="foot"></p>
+  <p class="foot">⚠ 本サイトは<b>公開済み特許の客観分析のみ</b>を収載しています（発明アイデア・出願戦略は含みません）。分類・要約は機械判定の一次情報で、正確な内容は各公報の原文をご確認ください。件数はファミリー（同一発明の各国出願をまとめた単位）ベース。出典: Google Patents Public Data（BigQuery）／図: 各特許公報（パブリックドメイン）／生成 2026-07-04</p>
 </div>
 
-<div class="lb" id="lb"><span class="x" id="lbx">✕</span><div><div class="box" id="lbbox"></div><div class="cap" id="lbcap"></div></div></div>
+<div class="lb" id="lb"><span class="x" id="lbx">✕</span><div class="box" id="lbbox"></div></div>
 
-<script>window.DATA={"meta":{"title":"フォイル式ガス軸受 公開特許ランドスケープ","subtitle":"公知特許の調査・分析（一次サーフェス）","project":"Counsel","date":"2026-06-29","note":"公開済み特許の俯瞰のみ。自社の発明アイデア・出願戦略は含みません。web一次サーフェスであり網羅ではなく、出願人・年・分類は概略で、確定は原文・公報の確認を要します。公的特許データベースでの分類精査と原文確認は人が仕上げる前提です。"},"themes":[{"key":"fix","label":"フォイル固定","blurb":"溶接レス・抗回転・公差ロバスト性。トップ/バンプをホルダにどう留めるか。","fi":["F16C27/02","F16C17/02"]},{"key":"thermal","label":"熱クラウニング / 熱膨張拘束","blurb":"固定端の熱応力・うねり、ミスアライメント追従、冷却。","fi":["F16C27/02","F16C37/00"]},{"key":"startup","label":"起動停止耐久性","blurb":"浮上前後の固体接触・摩耗。被膜／静圧リフト／タッチダウン／制御。","fi":["F16C17/02","F16C33/04"]},{"key":"axial","label":"軸方向追従 / 剛性の仕立て","blurb":"バンプ・支持層の分割やスリットで軸方向の剛性・曲げを仕立てる。","fi":["F16C17/024","F16C27/02"]}],"fiTerms":[{"code":"F16C27/02","label":"軸受の弾性支持（フォイル・ばね支持）"},{"code":"F16C17/02","label":"ラジアル滑り軸受（気体潤滑・フォイル）"},{"code":"F16C17/024","label":"ラジアル滑り軸受の細分（剛性・形状）"},{"code":"F16C33/04","label":"摺動層・被膜（固体潤滑）"},{"code":"F16C37/00","label":"軸受の冷却"}],"patents":[{"no":"US8672549B2","applicant":"keyless/grooveless fold-over tab","year":null,"theme":"fix","category":"差込タブ＋折曲げ（溶接レス）","covers":"端のタブを折ってハウジング（シェル）に固定し、抗回転・軸方向固定をする。トング＆グルーブ（舌片と溝）で保持する構成も示す。","gap":"脱落・抗回転の確実性、タブ根元の疲労。","tags":["溶接レス","抗回転"]},{"no":"US20130216167A1","applicant":"—","year":null,"theme":"fix","category":"差込タブ＋折曲げ（溶接レス）","covers":"端のタブ／トングでハウジング固定・抗回転（fold-over tab 系統）。","gap":"差込タブ系統と同様の保持確実性。","tags":["溶接レス","抗回転"]},{"no":"US9222509B2","applicant":"Xdot","year":null,"theme":"fix","category":"wing foil / 2Dタブ配列","covers":"翼状タブの2次元配列で周方向・軸方向の剛性を可変にした多層構造（ヘリンボーン的タブ配列）。","gap":"連続した一体性の喪失、膜の谷。","tags":["wing foil","量産性"]},{"no":"US10267354B2","applicant":"—","year":null,"theme":"fix","category":"wing foil / 2Dタブ配列","covers":"溶接不可材の wing foil／2D配列で量産性・溶接回避。","gap":"一体性の喪失・膜の谷。","tags":["wing foil","溶接回避"]},{"no":"US20140376844A1","applicant":"wing foil","year":null,"theme":"fix","category":"シムによる局所予圧","covers":"シム（薄板）を層の間に入れて局所プリロード（あらかじめの押付け力）を与える。","gap":"別部品のシムで部品・工程が増える。","tags":["プリロード"]},{"no":"WO2017022795A1","applicant":"NTN","year":null,"theme":"fix","category":"摺動層の架橋接着","covers":"摺動層の架橋接着で密着・始動トルクを低減。凝着→トルク増→焼付きにも言及。","gap":"摺動層が主題で固定構造ではない。","tags":["被膜","始動トルク"]},{"no":"CN104603480B","applicant":"—","year":null,"theme":"fix","category":"差込タブ＋ラジアルスロット","covers":"差込タブ＋ラジアルスロットで自由端が軸方向に膨張できる固定。","gap":"抗回転と滑りの両立は設計依存。","tags":["溶接レス","熱膨張許容"]},{"no":"US5518320A","applicant":"Texas A&M","year":null,"theme":"fix","category":"剛固定の回避","covers":"両端突き当てを避け、回転可能マウントで剛固定を回避。座屈バンプ／鋭い折り目を排除。","gap":"張力型・可変剛性が前提。","tags":["剛固定回避"]},{"no":"US20170030404A1","applicant":"—","year":null,"theme":"fix","category":"スプリットキー固定","covers":"スプリットキーで回転も移動も滑りも止める全方向拘束の固定。","gap":"軸方向の熱膨張も拘束する（全方向）。","tags":["全方向拘束"]},{"no":"US9568042","applicant":"—","year":null,"theme":"fix","category":"固定・プリロード関連","covers":"ラジアルフォイル軸受の固定・プリロード関連。","gap":"詳細は原文要精読。","tags":["固定","プリロード"]},{"no":"US9551375","applicant":"—","year":null,"theme":"fix","category":"固定・プリロード関連","covers":"ラジアルフォイル軸受の固定・プリロード関連。","gap":"詳細は原文要精読。","tags":["固定","プリロード"]},{"no":"US8944688","applicant":"—","year":null,"theme":"fix","category":"固定・プリロード関連","covers":"ラジアルフォイル軸受の固定・プリロード関連。","gap":"詳細は原文要精読。","tags":["固定","プリロード"]},{"no":"US9062712B1","applicant":"NASA","year":null,"theme":"thermal","category":"受動熱管理","covers":"セクタ間の高温潤滑遮断（ワイパー／エアダム／セクタ間シール／トレーリング形状）による受動的な熱管理。","gap":"セクタ間の熱遮断が主で、軸方向勾配のうねり・固定端応力は明示的に未対処。","tags":["受動","冷却"]},{"no":"US20090087299A1","applicant":"—","year":null,"theme":"thermal","category":"能動冷却","covers":"高温ブロワの冷却法／能動（熱電・SMA）による熱対策。","gap":"効果は大きいがコスト・複雑・追加部品。","tags":["能動","冷却"]},{"no":"US12535102","applicant":"—","year":null,"theme":"thermal","category":"CTE適応（材料）","covers":"CTEマッチング／CTE勾配の熱適応スリーブ（異種金属積層）で差成長を吸収。","gap":"材料・製法コスト。","tags":["材料","CTE"]},{"no":"US4795274A","applicant":"—","year":null,"theme":"thermal","category":"自由端コンプライアンス","covers":"resilient trailing edge／剛性勾配で、パッドの傾きが速度とともに増す。自由端で差成長を吸収。","gap":"固定端側の拘束は残る。","tags":["自由端","速度依存"]},{"no":"US4668108","applicant":"—","year":null,"theme":"thermal","category":"支持剛性の異方性","covers":"支持剛性の異方性によりロータ振動を抑制（anisotropic support）。","gap":"目的はロータ振動対策で、固定端の拘束方向の異方化（熱膨張）とは別。","tags":["異方性","振動"]},{"no":"US9109622","applicant":"—","year":null,"theme":"thermal","category":"支持剛性の異方性","covers":"支持剛性の異方性（振動対策）。","gap":"振動対策が主目的。","tags":["異方性","振動"]},{"no":"US5866518","applicant":"NASA（PS300）","year":null,"theme":"startup","category":"固体潤滑被膜","covers":"PS300 系の高温固体潤滑被膜。","gap":"低トルク×高温×長寿命の三立は単一被膜で困難。摩耗・酸化・厚み／粗さ。","tags":["被膜"]},{"no":"US8753417","applicant":"PS400","year":null,"theme":"startup","category":"固体潤滑被膜","covers":"PS400 系の高温固体潤滑被膜。","gap":"三立困難・摩耗・酸化。","tags":["被膜"]},{"no":"US8500331B2","applicant":"—","year":null,"theme":"startup","category":"ハイブリッド静圧リフト","covers":"起動前に外部加圧で浮上させ、固体接触を回避。","gap":"外部供給・配管・制御＝コスト・複雑・供給喪失リスク。","tags":["静圧","リフト補助"]},{"no":"US5348401","applicant":"—","year":null,"theme":"startup","category":"ハイブリッド静圧リフト","covers":"静圧リフト補助による起動時の接触回避。","gap":"外部供給依存。","tags":["静圧","リフト補助"]},{"no":"US20020097927A1","applicant":"—","year":null,"theme":"startup","category":"ハイブリッド静圧リフト","covers":"静圧リフト補助。","gap":"外部供給依存。","tags":["静圧","リフト補助"]},{"no":"US7830055B2","applicant":"—","year":null,"theme":"startup","category":"タッチダウン／補助軸受","covers":"磁気→機械の移行を管理するタッチダウン／補助軸受。","gap":"追加部品。","tags":["タッチダウン"]},{"no":"US11644227","applicant":"—","year":null,"theme":"startup","category":"起動停止制御","covers":"加減速で接触時間を最小化する制御。","gap":"ハード本体は変えない。","tags":["制御"]},{"no":"US11346397","applicant":"—","year":null,"theme":"startup","category":"起動停止制御","covers":"加減速で接触時間を最小化する制御。","gap":"ハード本体は変えない。","tags":["制御"]},{"no":"US4445792A","applicant":"Variable preload foil bearing","year":null,"theme":"startup","category":"可変プリロードで適応起動","covers":"起動時にフォイル張力（プリロード）を上げて軸を持ち上げ、回転が上がると下げる。","gap":"機構が張力変化に依存。","tags":["適応起動","プリロード"]},{"no":"US20190203761A1","applicant":"wing foil","year":null,"theme":"startup","category":"膜圧応答の予圧／テーパ","covers":"プリロードや入口テーパが膜圧に応じて生まれる（wing foil 系）。","gap":"形状が膜圧に従属。","tags":["膜圧応答","wing foil"]},{"no":"US5286113A","applicant":"—","year":null,"theme":"startup","category":"遠心作動機構","covers":"遠心作動の軸受機構（前例）。","gap":"目的（浮上回転数／起動摩耗）は別。","tags":["遠心作動"]},{"no":"US6655846B2","applicant":"—","year":null,"theme":"startup","category":"遠心作動機構","covers":"遠心作動の軸受機構（前例）。","gap":"目的は別。","tags":["遠心作動"]},{"no":"US3957317A","applicant":"Shaped foil","year":null,"theme":"axial","category":"動圧ポンピング形状","covers":"シェブロン状後端／ヘリンボーン溝で流体ポンピング＝負荷容量を上げる。","gap":"目的は動圧ポンピングで、構造のコンプライアンスではない。","tags":["動圧","形状"]},{"no":"WO2024176423A1","applicant":"—","year":null,"theme":"axial","category":"周方向の波形バンプ","covers":"周方向のバンプ波形（波状バンプ）。","gap":"軸方向の波形ではない。","tags":["波形バンプ"]},{"no":"US9388848B2","applicant":"Howden / Siemens","year":null,"theme":"axial","category":"バンプ層の軸方向分割","covers":"バンプフォイル『層』を軸方向ストライプ化し、剛性低減・減衰向上・熱／遠心成長・ミスアライメントを吸収。フォイルは周方向に連続。","gap":"対象がバンプ層。","tags":["分割","減衰","冷却"]},{"no":"JP6113444B2","applicant":"NTN","year":null,"theme":"axial","category":"後端スリットで剛性勾配","covers":"リーフ後端（平坦部）にスリットを設け、ばね性に軸方向の勾配を付与してコニカル振れ回りを抑制。","gap":"対象は平坦部、目的は剛性勾配。","tags":["スリット","剛性勾配"]},{"no":"US4296976A","applicant":"Heshmat / Mechanical Technology Inc","year":1981,"theme":"axial","category":"部分スリット（連結を残す）","covers":"支持／中間シートを部分スリットでストリップに分割。スリットは縁まで届かず連結したモジュールとして残し、角（曲げ）剛性を消しつつ力分配・干渉防止を維持する。","gap":"1981年の古典。フォイル分節の基礎。","tags":["部分スリット","連結残し"]},{"no":"CN212959540U","applicant":"Hebei Kingston","year":null,"theme":"axial","category":"相互連結の擬似独立バンプ","covers":"バンプを相互連結のまま、円弧の部分スリット（連結を20–30%残す）で擬似独立化し、軸方向ズレ防止と弾性支持・減衰を得る。","gap":"—","tags":["部分スリット","擬似独立"]},{"no":"US10415634B2","applicant":"—","year":null,"theme":"axial","category":"バンプ／支持層の分割系","covers":"バンプ・支持層の分割系。","gap":"詳細は原文確認。","tags":["分割"]},{"no":"RE48269","applicant":"—","year":null,"theme":"axial","category":"バンプ／支持層の分割系","covers":"バンプ・支持層の分割系（再発行特許）。","gap":"詳細は原文確認。","tags":["分割"]},{"no":"US20140147064A1","applicant":"—","year":null,"theme":"axial","category":"バンプ／支持層の分割系","covers":"バンプ・支持層の分割系。","gap":"詳細は原文確認。","tags":["分割"]},{"no":"US5584582A","applicant":"—","year":null,"theme":"axial","category":"バンプ2段高さ","covers":"バンプの2段高さ構造（スリット無し）。","gap":"web要約では分節スリット文献と取り違えられやすいが、全文では2段高さ・スリット無し。原文確認の好例。","tags":["2段高さ","要注意"]}],"problems":[{"theme":"fix","title":"溶接（HAZ）起因の信頼性低下","evidence":"複数文献が冷間割れ・残留応力・疲労を明言し、各社が weld-free へ動いている。","gap":"weld-free は脱落・保持力など別の確実性課題を生む。"},{"theme":"fix","title":"固定起因のプリロード／すきまのばらつき","evidence":"「preload は製造ばらつきに非常に敏感」「溶接位置ばらつきで性能ばらつき」との指摘。","gap":"固定を介した受動的なすきま自己補正・公差鈍感化は文献上手薄。"},{"theme":"fix","title":"固定端の局所剛性段差→応力集中・摩耗","evidence":"「固定端剛性が高い」「角部は R 付与で対策」との記載。","gap":"段差そのものの連続化は限定的。"},{"theme":"fix","title":"高温長時間での固定部フレッティング・緩み","evidence":"weld-free は摩擦保持に依存する。","gap":"高温での保持力維持の作り込みは文献上薄い（要追加調査）。"},{"theme":"thermal","title":"固定端の熱膨張拘束→熱応力・うねり","evidence":"多くは「自由端で逃がす」か「勾配を下げる」。固定端応力は US9062712B1 でも明示的に未対処。","gap":"固定端そのものの拘束・剛性段差に起因する熱応力／うねりを、抗回転を保ったまま受動・低コストで逃がす構成は文献上手薄。"},{"theme":"startup","title":"被膜の三立困難（低トルク×高温×長寿命）","evidence":"各被膜に温度／摩耗／厚みの制約があり、各社が新被膜を出し続けている。","gap":"単一被膜での三立は困難。材料化学の混雑領域。"},{"theme":"startup","title":"浮上回転数の構造的低減","evidence":"浮上回転数が接触回転数＝摩耗量を決める。テクスチャ・テーパは高速性能と二律背反。","gap":"低速で効き高速で邪魔しない速度適応構造は文献上乏しい。"},{"theme":"startup","title":"受動・自己完結のリフトオフ補助","evidence":"ハイブリッド静圧は有効だが外部加圧に依存。","gap":"外部供給なしの受動リフト補助は手薄。"},{"theme":"startup","title":"停止タッチダウンのダメージ低減","evidence":"起動側に比べ停止時の再接触ダメージ対策は手薄。","gap":"停止時の構造的保護は文献上薄い（要裏取り）。"},{"theme":"startup","title":"凝着・摩耗粉（seizure 起点）の管理","evidence":"WO2017022795A1 が凝着→トルク増→焼付きに言及。","gap":"凝着・摩耗粉の管理は構造側で手薄。"}],"refFigs":[{"path":"fig/ref-bump-radial-anatomy.svg","title":"バンプ型ラジアル軸受の解剖図","kind":"参照","id":"fig_ref_bump_radial_anatomy_svg"},{"path":"fig/ref-bump-geometry.svg","title":"バンプ形状の幾何パラメータ","kind":"参照","id":"fig_ref_bump_geometry_svg"},{"path":"fig/ref-axial-film.svg","title":"軸方向の膜厚プロファイル","kind":"参照","id":"fig_ref_axial_film_svg"}]};
-window.FIGSVG={"fig_ref_bump_radial_anatomy_svg":"<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 760 720\" font-family=\"'Segoe UI','Yu Gothic UI',sans-serif\">\n  <defs>\n    <path id=\"fg_fig_ref_bump_radial_anatomy_svg_b\" d=\"M -15,-184 Q 0,-208 15,-184\" fill=\"none\" stroke=\"#e67e22\" stroke-width=\"2.5\"/>\n    <marker id=\"fg_fig_ref_bump_radial_anatomy_svg_ar\" markerWidth=\"9\" markerHeight=\"9\" refX=\"7\" refY=\"3\" orient=\"auto\"><path d=\"M0,0 L7,3 L0,6 Z\" fill=\"#333\"/></marker>\n  </defs>\n  <rect width=\"760\" height=\"720\" fill=\"#ffffff\"/>\n  <text x=\"380\" y=\"36\" font-size=\"22\" font-weight=\"700\" text-anchor=\"middle\" fill=\"#1a1a1a\">典型バンプフォイル型ラジアルガス軸受：横断面図</text>\n  <text x=\"380\" y=\"58\" font-size=\"12\" text-anchor=\"middle\" fill=\"#777\">＊参照用模式図。符号・寸法は仮・誇張。確定図面は弁理士レビュー前提。</text>\n\n  <g transform=\"translate(360,360)\">\n    <!-- housing outer -->\n    <circle cx=\"0\" cy=\"0\" r=\"240\" fill=\"#c8ccd2\" stroke=\"#555\" stroke-width=\"2\"/>\n    <!-- inner wall (carve white) -->\n    <circle cx=\"0\" cy=\"0\" r=\"205\" fill=\"#ffffff\" stroke=\"#555\" stroke-width=\"2\"/>\n    <!-- bump foil base ring -->\n    <circle cx=\"0\" cy=\"0\" r=\"184\" fill=\"none\" stroke=\"#e67e22\" stroke-width=\"1.4\"/>\n    <!-- 30 bumps -->\n    <use href=\"#fg_fig_ref_bump_radial_anatomy_svg_b\"/><use href=\"#fg_fig_ref_bump_radial_anatomy_svg_b\" transform=\"rotate(12)\"/><use href=\"#fg_fig_ref_bump_radial_anatomy_svg_b\" transform=\"rotate(24)\"/><use href=\"#fg_fig_ref_bump_radial_anatomy_svg_b\" transform=\"rotate(36)\"/><use href=\"#fg_fig_ref_bump_radial_anatomy_svg_b\" transform=\"rotate(48)\"/>\n    <use href=\"#fg_fig_ref_bump_radial_anatomy_svg_b\" transform=\"rotate(60)\"/><use href=\"#fg_fig_ref_bump_radial_anatomy_svg_b\" transform=\"rotate(72)\"/><use href=\"#fg_fig_ref_bump_radial_anatomy_svg_b\" transform=\"rotate(84)\"/><use href=\"#fg_fig_ref_bump_radial_anatomy_svg_b\" transform=\"rotate(96)\"/><use href=\"#fg_fig_ref_bump_radial_anatomy_svg_b\" transform=\"rotate(108)\"/>\n    <use href=\"#fg_fig_ref_bump_radial_anatomy_svg_b\" transform=\"rotate(120)\"/><use href=\"#fg_fig_ref_bump_radial_anatomy_svg_b\" transform=\"rotate(132)\"/><use href=\"#fg_fig_ref_bump_radial_anatomy_svg_b\" transform=\"rotate(144)\"/><use href=\"#fg_fig_ref_bump_radial_anatomy_svg_b\" transform=\"rotate(156)\"/><use href=\"#fg_fig_ref_bump_radial_anatomy_svg_b\" transform=\"rotate(168)\"/>\n    <use href=\"#fg_fig_ref_bump_radial_anatomy_svg_b\" transform=\"rotate(180)\"/><use href=\"#fg_fig_ref_bump_radial_anatomy_svg_b\" transform=\"rotate(192)\"/><use href=\"#fg_fig_ref_bump_radial_anatomy_svg_b\" transform=\"rotate(204)\"/><use href=\"#fg_fig_ref_bump_radial_anatomy_svg_b\" transform=\"rotate(216)\"/><use href=\"#fg_fig_ref_bump_radial_anatomy_svg_b\" transform=\"rotate(228)\"/>\n    <use href=\"#fg_fig_ref_bump_radial_anatomy_svg_b\" transform=\"rotate(240)\"/><use href=\"#fg_fig_ref_bump_radial_anatomy_svg_b\" transform=\"rotate(252)\"/><use href=\"#fg_fig_ref_bump_radial_anatomy_svg_b\" transform=\"rotate(264)\"/><use href=\"#fg_fig_ref_bump_radial_anatomy_svg_b\" transform=\"rotate(276)\"/><use href=\"#fg_fig_ref_bump_radial_anatomy_svg_b\" transform=\"rotate(288)\"/>\n    <use href=\"#fg_fig_ref_bump_radial_anatomy_svg_b\" transform=\"rotate(300)\"/><use href=\"#fg_fig_ref_bump_radial_anatomy_svg_b\" transform=\"rotate(312)\"/><use href=\"#fg_fig_ref_bump_radial_anatomy_svg_b\" transform=\"rotate(324)\"/><use href=\"#fg_fig_ref_bump_radial_anatomy_svg_b\" transform=\"rotate(336)\"/><use href=\"#fg_fig_ref_bump_radial_anatomy_svg_b\" transform=\"rotate(348)\"/>\n    <!-- top foil -->\n    <circle cx=\"0\" cy=\"0\" r=\"180\" fill=\"#ffffff\" stroke=\"#2980b9\" stroke-width=\"3\"/>\n    <!-- shaft (eccentric downward) -->\n    <circle cx=\"0\" cy=\"14\" r=\"170\" fill=\"#aeb4bd\" stroke=\"#555\" stroke-width=\"2\"/>\n    <line x1=\"-12\" y1=\"14\" x2=\"12\" y2=\"14\" stroke=\"#333\" stroke-width=\"1.2\"/>\n    <line x1=\"0\" y1=\"2\" x2=\"0\" y2=\"26\" stroke=\"#333\" stroke-width=\"1.2\"/>\n    <text x=\"0\" y=\"60\" font-size=\"14\" text-anchor=\"middle\" fill=\"#333\">軸</text>\n    <!-- rotation arrow -->\n    <path d=\"M -55,-70 A 90,90 0 0 1 70,-50\" fill=\"none\" stroke=\"#16a085\" stroke-width=\"3\" marker-end=\"url(#fg_fig_ref_bump_radial_anatomy_svg_ar)\"/>\n    <text x=\"78\" y=\"-58\" font-size=\"13\" fill=\"#16a085\">回転</text>\n    <!-- fixed end (left, 9 o'clock): clamp slot -->\n    <rect x=\"-208\" y=\"-10\" width=\"30\" height=\"20\" fill=\"#7f8c8d\" stroke=\"#333\" stroke-width=\"1\"/>\n  </g>\n\n  <!-- callouts -->\n  <text x=\"640\" y=\"150\" font-size=\"13\" fill=\"#555\">ハウジング/スリーブ</text>\n  <line x1=\"638\" y1=\"146\" x2=\"560\" y2=\"190\" stroke=\"#555\" stroke-width=\"1\" marker-end=\"url(#fg_fig_ref_bump_radial_anatomy_svg_ar)\"/>\n  <text x=\"650\" y=\"300\" font-size=\"13\" fill=\"#e67e22\">バンプフォイル</text>\n  <line x1=\"648\" y1=\"296\" x2=\"548\" y2=\"320\" stroke=\"#e67e22\" stroke-width=\"1\" marker-end=\"url(#fg_fig_ref_bump_radial_anatomy_svg_ar)\"/>\n  <text x=\"650\" y=\"430\" font-size=\"13\" fill=\"#2980b9\">トップフォイル</text>\n  <line x1=\"648\" y1=\"426\" x2=\"540\" y2=\"402\" stroke=\"#2980b9\" stroke-width=\"1\" marker-end=\"url(#fg_fig_ref_bump_radial_anatomy_svg_ar)\"/>\n  <text x=\"60\" y=\"360\" font-size=\"13\" fill=\"#333\" text-anchor=\"end\" transform=\"translate(70,0)\">固定端</text>\n  <line x1=\"92\" y1=\"356\" x2=\"162\" y2=\"360\" stroke=\"#333\" stroke-width=\"1\" marker-end=\"url(#fg_fig_ref_bump_radial_anatomy_svg_ar)\"/>\n  <text x=\"60\" y=\"378\" font-size=\"11\" fill=\"#777\" transform=\"translate(0,0)\">(溶接/差込)</text>\n\n  <!-- 空気膜 callout -->\n  <text x=\"360\" y=\"690\" font-size=\"13\" text-anchor=\"middle\" fill=\"#c0392b\">空気膜(すきま)：周方向に楔形成 → 浮上。偏心側に最小膜厚 h_min</text>\n</svg>","fig_ref_bump_geometry_svg":"<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 820 430\" font-family=\"'Segoe UI','Yu Gothic UI',sans-serif\">\n  <defs>\n    <marker id=\"fg_fig_ref_bump_geometry_svg_a2\" markerWidth=\"8\" markerHeight=\"8\" refX=\"6\" refY=\"3\" orient=\"auto\"><path d=\"M0,0 L6,3 L0,6 Z\" fill=\"#333\"/></marker>\n    <marker id=\"fg_fig_ref_bump_geometry_svg_a2s\" markerWidth=\"8\" markerHeight=\"8\" refX=\"2\" refY=\"3\" orient=\"auto\"><path d=\"M6,0 L0,3 L6,6 Z\" fill=\"#333\"/></marker>\n  </defs>\n  <rect width=\"820\" height=\"430\" fill=\"#ffffff\"/>\n  <text x=\"410\" y=\"34\" font-size=\"21\" font-weight=\"700\" text-anchor=\"middle\" fill=\"#1a1a1a\">バンプ形状の詳細（剛性レバー）</text>\n  <text x=\"410\" y=\"55\" font-size=\"12\" text-anchor=\"middle\" fill=\"#777\">＊参照用模式図。符号・寸法は仮。確定図面は弁理士レビュー前提。</text>\n\n  <!-- housing line (top) -->\n  <line x1=\"80\" y1=\"110\" x2=\"740\" y2=\"110\" stroke=\"#555\" stroke-width=\"4\"/>\n  <text x=\"748\" y=\"114\" font-size=\"13\" fill=\"#555\">ハウジング内壁</text>\n\n  <!-- bump foil: arcs sitting between top foil(bottom) and housing(top) -->\n  <!-- top foil flat -->\n  <line x1=\"80\" y1=\"250\" x2=\"740\" y2=\"250\" stroke=\"#2980b9\" stroke-width=\"4\"/>\n  <text x=\"748\" y=\"254\" font-size=\"13\" fill=\"#2980b9\">トップフォイル</text>\n\n  <!-- bumps (5 bumps) bulging up from top foil toward housing -->\n  <path d=\"M 120,250 Q 165,118 210,250 M 230,250 Q 275,118 320,250 M 340,250 Q 385,118 430,250 M 450,250 Q 495,118 540,250 M 560,250 Q 605,118 650,250\"\n        fill=\"none\" stroke=\"#e67e22\" stroke-width=\"3.5\"/>\n  <text x=\"120\" y=\"300\" font-size=\"13\" fill=\"#e67e22\">バンプフォイル</text>\n\n  <!-- pitch s0 between apexes (165 -> 275) -->\n  <line x1=\"165\" y1=\"92\" x2=\"275\" y2=\"92\" stroke=\"#333\" stroke-width=\"1\" marker-start=\"url(#fg_fig_ref_bump_geometry_svg_a2s)\" marker-end=\"url(#fg_fig_ref_bump_geometry_svg_a2)\"/>\n  <text x=\"220\" y=\"86\" font-size=\"13\" text-anchor=\"middle\" fill=\"#333\">ピッチ s₀</text>\n  <line x1=\"165\" y1=\"118\" x2=\"165\" y2=\"92\" stroke=\"#999\" stroke-width=\"0.8\" stroke-dasharray=\"3 3\"/>\n  <line x1=\"275\" y1=\"118\" x2=\"275\" y2=\"92\" stroke=\"#999\" stroke-width=\"0.8\" stroke-dasharray=\"3 3\"/>\n\n  <!-- bump height h (apex 118 to base 250) at x=495 -->\n  <line x1=\"495\" y1=\"118\" x2=\"495\" y2=\"250\" stroke=\"#333\" stroke-width=\"1\" marker-start=\"url(#fg_fig_ref_bump_geometry_svg_a2s)\" marker-end=\"url(#fg_fig_ref_bump_geometry_svg_a2)\"/>\n  <text x=\"505\" y=\"190\" font-size=\"13\" fill=\"#333\">高さ h</text>\n\n  <!-- half length l (foot of a bump: 450 -> 495) -->\n  <line x1=\"450\" y1=\"268\" x2=\"495\" y2=\"268\" stroke=\"#333\" stroke-width=\"1\" marker-start=\"url(#fg_fig_ref_bump_geometry_svg_a2s)\" marker-end=\"url(#fg_fig_ref_bump_geometry_svg_a2)\"/>\n  <text x=\"472\" y=\"288\" font-size=\"12\" text-anchor=\"middle\" fill=\"#333\">半長 l</text>\n\n  <!-- thickness t callout -->\n  <line x1=\"650\" y1=\"250\" x2=\"700\" y2=\"210\" stroke=\"#333\" stroke-width=\"0.8\"/>\n  <text x=\"700\" y=\"208\" font-size=\"12\" fill=\"#333\">板厚 t</text>\n\n  <!-- curvature radius -->\n  <line x1=\"385\" y1=\"118\" x2=\"385\" y2=\"250\" stroke=\"#bbb\" stroke-width=\"0.8\" stroke-dasharray=\"3 3\"/>\n  <text x=\"360\" y=\"135\" font-size=\"12\" fill=\"#888\" text-anchor=\"end\">曲率半径 R_b</text>\n\n  <!-- fixed/free -->\n  <rect x=\"80\" y=\"244\" width=\"22\" height=\"12\" fill=\"#7f8c8d\" stroke=\"#333\" stroke-width=\"1\"/>\n  <text x=\"80\" y=\"335\" font-size=\"13\" fill=\"#333\">固定端</text>\n  <text x=\"650\" y=\"335\" font-size=\"13\" fill=\"#333\">自由端 →</text>\n\n  <text x=\"410\" y=\"388\" font-size=\"13\" text-anchor=\"middle\" fill=\"#444\">剛性レバー：ピッチ s₀・高さ h・板厚 t・半長 l・曲率 R_b を変えて、周/軸方向の剛性分布を仕立てる</text>\n</svg>","fig_ref_axial_film_svg":"<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 820 560\" font-family=\"'Segoe UI','Yu Gothic UI',sans-serif\">\n  <defs>\n    <marker id=\"fg_fig_ref_axial_film_svg_a3\" markerWidth=\"8\" markerHeight=\"8\" refX=\"6\" refY=\"3\" orient=\"auto\"><path d=\"M0,0 L6,3 L0,6 Z\" fill=\"#333\"/></marker>\n  </defs>\n  <rect width=\"820\" height=\"560\" fill=\"#ffffff\"/>\n  <text x=\"410\" y=\"34\" font-size=\"21\" font-weight=\"700\" text-anchor=\"middle\" fill=\"#1a1a1a\">軸方向断面：膜厚プロファイルと端部の最小膜厚</text>\n  <text x=\"410\" y=\"55\" font-size=\"12\" text-anchor=\"middle\" fill=\"#777\">＊参照用模式図。符号・寸法は仮・誇張。確定図面は弁理士レビュー前提。</text>\n\n  <!-- axis arrow -->\n  <line x1=\"120\" y1=\"90\" x2=\"700\" y2=\"90\" stroke=\"#333\" stroke-width=\"1.5\" marker-end=\"url(#fg_fig_ref_axial_film_svg_a3)\"/>\n  <text x=\"708\" y=\"94\" font-size=\"13\" fill=\"#333\">軸方向 Z</text>\n\n  <!-- bump foil + top foil (top, flat-ish) -->\n  <line x1=\"140\" y1=\"150\" x2=\"680\" y2=\"150\" stroke=\"#e67e22\" stroke-width=\"3\"/>\n  <text x=\"688\" y=\"154\" font-size=\"12\" fill=\"#e67e22\">バンプ/トップフォイル</text>\n  <line x1=\"140\" y1=\"175\" x2=\"680\" y2=\"175\" stroke=\"#2980b9\" stroke-width=\"2.5\"/>\n\n  <!-- shaft surface: barrel profile (bulging up at center) -->\n  <path d=\"M 140,250 Q 410,205 680,250\" fill=\"#aeb4bd\" stroke=\"#555\" stroke-width=\"2\"/>\n  <rect x=\"140\" y=\"250\" width=\"540\" height=\"70\" fill=\"#aeb4bd\" stroke=\"#555\" stroke-width=\"2\"/>\n  <text x=\"410\" y=\"295\" font-size=\"14\" text-anchor=\"middle\" fill=\"#333\">軸(樽型プロファイル：遠心/熱膨張)</text>\n\n  <!-- film thickness: between top foil(175) and shaft top(barrel) -->\n  <!-- center gap small, end gap large -->\n  <line x1=\"160\" y1=\"175\" x2=\"160\" y2=\"247\" stroke=\"#c0392b\" stroke-width=\"1.4\" marker-end=\"url(#fg_fig_ref_axial_film_svg_a3)\"/>\n  <text x=\"150\" y=\"220\" font-size=\"11\" text-anchor=\"end\" fill=\"#c0392b\">端部</text>\n  <line x1=\"410\" y1=\"175\" x2=\"410\" y2=\"207\" stroke=\"#c0392b\" stroke-width=\"1.4\" marker-end=\"url(#fg_fig_ref_axial_film_svg_a3)\"/>\n  <text x=\"420\" y=\"198\" font-size=\"11\" fill=\"#c0392b\">中央(薄)</text>\n  <line x1=\"660\" y1=\"175\" x2=\"660\" y2=\"247\" stroke=\"#c0392b\" stroke-width=\"1.4\" marker-end=\"url(#fg_fig_ref_axial_film_svg_a3)\"/>\n\n  <text x=\"410\" y=\"350\" font-size=\"13\" text-anchor=\"middle\" fill=\"#444\">膜厚 h(z)：軸の樽/鼓・テーパで軸方向に非一様 → 中央が薄く、端部側方漏れで圧力降下</text>\n\n  <!-- pressure profile plot -->\n  <text x=\"140\" y=\"410\" font-size=\"13\" font-weight=\"700\" fill=\"#1a1a1a\">膜内圧 p(z)（模式）</text>\n  <line x1=\"160\" y1=\"520\" x2=\"680\" y2=\"520\" stroke=\"#333\" stroke-width=\"1.2\"/>\n  <line x1=\"160\" y1=\"520\" x2=\"160\" y2=\"420\" stroke=\"#333\" stroke-width=\"1.2\"/>\n  <text x=\"150\" y=\"425\" font-size=\"11\" text-anchor=\"end\" fill=\"#333\">p</text>\n  <text x=\"688\" y=\"524\" font-size=\"11\" fill=\"#333\">Z</text>\n  <!-- pressure hump, drops to ambient at ends -->\n  <path d=\"M 160,520 Q 290,440 410,440 Q 530,440 680,520\" fill=\"none\" stroke=\"#8e44ad\" stroke-width=\"3\"/>\n  <line x1=\"160\" y1=\"520\" x2=\"680\" y2=\"520\" stroke=\"#bbb\" stroke-width=\"0.8\" stroke-dasharray=\"4 4\"/>\n  <text x=\"420\" y=\"432\" font-size=\"11\" fill=\"#8e44ad\">中央で最大</text>\n  <text x=\"160\" y=\"540\" font-size=\"11\" fill=\"#777\">端=大気圧</text>\n  <text x=\"640\" y=\"540\" font-size=\"11\" fill=\"#777\">端=大気圧</text>\n</svg>"};</script>
+<script src="data.js"></script>
 <script>
-const D = window.DATA, FIGSVG = window.FIGSVG || {};
-const $ = id => document.getElementById(id);
-const themeById = {}; D.themes.forEach(t=>themeById[t.key]=t);
-const THCOL = {fix:"#0F4C4C", thermal:"#9A5B2E", startup:"#B5822E", axial:"#4E7C7C"};
-function thBadge(key){const t=themeById[key];const c=THCOL[key]||"#0F4C4C";
-  return `<span class="tbadge" style="color:${c};border-color:${c}55;background:${c}14">${t?t.label:key}</span>`;}
-function gpLink(no){const n=no.startsWith("RE")?"US"+no:no;return "https://patents.google.com/patent/"+encodeURIComponent(n);}
+const D=window.LS,$=id=>document.getElementById(id);
+const PLJA={load_capacity:"荷重容量",assembly_fixation:"固定・組立",stability_whirl:"安定性",startstop_wear:"起動停止",damping:"減衰",thermal:"熱",tolerance_robust:"公差ロバスト",misalignment_conformity:"追従"};
+const LVJA={pitch_height_thickness:"バンプ形状",segmentation_slit:"分割・スリット",multizone_multipad:"多ゾーン",stacking:"積層",preload:"予圧",material_coating:"材料・被膜",adaptive_geometry:"適応形状",cooling_flow:"冷却流",fixation_design:"固定設計",other:"その他"};
+const STJA={bump:"バンプ型",leaf:"リーフ型",tension:"テンション型",hybrid:"ハイブリッド",other:"その他",unknown:"—"};
+const FMJA={radial:"ラジアル",thrust:"スラスト",combo:"複合",conical:"円錐",unknown:""};
+const APJA={fc_compressor:"燃料電池",turbocharger:"ターボチャージャ",blower_fan:"ブロワ",hvac_chiller:"空調・チラー",acm:"航空機ACM",micro_turbine:"マイクロGT",turbo_expander_cryo:"膨張タービン",motor_spindle:"高速モータ",general_unknown:"—"};
+const YRS=["'75","'80","'85","'90","'95","'00","'05","'10","'15","'20"];
+$("dek").textContent=`公知特許 ${D.meta.total.toLocaleString()} ファミリー・70年分（1955–2026、優先年ベース）を課題・構造・出願人で俯瞰する`;
 
-/* tabs */
-document.querySelectorAll(".tab").forEach(t=>t.addEventListener("click",()=>{
-  document.querySelectorAll(".tab").forEach(x=>x.classList.remove("on"));
+/* ---- tabs ---- */
+document.querySelectorAll(".tab").forEach(t=>t.addEventListener("click",()=>showView(t.dataset.v)));
+function showView(v){
+  document.querySelectorAll(".tab").forEach(x=>x.classList.toggle("on",x.dataset.v===v));
   document.querySelectorAll(".view").forEach(x=>x.classList.remove("on"));
-  t.classList.add("on");$("view-"+t.dataset.tab).classList.add("on");
+  $("v-"+v).classList.add("on");
   window.scrollTo({top:0,behavior:"smooth"});
-}));
-function gotoTab(n){document.querySelectorAll(".tab").forEach(x=>x.classList.toggle("on",x.dataset.tab===n));
-  document.querySelectorAll(".view").forEach(x=>x.classList.remove("on"));$("view-"+n).classList.add("on");}
-
-/* ① landscape */
-function renderThemes(){
-  let html="";
-  D.themes.forEach(t=>{
-    const pats=D.patents.filter(p=>p.theme===t.key);
-    const cats=[...new Set(pats.map(p=>p.category))];
-    html+=`<div class="theme"><div class="th">
-      <div class="tname">${thBadge(t.key)} ${t.label} <span class="small">（${pats.length}件）</span></div>
-      <div class="tblurb">${t.blurb}</div>
-      <div class="chips">${(t.fi||[]).map(f=>`<span class="ficode">${f}</span>`).join("")}</div>
-    </div>`;
-    cats.forEach(cat=>{
-      const cp=pats.filter(p=>p.category===cat);
-      html+=`<div class="catblock"><div class="catname">▸ ${cat}<span class="small" style="color:var(--faint)"> ・${cp.length}件</span></div>`;
-      cp.forEach(p=>{
-        html+=`<div class="pat">
-          <a class="pno" href="${gpLink(p.no)}" target="_blank" rel="noopener">${p.no}</a>${p.applicant&&p.applicant!=="—"?`<span class="pap">${p.applicant}</span>`:""}
-          <div class="pcov">${p.covers}</div>
-          ${p.gap&&p.gap!=="—"?`<div class="pgap">${p.gap}</div>`:""}
-        </div>`;
-      });
-      html+=`</div>`;
-    });
-    html+=`</div>`;
-  });
-  $("themes").innerHTML=html;
 }
 
-/* figs */
-function renderFigs(){
-  $("figgrid").innerHTML=(D.refFigs||[]).map(f=>{
-    const id=f.id||f.path;
-    return `<div class="figcell" data-fig="${id}"><div class="gsvg">${FIGSVG[id]||""}</div><div class="gcap">${f.title}</div></div>`;
-  }).join("");
-  $("figgrid").querySelectorAll(".figcell").forEach(e=>e.addEventListener("click",()=>{
-    const f=(D.refFigs||[]).find(x=>(x.id||x.path)===e.dataset.fig);
-    $("lbbox").innerHTML=FIGSVG[e.dataset.fig]||"";$("lbcap").textContent=f?f.title:"";$("lb").classList.add("on");
+/* ---- dash ---- */
+$("kpi").innerHTML=`<div><div class="n">${D.meta.total.toLocaleString()}</div><div class="l">ファミリー</div></div>
+<div><div class="n">${D.meta.bump}</div><div class="l">バンプ型</div></div>
+<div><div class="n">${D.meta.figs}</div><div class="l">代表図</div></div>
+<div><div class="n">70<span style="font-size:12px">年</span></div><div class="l">1955–2026</div></div>`;
+
+function heat(v,max){
+  if(!v)return['#fff','#B7C6CF'];
+  const t=Math.pow(v/max,.5);
+  if(v>=100)return['#E3120B','#fff'];
+  const mix=(a,b,tt)=>Math.round(a+(b-a)*tt);
+  return[`rgb(${mix(245,227,t)},${mix(244,120,t)},${mix(239,110,t)})`,t>.62?'#fff':'#0C0C0C'];
+}
+let h='';
+D.HM.forEach((row,i)=>{
+  h+=`<tr><td class="rl" data-pi="${i}">${PLJA[D.PROBS[i]]}</td>`;
+  row.forEach((v,bi)=>{const[bg,fg]=heat(v,161);h+=`<td class="cell" data-pi="${i}" data-bi="${bi}" style="background:${bg};color:${fg}">${v||''}</td>`;});
+  h+=`<td class="tot">${row.reduce((a,b)=>a+b,0)}</td></tr>`;
+});
+h+=`<tr><td></td>${YRS.map(y=>`<td class="yl">${y}</td>`).join('')}<td></td></tr>`;
+$("hm").innerHTML=h;
+$("hm").querySelectorAll(".cell,.rl").forEach(c=>c.addEventListener("click",()=>{
+  resetFilters();
+  F.pr=D.PROBS[+c.dataset.pi];
+  if(c.dataset.bi!==undefined){F.y0=1975+(+c.dataset.bi)*5;F.y1=F.y0+4;}
+  syncChips();showView("find");renderList();
+}));
+
+let a='';
+D.TOPS.forEach((nm,i)=>{
+  const old=D.APRE[i]>3;
+  const tot=D.ATIME[i].reduce((x,y)=>x+y,0)+D.APRE[i];
+  const cells=D.ATIME[i].map(v=>{
+    if(!v)return `<i style="background:#F1F1F1"></i>`;
+    const t=.2+Math.pow(v/38,.6)*.8;
+    return `<i style="background:rgba(${old?'227,18,11':'12,12,12'},${t.toFixed(2)})"></i>`;
+  }).join('');
+  a+=`<div class="st" data-as="${nm}"><span class="l">${nm.split(' ')[0]}</span><div class="cells">${cells}</div><span class="v">${tot}</span></div>`;
+});
+a+=`<div class="st"><span></span><div class="cells">${YRS.map(y=>`<i style="height:auto;font-size:8px;color:#758D99;text-align:center;font-family:var(--mono)">${y}</i>`).join('')}</div><span></span></div>`;
+$("at").innerHTML=a;
+$("at").querySelectorAll(".st[data-as]").forEach(e=>e.addEventListener("click",()=>{
+  resetFilters();$("q").value=e.dataset.as.split(' ')[0];showView("find");renderList();
+}));
+
+const appRows=Object.entries(D.APPS).map(([k,arr])=>[k,arr[9]]).filter(x=>x[1]>0).sort((x,y)=>y[1]-x[1]);
+const amax=appRows.length?appRows[0][1]:1;
+$("apps").innerHTML=appRows.map(([k,v],i)=>`<div class="bar ${i<2?'hot':''}" data-ap="${k}">
+  <span class="l">${APJA[k]}</span><div class="t" style="width:${(v/amax*100).toFixed(0)}%"></div><span class="v">${v}</span></div>`).join('');
+$("apps").querySelectorAll(".bar").forEach(e=>e.addEventListener("click",()=>{
+  resetFilters();F.ap=e.dataset.ap;F.y0=2020;F.y1=2026;showView("find");renderList();
+}));
+
+const SCOL={bump:"#0C0C0C",leaf:"#758D99",tension:"#B7C6CF",hybrid:"#E3120B",other:"#DEE5E9",unknown:"#F1EEE6"};
+const colTot=Array(10).fill(0);
+D.STREND.forEach(row=>row.forEach((v,i)=>colTot[i]+=v));
+const cmax=Math.max(...colTot);
+let sk='';
+for(let bi=0;bi<10;bi++){
+  let col='';
+  D.STK.forEach((s,si)=>{const v=D.STREND[si][bi];if(!v)return;col+=`<i style="height:${(v/cmax*108).toFixed(1)}px;background:${SCOL[s]}"></i>`;});
+  sk+=`<div class="col">${col}</div>`;
+}
+$("stk").innerHTML=sk;
+$("stkx").innerHTML=YRS.map(y=>`<span>${y}</span>`).join('');
+$("stklg").innerHTML=["bump","leaf","hybrid","tension"].map(s=>`<span><i style="background:${SCOL[s]}"></i>${STJA[s]}</span>`).join('')+`<span><i style="background:#F1EEE6;border:1px solid #DDD"></i>判定不能ほか</span>`;
+
+/* ---- find ---- */
+const F={st:null,pr:null,ap:null,fg:null,gr:null,y0:null,y1:null};
+let shown=60;
+function resetFilters(){Object.keys(F).forEach(k=>F[k]=null);$("q").value="";shown=60;
+  document.querySelectorAll("#v-find .chip").forEach(c=>c.classList.remove("on"));}
+function syncChips(){
+  document.querySelectorAll("#v-find .chip").forEach(c=>{
+    const f=c.dataset.f,k=c.dataset.k;
+    c.classList.toggle("on",(f==="st"&&F.st===k)||(f==="pr"&&F.pr===k)||(f==="fg"&&F.fg==="1")||(f==="gr"&&F.gr==="1")||(f==="era"&&F.y0===2010&&F.y1===null));
+  });
+}
+document.querySelectorAll("#v-find .chip").forEach(c=>c.addEventListener("click",()=>{
+  const f=c.dataset.f,k=c.dataset.k;
+  if(f==="era"){if(F.y0===2010&&F.y1===null){F.y0=null;}else{F.y0=2010;F.y1=null;}}
+  else F[f]=(F[f]===k?null:k);
+  shown=60;syncChips();renderList();
+}));
+$("q").addEventListener("input",()=>{shown=60;renderList();});
+$("sort").addEventListener("change",()=>renderList());
+$("more").addEventListener("click",()=>{shown+=80;renderList();});
+
+function match(o){
+  if(F.st&&o.st!==F.st)return false;
+  if(F.pr&&!o.pr.includes(F.pr))return false;
+  if(F.ap&&o.ap!==F.ap)return false;
+  if(F.fg&&!o.fg)return false;
+  if(F.gr&&!o.gr)return false;
+  if(F.y0&&(!o.yr||o.yr<F.y0))return false;
+  if(F.y1&&(!o.yr||o.yr>F.y1))return false;
+  const q=$("q").value.trim().toLowerCase();
+  if(q){
+    const hay=(o.rep+" "+o.t+" "+o.ja+" "+o.as.join(" ")).toLowerCase();
+    for(const w of q.split(/\s+/))if(!hay.includes(w))return false;
+  }
+  return true;
+}
+function pubDisp(rep){return rep.replace(/-/g," ")}
+function rowHTML(o,i){
+  return `<div class="li ${o.fg?'':'nofig'}" data-i="${i}">
+    ${o.fg?`<img loading="lazy" src="figs/${o.id}.png">`:""}
+    <div>
+      <div class="no">${pubDisp(o.rep)}<small>${o.as[0]||"—"} · ${o.yr||"—"}${o.gr?" · 成立":""}</small></div>
+      <div class="tt">${o.ja||o.t||"（書誌のみ・内容不明）"}</div>
+      <div class="mt">${STJA[o.st]}${FMJA[o.fm]?"／"+FMJA[o.fm]:""}${o.pr.length?"／"+o.pr.map(p=>PLJA[p]).join("・"):""}　${o.ju}法域</div>
+    </div>
+  </div>
+  <div class="det" id="det-${i}"></div>`;
+}
+let cur=[];
+function renderList(){
+  cur=D.fams.filter(match);
+  const s=$("sort").value;
+  if(s==="new")cur.sort((a,b)=>(b.yr||0)-(a.yr||0)||b.ju-a.ju);
+  if(s==="old")cur.sort((a,b)=>(a.yr||9999)-(b.yr||9999));
+  if(s==="ju")cur.sort((a,b)=>b.ju-a.ju||(b.yr||0)-(a.yr||0));
+  $("cnt").firstElementChild?$("cnt").firstElementChild.textContent=`${cur.length} / ${D.fams.length} 件`:$("cnt").insertAdjacentHTML("afterbegin",`<span>${cur.length} / ${D.fams.length} 件</span>`);
+  $("list").innerHTML=cur.slice(0,shown).map((o,i)=>rowHTML(o,i)).join("");
+  $("more").style.display=cur.length>shown?"block":"none";
+  $("list").querySelectorAll(".li").forEach(e=>e.addEventListener("click",()=>toggleDet(+e.dataset.i)));
+}
+function toggleDet(i){
+  const o=cur[i],d=$("det-"+i);
+  if(d.classList.contains("on")){d.classList.remove("on");return;}
+  d.innerHTML=`${o.t?`<div class="en">${o.t}</div>`:""}
+    <div class="tags">
+      <span class="tg">${STJA[o.st]}</span>${o.fm&&FMJA[o.fm]?`<span class="tg">${FMJA[o.fm]}</span>`:""}
+      ${o.pr.map(p=>`<span class="tg">${PLJA[p]}</span>`).join("")}
+      ${o.lv.map(l=>`<span class="tg">${LVJA[l]||l}</span>`).join("")}
+      ${o.ap!=="general_unknown"?`<span class="tg">${APJA[o.ap]}</span>`:""}
+    </div>
+    <div style="color:#758D99;font-size:10px">ファミリー ${o.mm} 公報 · ${o.ju} 法域 · 判定確度 ${o.cf}${o.as.length?` · ${o.as.join(" / ")}`:""}</div>
+    <div style="margin-top:7px"><a href="https://patents.google.com/patent/${o.gp}/ja" target="_blank" rel="noopener">Google Patents で原文を見る →</a></div>`;
+  d.classList.add("on");
+}
+
+/* ---- zukan ---- */
+let zf="all";
+const zfams=D.fams.filter(o=>o.fg);
+function renderZ(){
+  const cats=[["all","すべて"],["bump","バンプ型"],["leaf","リーフ型"],["assembly_fixation","固定・組立"],["startstop_wear","起動停止"],["thermal","熱"]];
+  $("zfilter").innerHTML=cats.map(([k,l])=>`<span class="chip ${zf===k?'on':''}" data-z="${k}">${l}</span>`).join("");
+  $("zfilter").querySelectorAll(".chip").forEach(c=>c.addEventListener("click",()=>{zf=c.dataset.z;renderZ();}));
+  const list=zfams.filter(o=>zf==="all"||o.st===zf||o.pr.includes(zf));
+  $("zgrid").innerHTML=list.map(o=>`<div class="zc" data-id="${o.id}">
+    <div class="im"><img loading="lazy" src="figs/${o.id}.png"></div>
+    <div class="cp"><div class="no">${pubDisp(o.rep)}</div><div class="ja">${o.ja||o.t}</div><div class="mt">${o.as[0]||"—"} · ${o.yr||"—"}</div></div>
+  </div>`).join("");
+  $("zgrid").querySelectorAll(".zc").forEach(e=>e.addEventListener("click",()=>{
+    const o=zfams.find(x=>x.id===e.dataset.id);
+    $("lbbox").innerHTML=`<img src="figs/${o.id}.png"><div class="cap"><b>${pubDisp(o.rep)}</b>　${o.ja||o.t}<br>
+      <span style="color:#758D99;font-size:10.5px">${o.as[0]||""} · ${o.yr||""}</span><br>
+      <a href="https://patents.google.com/patent/${o.gp}/ja" target="_blank" rel="noopener">Google Patents で原文を見る →</a></div>`;
+    $("lb").classList.add("on");
   }));
 }
-
-/* ② index */
-let tFilter="all", q="";
-function renderFilt(){
-  const cats=[["all","すべて"]].concat(D.themes.map(t=>[t.key,t.label]));
-  $("themefilt").innerHTML=cats.map(([k,l])=>`<button class="${tFilter===k?'on':''}" data-k="${k}">${l}</button>`).join("");
-  $("themefilt").querySelectorAll("button").forEach(b=>b.addEventListener("click",()=>{tFilter=b.dataset.k;renderFilt();renderIdx();}));
-}
-function renderIdx(){
-  const qq=q.trim().toLowerCase();
-  const list=D.patents.filter(p=>(tFilter==="all"||p.theme===tFilter)&&(!qq||
-    (p.no+" "+p.applicant+" "+p.category+" "+p.covers+" "+(p.tags||[]).join(" ")).toLowerCase().includes(qq)));
-  $("cnt").textContent=`${list.length} 件 / 全 ${D.patents.length} 件`;
-  $("patlist").innerHTML=list.map(p=>`<div class="prow">
-    <div class="top"><a class="pno" href="${gpLink(p.no)}" target="_blank" rel="noopener">${p.no}</a>
-      ${thBadge(p.theme)}${p.applicant&&p.applicant!=="—"?`<span class="pap">${p.applicant}</span>`:""}
-      <span class="cat">${p.category}</span></div>
-    <div class="pcov">${p.covers}</div>
-    ${p.gap&&p.gap!=="—"?`<div class="pgap"><b>残るギャップ</b> ${p.gap}</div>`:""}
-    <div class="chips">${(p.tags||[]).map(x=>`<span class="chip">${x}</span>`).join("")}</div>
-  </div>`).join("");
-}
-$("srch").addEventListener("input",e=>{q=e.target.value;renderIdx();});
-
-/* ③ crowding */
-function renderCrowd(){
-  // theme bars
-  const max=Math.max(...D.themes.map(t=>D.patents.filter(p=>p.theme===t.key).length),1);
-  $("themebars").innerHTML=D.themes.map(t=>{
-    const n=D.patents.filter(p=>p.theme===t.key).length;
-    return `<div class="barrow"><div class="bl">${t.label}</div>
-      <div class="bt" style="width:${Math.max(6,n/max*100)}%;background:${THCOL[t.key]}"></div>
-      <div class="bv">${n}</div></div>`;
-  }).join("");
-  // category crowding
-  const catMap={};
-  D.patents.forEach(p=>{catMap[p.category]=(catMap[p.category]||0)+1;});
-  const cats=Object.entries(catMap).sort((a,b)=>b[1]-a[1]);
-  $("catcrowd").innerHTML=cats.map(([c,n])=>`<span class="cpill ${n>=2?'hot':''}">${c} <b>${n}</b></span>`).join("");
-  // applicants
-  const apMap={};
-  D.patents.forEach(p=>{const a=(p.applicant&&p.applicant!=="—")?p.applicant:null;if(a)apMap[a]=(apMap[a]||0)+1;});
-  const aps=Object.entries(apMap).sort((a,b)=>b[1]-a[1]||a[0].localeCompare(b[0]));
-  $("apcrowd").innerHTML=aps.map(([a,n])=>`<span class="cpill ${n>=2?'hot':''}">${a} <b>${n}</b></span>`).join("");
-  // FI
-  const fiSet={};
-  D.themes.forEach(t=>(t.fi||[]).forEach(f=>fiSet[f]=(fiSet[f]||0)+1));
-  const fis=D.fiTerms||[];
-  $("ficrowd").innerHTML=fis.map(f=>`<span class="cpill"><b>${f.code}</b> ${f.label}</span>`).join("");
-}
-
-/* ④ problems */
-function renderProb(){
-  $("problist").innerHTML=D.problems.map(p=>`<div class="prob">
-    <div class="pt">${thBadge(p.theme)} ${p.title}</div>
-    <div class="ev">${p.evidence}</div>
-    <div class="gp">${p.gap}</div>
-  </div>`).join("");
-}
-
-/* lightbox close */
 $("lbx").addEventListener("click",()=>$("lb").classList.remove("on"));
 $("lb").addEventListener("click",e=>{if(e.target===$("lb"))$("lb").classList.remove("on");});
 
-/* meta */
-$("barmeta").textContent="PUBLIC · "+D.patents.length+"件 · "+D.meta.date;
-$("lede").innerHTML=D.meta.subtitle+'。公開済みの特許だけを俯瞰し、出願人・カバー範囲・残るギャップ・分類の当たりを整理します。<span class="small">自社の発明アイデア・戦略は含みません。</span>';
-$("foot").innerHTML="⚠️ "+D.meta.note+"&nbsp;&nbsp;"+D.meta.project+"／生成 "+D.meta.date;
-
-renderThemes();renderFigs();renderFilt();renderIdx();renderCrowd();renderProb();
-if(location.hash){const n=location.hash.slice(1);if($("view-"+n))gotoTab(n);}
+$("zn").textContent=zfams.length;
+renderList();renderZ();
+if(location.hash==="#find")showView("find");
+if(location.hash==="#zukan")showView("zukan");
 </script>
 </body>
 </html>
