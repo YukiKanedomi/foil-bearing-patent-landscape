@@ -277,7 +277,7 @@ table{border-collapse:collapse}
     </div>
 
     <button class="more" id="tolist">この条件の特許一覧を見る →</button>
-    <div class="note"><b>読みどころ</b>　2020年代は414ファミリーと史上最多ペース。空調（Gree・Hanon）と燃料電池が波を作り、荷重容量と固定・組立に出願が集中する。一方で公差ロバスト・追従は70年間で計112件と薄く、課題×解決手段マップの空白セルとともに「文献が疎な領域」として残る。</div>
+    <div class="note"><b>読みどころ</b>　2020年代は882ファミリーと史上最多ペース。首位は空調のGree、NTN・IHIの日本勢が続き、燃料電池・チラーが波を作る。出願は荷重容量と固定・組立に集中する一方、公差ロバスト・追従は全期間で計205件と薄く、課題×解決手段マップの空白セルとともに「文献が疎な領域」として残る。</div>
     <div class="src">出典: Google Patents Public Data（BigQuery）。分類は要約ベースの一次判定（原文確認前提）。件数はファミリー単位</div>
   </section>
 
@@ -351,7 +351,7 @@ const STJA={bump:"バンプ型",leaf:"リーフ型",tension:"テンション型"
 const FMJA={radial:"ラジアル",thrust:"スラスト",combo:"複合",conical:"円錐",unknown:""};
 const APJA={fc_compressor:"燃料電池",turbocharger:"ターボチャージャ",blower_fan:"ブロワ",hvac_chiller:"空調・チラー",acm:"航空機ACM",micro_turbine:"マイクロGT",turbo_expander_cryo:"膨張タービン",motor_spindle:"高速モータ",general_unknown:"—"};
 const MINY=1955,MAXY=2026;
-$("dek").textContent=`公知特許 ${D.meta.total.toLocaleString()} ファミリー・70年分（1955–2026、優先年ベース）を課題・構造・出願人で分析する。グラフはタップで絞り込み、もう一度タップで解除`;
+$("dek").textContent=`公知特許 ${D.meta.total.toLocaleString()} ファミリー（1900–2026、優先年ベース。年表チャートは1955年以降）を課題・構造・出願人で分析する。グラフはタップで絞り込み、もう一度タップで解除`;
 
 /* ================= shared filter state ================= */
 const A={q:"",st:new Set(),fm:new Set(),pr:new Set(),lv:new Set(),ap:new Set(),as:new Set(),y0:MINY,y1:MAXY,fg:false,gr:false};
