@@ -339,7 +339,7 @@ table{border-collapse:collapse}
     <summary>データと方法 — 名寄せ・分類・コア選定のルール</summary>
     <div class="abody">
       <p><b>データ源と検索式</b>　Google Patents Public Data（BigQuery 公式データセット `patents.publications`）から、<b>CPC分類 F16C17/024（フォイル型ジャーナル軸受）または F16C17/042（フォイル型スラスト軸受）が付与された全公報</b>（全期間・全法域）を取得し、優先権で束ねたファミリー（同一発明の各国出願のまとまり）単位で集計しています。この検索式の性質上、フォイル軸受を使っていてもCPCがシステム側（圧縮機・モータ等）にしか付いていない出願は含まれません＝各社の件数は下限値です。2025年以降は出願から公開まで最長18か月かかるため件数が未確定です。</p>
-      <p><b>分類タグと要約</b>　構造・課題・解決手段・適用機器のタグと日本語1行要約は、発明の名称と要約（判定できない場合はクレーム冒頭も）をもとにした機械判定の一次情報です。原文確認を前提にお使いください。</p>
+      <p><b>分類タグと要約</b>　構造・課題・解決手段・適用機器のタグと日本語1行要約は、発明の名称と要約（判定できない場合はクレーム冒頭も）をもとにした機械判定の一次情報です。コア特許には、公報の明細から抽出した請求項1の骨子・被引用数（取得時点のスナップショット）・材質/被膜/設計数値も付与しています。いずれも原文確認を前提にお使いください。</p>
       <p><b>出願人の名寄せ</b>　同一出願人が別名でカウントされるのを防ぐため、次の表記を統合しています（社名変更・事業承継・翻訳ゆれ）。個人名義を会社へ寄せる推測的な統合は行っていません。</p>
       <table class="ctab">
         <tr><td>ROBERT BOSCH CO LTD</td><td>→ Bosch</td><td>表記ゆれ</td></tr>
@@ -390,7 +390,7 @@ function pass(o,skip){
   if(!skip.includes("ju")&&A.ju.size&&!(o.jl||[]).some(j=>A.ju.has(j)))return false;
   if(A.fg&&!o.fg)return false;
   if(A.gr&&!o.gr)return false;
-  if(A.q){const hay=(o.rep+" "+o.t+" "+o.ja+" "+o.as.join(" ")+" "+(o.c1||"")+" "+(o.el||[]).join(" ")).toLowerCase();
+  if(A.q){const hay=(o.rep+" "+o.t+" "+o.ja+" "+o.as.join(" ")+" "+(o.c1||"")+" "+(o.el||[]).join(" ")+" "+(o.mt||[]).join(" ")+" "+(o.co||[]).join(" ")+" "+(o.pm||[]).map(p=>p.n).join(" ")).toLowerCase();
     for(const w of A.q.toLowerCase().split(/\s+/))if(w&&!hay.includes(w))return false;}
   return true;
 }
@@ -891,6 +891,12 @@ function detHTML(o){
       <div style="margin-top:2px">${o.c1}</div>
       ${o.el&&o.el.length?`<div class="tags" style="margin-top:5px">${o.el.map(e=>`<span class="tg" style="border-color:#006BA2;color:#006BA2">${e}</span>`).join("")}</div>`:""}
       ${o.ef?`<div style="margin-top:4px;font-size:10.5px"><span style="color:#758D99;font-weight:700">主張される効果</span>　${o.ef}</div>`:""}
+    </div>`:""}
+    ${(o.mt&&o.mt.length)||(o.co&&o.co.length)||(o.pm&&o.pm.length)?`<div style="margin-top:8px;border-top:1px solid #DDD;padding-top:7px">
+      <div style="font-size:9px;color:#758D99;font-weight:700;letter-spacing:.05em">明細に記載のスペック（機械抽出・原文確認前提）</div>
+      ${o.mt&&o.mt.length?`<div style="margin-top:3px;font-size:10.5px"><span style="color:#758D99;font-weight:700">材質</span>　${o.mt.join("・")}</div>`:""}
+      ${o.co&&o.co.length?`<div style="margin-top:2px;font-size:10.5px"><span style="color:#758D99;font-weight:700">被膜</span>　${o.co.join("・")}</div>`:""}
+      ${o.pm&&o.pm.length?`<div class="tags" style="margin-top:4px">${o.pm.map(p=>`<span class="tg" style="border-color:#3E7A5E;color:#3E7A5E">${p.n} ${p.v}${p.u}</span>`).join("")}</div>`:""}
     </div>`:""}
     <div style="color:#758D99;font-size:10px;margin-top:6px">ファミリー ${o.mm} 公報 · ${o.ju} 法域${o.ct?` · 被引用 ${o.ct}`:""} · 判定確度 ${o.cf}${o.as.length?` · ${o.as.join(" / ")}`:""}</div>
     <div style="margin-top:7px"><a href="https://patents.google.com/patent/${o.gp}/ja" target="_blank" rel="noopener">Google Patents で原文を見る（${o.gp}）→</a></div>`;
