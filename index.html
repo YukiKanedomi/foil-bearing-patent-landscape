@@ -285,6 +285,7 @@ table{border-collapse:collapse}
   <section class="view" id="v-find"><div class="findwrap">
     <input class="sbox" id="q" placeholder="検索：番号・出願人・技術語（例 IHI スリット 固定）">
     <div class="frow"><span class="flabel">構造（複数選択可・ダッシュボードと連動）</span><span class="chip" data-f="st" data-k="bump">バンプ</span><span class="chip" data-f="st" data-k="leaf">リーフ</span><span class="chip" data-f="st" data-k="tension">テンション</span><span class="chip" data-f="st" data-k="hybrid">ハイブリッド</span><span class="chip" data-f="st" data-k="other">その他</span><span class="chip" data-f="st" data-k="unknown">判定不能</span></div>
+    <div class="frow"><span class="flabel">形式</span><span class="chip" data-f="fm" data-k="radial">ラジアル</span><span class="chip" data-f="fm" data-k="thrust">スラスト</span><span class="chip" data-f="fm" data-k="combo">複合</span><span class="chip" data-f="fm" data-k="conical">円錐</span></div>
     <div class="frow"><span class="flabel">課題</span><span class="chip red" data-f="pr" data-k="load_capacity">荷重容量</span><span class="chip red" data-f="pr" data-k="assembly_fixation">固定・組立</span><span class="chip red" data-f="pr" data-k="stability_whirl">安定性</span><span class="chip red" data-f="pr" data-k="startstop_wear">起動停止</span><span class="chip red" data-f="pr" data-k="damping">減衰</span><span class="chip red" data-f="pr" data-k="thermal">熱</span><span class="chip red" data-f="pr" data-k="tolerance_robust">公差</span><span class="chip red" data-f="pr" data-k="misalignment_conformity">追従</span></div>
     <div class="frow"><span class="flabel">解決手段</span><span class="chip" data-f="lv" data-k="pitch_height_thickness">バンプ形状</span><span class="chip" data-f="lv" data-k="segmentation_slit">分割・スリット</span><span class="chip" data-f="lv" data-k="multizone_multipad">多ゾーン</span><span class="chip" data-f="lv" data-k="stacking">積層</span><span class="chip" data-f="lv" data-k="preload">予圧</span><span class="chip" data-f="lv" data-k="material_coating">材料・被膜</span><span class="chip" data-f="lv" data-k="adaptive_geometry">適応形状</span><span class="chip" data-f="lv" data-k="cooling_flow">冷却流</span><span class="chip" data-f="lv" data-k="fixation_design">固定設計</span></div>
     <div class="frow"><span class="flabel">その他</span><span class="chip" data-f="fg" data-k="1">図あり</span><span class="chip" data-f="gr" data-k="1">成立のみ</span><span class="chip" data-f="era" data-k="2010">2010年以降</span><span class="chip" data-f="era" data-k="2020">2020年以降</span></div>
@@ -353,11 +354,13 @@ const MINY=1955,MAXY=2026;
 $("dek").textContent=`公知特許 ${D.meta.total.toLocaleString()} ファミリー・70年分（1955–2026、優先年ベース）を課題・構造・出願人で分析する。グラフはタップで絞り込み、もう一度タップで解除`;
 
 /* ================= shared filter state ================= */
-const A={q:"",st:new Set(),pr:new Set(),lv:new Set(),ap:new Set(),as:new Set(),y0:MINY,y1:MAXY,fg:false,gr:false};
+const A={q:"",st:new Set(),fm:new Set(),pr:new Set(),lv:new Set(),ap:new Set(),as:new Set(),y0:MINY,y1:MAXY,fg:false,gr:false};
+const FMP={radial:"ラジアル",thrust:"スラスト",combo:"複合",conical:"円錐",unknown:"—"};
 function pass(o,skip){
   skip=skip||"";
   if(!skip.includes("yr")&&(A.y0>MINY||A.y1<MAXY)){if(!o.yr||o.yr<A.y0||o.yr>A.y1)return false;}
   if(!skip.includes("st")&&A.st.size&&!A.st.has(o.st))return false;
+  if(!skip.includes("fm")&&A.fm.size&&!A.fm.has(o.fm))return false;
   if(!skip.includes("pr")&&A.pr.size&&!o.pr.some(p=>A.pr.has(p)))return false;
   if(!skip.includes("lv")&&A.lv.size&&!o.lv.some(l=>A.lv.has(l)))return false;
   if(!skip.includes("ap")&&A.ap.size&&!A.ap.has(o.ap))return false;
@@ -368,7 +371,7 @@ function pass(o,skip){
     for(const w of A.q.toLowerCase().split(/\s+/))if(w&&!hay.includes(w))return false;}
   return true;
 }
-function resetA(){A.q="";A.st.clear();A.pr.clear();A.lv.clear();A.ap.clear();A.as.clear();A.y0=MINY;A.y1=MAXY;A.fg=false;A.gr=false;$("q").value="";shown=60;}
+function resetA(){A.q="";A.st.clear();A.fm.clear();A.pr.clear();A.lv.clear();A.ap.clear();A.as.clear();A.y0=MINY;A.y1=MAXY;A.fg=false;A.gr=false;$("q").value="";shown=60;}
 function tgl(set,k){set.has(k)?set.delete(k):set.add(k);shown=60;renderAll();}
 
 /* time buckets: yearly when span<=30, else 5-year */
@@ -424,6 +427,7 @@ function renderKPI(){
 function renderFbar(){
   const chips=[];
   A.st.forEach(k=>chips.push(["st",k,"構造",STJA[k]]));
+  A.fm.forEach(k=>chips.push(["fm",k,"形式",FMP[k]]));
   A.pr.forEach(k=>chips.push(["pr",k,"課題",PLJA[k],1]));
   A.lv.forEach(k=>chips.push(["lv",k,"手段",LVJA[k]]));
   A.ap.forEach(k=>chips.push(["ap",k,"機器",APJA[k]]));
@@ -644,7 +648,7 @@ function syncFindChips(){
   document.querySelectorAll("#v-find .chip").forEach(c=>{
     const f=c.dataset.f,k=c.dataset.k;
     let on=false;
-    if(f==="st")on=A.st.has(k);else if(f==="pr")on=A.pr.has(k);else if(f==="lv")on=A.lv.has(k);
+    if(f==="st")on=A.st.has(k);else if(f==="fm")on=A.fm.has(k);else if(f==="pr")on=A.pr.has(k);else if(f==="lv")on=A.lv.has(k);
     else if(f==="fg")on=A.fg;else if(f==="gr")on=A.gr;
     else if(f==="era")on=(A.y0===+k&&A.y1===MAXY);
     c.classList.toggle("on",on);
@@ -656,6 +660,7 @@ document.querySelectorAll("#v-find .chip").forEach(c=>c.addEventListener("click"
   else if(f==="fg")A.fg=!A.fg;
   else if(f==="gr")A.gr=!A.gr;
   else if(f==="st")A.st.has(k)?A.st.delete(k):A.st.add(k);
+  else if(f==="fm")A.fm.has(k)?A.fm.delete(k):A.fm.add(k);
   else if(f==="pr")A.pr.has(k)?A.pr.delete(k):A.pr.add(k);
   else if(f==="lv")A.lv.has(k)?A.lv.delete(k):A.lv.add(k);
   shown=60;renderAll();
@@ -731,8 +736,8 @@ function renderDB(){
     return (va<vb?-1:va>vb?1:0)*dd||(b.yr||0)-(a.yr||0);
   });
   $("cntdb").textContent=`${list.length} / ${D.fams.length} 件`;
-  const fActive={as:A.as.size>0,st:A.st.size>0,pr:A.pr.size>0,ap:A.ap.size>0,yr:A.y0>MINY||A.y1<MAXY,gr:A.gr,fg:A.fg};
-  const heads=[["公報","",""],["出願人","as","as"],["年","yr","yr"],["名称・要約","",""],["構造","st","st"],["課題","","pr"],["機器","","ap"],["法域","ju",""],["成","","gr"],["図","","fg"]];
+  const fActive={as:A.as.size>0,st:A.st.size>0,fm:A.fm.size>0,pr:A.pr.size>0,ap:A.ap.size>0,yr:A.y0>MINY||A.y1<MAXY,gr:A.gr,fg:A.fg};
+  const heads=[["公報","",""],["出願人","as","as"],["年","yr","yr"],["名称・要約","",""],["構造","st","st"],["形式","","fm"],["課題","","pr"],["機器","","ap"],["法域","ju",""],["成","","gr"],["図","","fg"]];
   let h="<tr>"+heads.map(([lab,key,fk])=>`<th data-k="${key}" class="${key&&DBS.key===key?'srt':''}">${lab}${key&&DBS.key===key?(dd<0?" ↓":" ↑"):""}${fk?`<span class="thf ${fActive[fk]?'on':''}" data-pf="${fk}">▼</span>`:""}</th>`).join("")+"</tr>";
   list.slice(0,shownDB).forEach((o,i)=>{
     h+=`<tr class="r" data-i="${i}">
@@ -741,12 +746,13 @@ function renderDB(){
       <td class="num">${o.yr||""}</td>
       <td class="ttl">${(o.ja||o.t||"").slice(0,42)}</td>
       <td>${STJA[o.st]}</td>
+      <td>${o.fm!=="unknown"?FMP[o.fm]:""}</td>
       <td>${o.pr.map(p=>PRS[p]).join("·")}</td>
       <td>${o.ap!=="general_unknown"?APJA[o.ap]:""}</td>
       <td class="num">${o.ju}</td>
       <td>${o.gr?"●":""}</td>
       <td>${o.fg?"図":""}</td></tr>
-    <tr class="dbdet" id="dbd-${i}" style="display:none"><td colspan="10"></td></tr>`;
+    <tr class="dbdet" id="dbd-${i}" style="display:none"><td colspan="11"></td></tr>`;
   });
   $("dbt").innerHTML=h;
   $("dbt").querySelectorAll("th").forEach(th=>{
@@ -779,6 +785,7 @@ function popHTML(f){
   const cList=(pairs,set,search)=>(search?`<input class="psearch" placeholder="絞り込み検索">`:"")+
     pairs.map(([k,l,c])=>`<label><input type="checkbox" data-k="${k}" ${set.has(k)?"checked":""}>${l}<span class="cnt2">${c}</span></label>`).join("")+btns;
   if(f==="st"){const m=popCnt(o=>o.st,"st");return cList(["bump","leaf","hybrid","tension","other","unknown"].map(k=>[k,STJA[k],m.get(k)||0]),A.st);}
+  if(f==="fm"){const m=popCnt(o=>o.fm,"fm");return cList(["radial","thrust","combo","conical","unknown"].map(k=>[k,FMP[k],m.get(k)||0]),A.fm);}
   if(f==="pr"){const m=new Map();D.fams.forEach(o=>{if(pass(o,"pr"))o.pr.forEach(p=>m.set(p,(m.get(p)||0)+1));});return cList(D.PROBS.map(k=>[k,PLJA[k],m.get(k)||0]),A.pr);}
   if(f==="ap"){const m=popCnt(o=>o.ap==="general_unknown"?null:o.ap,"ap");return cList(Object.keys(APJA).filter(k=>k!=="general_unknown").map(k=>[k,APJA[k],m.get(k)||0]).sort((a,b)=>b[2]-a[2]),A.ap);}
   if(f==="as"){const m=popCnt(o=>o.as[0],"as");const top=[...m.entries()].sort((a,b)=>b[1]-a[1]).slice(0,60);
