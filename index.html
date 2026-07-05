@@ -197,6 +197,12 @@ table{border-collapse:collapse}
   .st{grid-template-columns:74px 1fr 28px;gap:6px}
   .bar{grid-template-columns:86px 1fr 28px;gap:6px}
 }
+mark{background:#FFE28A;color:inherit;padding:0 1px;border-radius:2px}
+.hitline{font-size:10px;color:#5F5F5F;margin-top:3px;line-height:1.5}
+.hitline b{color:#758D99;font-weight:700;font-size:9px}
+.qsug{display:flex;flex-wrap:wrap;gap:5px;margin:-2px 0 10px}
+.qsug span{font-size:10px;padding:3px 8px;border:1px solid #D6D2C8;border-radius:11px;cursor:pointer;color:#5F5F5F;background:#FBFAF7}
+.qsug span.on{background:#0C0C0C;color:#fff;border-color:#0C0C0C}
 </style>
 </head>
 <body>
@@ -304,7 +310,8 @@ table{border-collapse:collapse}
 
   <!-- ============ FIND ============ -->
   <section class="view" id="v-find"><div class="findwrap">
-    <input class="sbox" id="q" placeholder="検索：番号・出願人・技術語（例 IHI スリット 固定）">
+    <input class="sbox" id="q" placeholder='検索：番号・出願人・技術語（"完全一致"・-除外語 も使えます）'>
+    <div class="qsug" id="qsug"></div>
     <div class="frow"><span class="flabel">構造（複数選択可・ダッシュボードと連動）</span><span class="chip" data-f="st" data-k="bump">バンプ</span><span class="chip" data-f="st" data-k="leaf">リーフ</span><span class="chip" data-f="st" data-k="tension">テンション</span><span class="chip" data-f="st" data-k="metal_mesh">金属メッシュ</span><span class="chip" data-f="st" data-k="spring">ばね支持</span><span class="chip" data-f="st" data-k="hybrid">ハイブリッド</span><span class="chip" data-f="st" data-k="other">その他</span><span class="chip" data-f="st" data-k="unknown">判定不能</span></div>
     <div class="frow"><span class="flabel">形式</span><span class="chip" data-f="fm" data-k="radial">ラジアル</span><span class="chip" data-f="fm" data-k="thrust">スラスト</span><span class="chip" data-f="fm" data-k="combo">複合</span><span class="chip" data-f="fm" data-k="conical">円錐</span></div>
     <div class="frow"><span class="flabel">課題</span><span class="chip red" data-f="pr" data-k="load_capacity">荷重容量</span><span class="chip red" data-f="pr" data-k="assembly_fixation">固定・組立</span><span class="chip red" data-f="pr" data-k="stability_whirl">安定性</span><span class="chip red" data-f="pr" data-k="startstop_wear">起動停止</span><span class="chip red" data-f="pr" data-k="damping">減衰</span><span class="chip red" data-f="pr" data-k="thermal">熱</span><span class="chip red" data-f="pr" data-k="tolerance_robust">公差</span><span class="chip red" data-f="pr" data-k="misalignment_conformity">追従</span></div>
@@ -397,9 +404,53 @@ function pass(o,skip){
   if(!skip.includes("ju")&&A.ju.size&&!(o.jl||[]).some(j=>A.ju.has(j)))return false;
   if(A.fg&&!o.fg)return false;
   if(A.gr&&!o.gr)return false;
-  if(A.q){const hay=(o.rep+" "+o.t+" "+o.ja+" "+o.as.join(" ")+" "+(o.c1||"")+" "+(o.el||[]).join(" ")+" "+(o.mt||[]).join(" ")+" "+(o.co||[]).join(" ")+" "+(o.pm||[]).map(p=>p.n).join(" ")).toLowerCase();
-    for(const w of A.q.toLowerCase().split(/\s+/))if(w&&!hay.includes(w))return false;}
+  if(A.q){const hay=(o.rep+" "+o.t+" "+o.ja+" "+o.as.join(" ")+" "+(o.c1||"")+" "+(o.el||[]).join(" ")+" "+(o.ef||"")+" "+(o.mt||[]).join(" ")+" "+(o.co||[]).join(" ")+" "+(o.pm||[]).map(p=>p.n).join(" ")).toLowerCase();
+    const{toks,ex}=qparse(A.q);
+    for(const w of toks)if(!hay.includes(w))return false;
+    for(const w of ex)if(hay.includes(w))return false;}
   return true;
+}
+/* 検索語のパース: "..."=フレーズ / -語=除外。結果はメモ化 */
+let _qs=null,_qp={toks:[],ex:[]};
+function qparse(q){
+  if(q===_qs)return _qp;
+  _qs=q;const toks=[],ex=[];const re=/"([^"]+)"|(\S+)/g;let m;
+  while((m=re.exec(q))){
+    const t=(m[1]||m[2]).toLowerCase();if(!t)continue;
+    if(!m[1]&&t.startsWith("-")&&t.length>1)ex.push(t.slice(1));else toks.push(t);
+  }
+  return _qp={toks,ex};
+}
+/* テキスト内の検索語を<mark>で強調（HTMLエスケープ込み・重なりはマージ） */
+const escH=s=>String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+function markText(s,toks){
+  s=String(s);if(!toks.length)return escH(s);
+  const low=s.toLowerCase(),ranges=[];
+  for(const t of toks){let i=0;while((i=low.indexOf(t,i))>=0){ranges.push([i,i+t.length]);i+=t.length;}}
+  if(!ranges.length)return escH(s);
+  ranges.sort((a,b)=>a[0]-b[0]);const mg=[ranges[0].slice()];
+  for(const r of ranges.slice(1)){const l=mg[mg.length-1];if(r[0]<=l[1])l[1]=Math.max(l[1],r[1]);else mg.push(r.slice());}
+  let out="",p=0;for(const[a,b]of mg){out+=escH(s.slice(p,a))+"<mark>"+escH(s.slice(a,b))+"</mark>";p=b;}
+  return out+escH(s.slice(p));
+}
+/* どのフィールドでヒットしたかの抜粋（表示済みの名称・要約以外から最大2つ） */
+function hitSnips(o,toks){
+  if(!toks.length)return "";
+  const FIELDS=[["クレーム骨子",o.c1],["構成要素",(o.el||[]).join("・")],["効果",o.ef],
+    ["材質",(o.mt||[]).join("・")],["被膜",(o.co||[]).join("・")],
+    ["数値",(o.pm||[]).map(p=>p.n+" "+p.v+p.u).join("・")],["出願人",(o.as||[]).join(" / ")]];
+  const shown=((o.ja||"")+" "+(o.t||"")).toLowerCase();
+  const out=[];
+  for(const[lab,val]of FIELDS){
+    if(!val)continue;const low=String(val).toLowerCase();
+    const hit=toks.filter(t=>low.includes(t)&&!shown.includes(t));
+    if(!hit.length)continue;
+    const i=low.indexOf(hit[0]);
+    const a=Math.max(0,i-26),b=Math.min(val.length,i+hit[0].length+34);
+    out.push(`<b>${lab}</b> ${a>0?"…":""}${markText(String(val).slice(a,b),toks)}${b<val.length?"…":""}`);
+    if(out.length>=2)break;
+  }
+  return out.length?`<div class="hitline">${out.join("　")}</div>`:"";
 }
 function resetA(){A.q="";A.st.clear();A.fm.clear();A.pr.clear();A.lv.clear();A.ap.clear();A.as.clear();A.ju.clear();A.y0=MINY;A.y1=MAXY;A.fg=false;A.gr=false;$("q").value="";shown=60;}
 function tgl(set,k){set.has(k)?set.delete(k):set.add(k);shown=60;renderAll();}
@@ -848,6 +899,12 @@ document.querySelectorAll("#v-find .chip").forEach(c=>c.addEventListener("click"
   shown=60;renderAll();
 }));
 $("q").addEventListener("input",()=>{A.q=$("q").value.trim();$("qdb").value=$("q").value;shown=60;renderAll();});
+/* 技術語のワンタップ検索（もう一度タップで解除） */
+const SUG=["DLC","MoS2","PTFE","インコネル","スリット","予圧","シム","楔","冷却","溶接"];
+$("qsug").innerHTML=SUG.map(t=>`<span data-t="${t}">${t}</span>`).join("");
+$("qsug").querySelectorAll("span").forEach(e=>e.addEventListener("click",()=>{
+  const t=e.dataset.t;A.q=(A.q===t)?"":t;$("q").value=A.q;$("qdb").value=A.q;shown=60;renderAll();
+}));
 $("sort").addEventListener("change",()=>renderList());
 $("more").addEventListener("click",()=>{shown+=80;renderList();});
 $("rst2").addEventListener("click",()=>{resetA();renderAll();});
@@ -855,12 +912,14 @@ $("tolist").addEventListener("click",()=>showView("find"));
 
 function pubDisp(rep){return rep.replace(/-/g," ")}
 function rowHTML(o,i){
+  const toks=A.q?qparse(A.q).toks:[];
   return `<div class="li ${o.fg?'':'nofig'}" data-i="${i}">
     ${o.fg?`<img loading="lazy" src="figs/${o.id}.png">`:""}
     <div>
-      <div class="no">${pubDisp(o.rep)}<small>${o.as[0]||"—"} · ${o.yr||"—"}${o.gr?" · 成立":""}</small></div>
-      <div class="tt">${o.ja||o.t||"（書誌のみ・内容不明）"}</div>
+      <div class="no">${pubDisp(o.rep)}<small>${toks.length?markText(o.as[0]||"—",toks):(o.as[0]||"—")} · ${o.yr||"—"}${o.gr?" · 成立":""}</small></div>
+      <div class="tt">${toks.length?markText(o.ja||o.t||"（書誌のみ・内容不明）",toks):(o.ja||o.t||"（書誌のみ・内容不明）")}</div>
       <div class="mt">${STJA[o.st]}${FMJA[o.fm]?"／"+FMJA[o.fm]:""}${o.pr.length?"／"+o.pr.map(p=>PLJA[p]).join("・"):""}　${o.ju}の国・地域</div>
+      ${hitSnips(o,toks)}
     </div>
   </div>
   <div class="det" id="det-${i}"></div>`;
@@ -874,6 +933,7 @@ function renderList(){
   if(s==="ju")cur.sort((a,b)=>b.ju-a.ju||(b.yr||0)-(a.yr||0));
   if(s==="ct")cur.sort((a,b)=>(b.ct||0)-(a.ct||0)||(b.yr||0)-(a.yr||0));
   $("cnt").textContent=`${cur.length} / ${D.fams.length} 件`;
+  $("qsug").querySelectorAll("span").forEach(e=>e.classList.toggle("on",A.q===e.dataset.t));
   $("list").innerHTML=cur.slice(0,shown).map((o,i)=>rowHTML(o,i)).join("");
   $("more").style.display=cur.length>shown?"block":"none";
   $("list").querySelectorAll(".li").forEach(e=>e.addEventListener("click",()=>toggleDet(+e.dataset.i)));
