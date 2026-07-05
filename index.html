@@ -279,7 +279,7 @@ table{border-collapse:collapse}
 
         <div class="hr"></div>
         <h2>支持構造の内訳と勢力図</h2>
-        <div class="cs">トップフォイルを支える支持構造の種類。バーをタップで絞り込み。下は期間内の構成推移。金属メッシュ・スプリング・カンチレバーは近年の非バンプ型</div>
+        <div class="cs">トップフォイルを支える支持構造の種類。バーをタップで絞り込み。下は期間内の構成推移。金属メッシュ・ばね支持は近年の非バンプ型</div>
         <div id="stb"></div>
         <div class="stk" id="stk"></div>
         <div class="stkx" id="stkx"></div>
@@ -305,7 +305,7 @@ table{border-collapse:collapse}
   <!-- ============ FIND ============ -->
   <section class="view" id="v-find"><div class="findwrap">
     <input class="sbox" id="q" placeholder="検索：番号・出願人・技術語（例 IHI スリット 固定）">
-    <div class="frow"><span class="flabel">構造（複数選択可・ダッシュボードと連動）</span><span class="chip" data-f="st" data-k="bump">バンプ</span><span class="chip" data-f="st" data-k="leaf">リーフ</span><span class="chip" data-f="st" data-k="tension">テンション</span><span class="chip" data-f="st" data-k="metal_mesh">金属メッシュ</span><span class="chip" data-f="st" data-k="spring">スプリング</span><span class="chip" data-f="st" data-k="cantilever">カンチレバー</span><span class="chip" data-f="st" data-k="hybrid">ハイブリッド</span><span class="chip" data-f="st" data-k="other">その他</span><span class="chip" data-f="st" data-k="unknown">判定不能</span></div>
+    <div class="frow"><span class="flabel">構造（複数選択可・ダッシュボードと連動）</span><span class="chip" data-f="st" data-k="bump">バンプ</span><span class="chip" data-f="st" data-k="leaf">リーフ</span><span class="chip" data-f="st" data-k="tension">テンション</span><span class="chip" data-f="st" data-k="metal_mesh">金属メッシュ</span><span class="chip" data-f="st" data-k="spring">ばね支持</span><span class="chip" data-f="st" data-k="hybrid">ハイブリッド</span><span class="chip" data-f="st" data-k="other">その他</span><span class="chip" data-f="st" data-k="unknown">判定不能</span></div>
     <div class="frow"><span class="flabel">形式</span><span class="chip" data-f="fm" data-k="radial">ラジアル</span><span class="chip" data-f="fm" data-k="thrust">スラスト</span><span class="chip" data-f="fm" data-k="combo">複合</span><span class="chip" data-f="fm" data-k="conical">円錐</span></div>
     <div class="frow"><span class="flabel">課題</span><span class="chip red" data-f="pr" data-k="load_capacity">荷重容量</span><span class="chip red" data-f="pr" data-k="assembly_fixation">固定・組立</span><span class="chip red" data-f="pr" data-k="stability_whirl">安定性</span><span class="chip red" data-f="pr" data-k="startstop_wear">起動停止</span><span class="chip red" data-f="pr" data-k="damping">減衰</span><span class="chip red" data-f="pr" data-k="thermal">熱</span><span class="chip red" data-f="pr" data-k="tolerance_robust">公差</span><span class="chip red" data-f="pr" data-k="misalignment_conformity">追従</span></div>
     <div class="frow"><span class="flabel">解決手段</span><span class="chip" data-f="lv" data-k="pitch_height_thickness">バンプ形状</span><span class="chip" data-f="lv" data-k="segmentation_slit">分割・スリット</span><span class="chip" data-f="lv" data-k="multizone_multipad">多ゾーン</span><span class="chip" data-f="lv" data-k="stacking">積層</span><span class="chip" data-f="lv" data-k="preload">予圧</span><span class="chip" data-f="lv" data-k="material_coating">材料・被膜</span><span class="chip" data-f="lv" data-k="adaptive_geometry">適応形状</span><span class="chip" data-f="lv" data-k="cooling_flow">冷却流</span><span class="chip" data-f="lv" data-k="fixation_design">固定設計</span></div>
@@ -343,7 +343,8 @@ table{border-collapse:collapse}
       <b>② 名称・要約のキーワード</b>：発明の名称または要約に、フォイル軸受を指す語を含む公報。<b>英</b> foil (air/gas) bearing・bump foil・foil journal/thrust bearing／<b>日</b> フォイル軸受・フォイルベアリング／<b>中</b> 箔片轴承・箔轴承・波箔／<b>韓</b> 포일 베어링・포일 저널/스러스트。②は、CPCが圧縮機・モータなど<b>システム側</b>にしか付いていない出願を拾うためのものです。<br>
       ②では、箔を「担持体」に使う電池・触媒の特許や、翼型(airfoil)など<b>無関係な公報が混じる</b>ため、名称・要約・請求項を機械で読み、フォイル軸受でないものを除外しています。以上を優先権で束ねたファミリー（同一発明の各国出願のまとまり）単位で数え、<b>全 2,089 ファミリー</b>が対象です。それでもCPCもキーワードも付かない出願は漏れるため、各社の件数は<b>下限値</b>です。2025年以降は出願から公開まで最長18か月かかるため件数が未確定です。</p>
       <p><b>分類タグと要約</b>　構造・課題・解決手段・適用機器のタグと日本語1行要約は、発明の名称と要約（判定できない場合はクレーム冒頭も）をもとにした機械判定の一次情報です。コア特許には、公報の明細から抽出した請求項1の骨子・被引用数（取得時点のスナップショット）・材質/被膜/設計数値も付与しています。いずれも原文確認を前提にお使いください。</p>
-      <p><b>「構造」＝支持構造で分けています</b>　トップフォイルの下でフォイルを弾性的に支える<b>支持構造</b>の種類で分類しています。<b>バンプ</b>（波状の山＝最も一般的）／<b>リーフ</b>（多葉・重ね葉）／<b>テンション</b>（張力で巻き付け）に加え、近年の非バンプ型として <b>金属メッシュ</b>（ワイヤメッシュのパッドで支持）／<b>スプリング</b>（コイル・板ばね等の独立ばね部材や「spring foil」層。燃料電池向けで各社が採用）／<b>カンチレバー</b>（片持ちフォイル片）を独立の類型として立てています。名称・要約でバンプと読めない候補や、金属メッシュ・スプリング・カンチレバーを示唆する語を含む公報を選び、名称・要約・請求項を機械で読み直して割り当てました。ただし要約が公開されていない古い出願・一部の各国出願は「判定不能」に残ります。</p>
+      <p><b>「読めた情報」＝分類の根拠にできた情報量</b>　機械分類の信頼度は「どこまで原文を読めたか」で決まるため、各ファミリーに <b>明細まで</b>（明細本文のテキストを取得済み）／<b>請求項まで</b>（請求項テキストあり）／<b>要約まで</b>（発明の名称と要約のみ）／<b>書誌のみ</b>（テキストが公開されておらずスキャン画像だけ＝内容は分類できない）の4段階を付け、詳細パネルに表示しています。古い公報（1980年以前の独・旧ソ連・日本の実用新案など）はテキスト自体が存在しないことが多く、この場合は正直に「書誌のみ」とし、構造・課題の判定は行っていません。</p>
+      <p><b>「構造」＝支持構造で分けています</b>　トップフォイルの下でフォイルを弾性的に支える<b>支持構造</b>の種類で分類しています。<b>バンプ</b>（波状の山＝最も一般的）／<b>リーフ</b>（多葉・重ね葉）／<b>テンション</b>（張力で巻き付け）に加え、近年の非バンプ型として <b>金属メッシュ</b>（ワイヤメッシュのパッドで支持）／<b>ばね支持</b>（コイル・板・皿ばねなどの独立ばね部材、「spring foil」層、片持ちフォイル片。燃料電池向けで各社が採用）を立てています。スプリング式と片持ち（カンチレバー）式は文献上の呼び分けが揺れていて、要約の記述だけでは安定して区別できないため、<b>あえて「ばね支持」1本にまとめています</b>（細分しないのは誤分類を避けるためです）。金属メッシュ・ばね支持のラベルは、<b>請求項・要約からの逐語引用が取れた場合にだけ</b>付けています（引用が公報原文に実在するかを機械照合で検査済み。引用は各特許の詳細に表示）。要約が公開されていない古い出願や、本文に支持構造の記載がない出願は「判定不能」に残ります。</p>
       <p><b>出願人の名寄せ</b>　同じ出願人が別名で二重にカウントされるのを防ぐため、次の4種類のゆれを統合しています。<b>① 表記・分かち書き・綴りのゆれ</b>（例: 西安交通大学の「XI AN」と「XIAN」、Capstone の綴り誤記「TRUBINE」）／<b>② 社名変更・合併・スピンオフ</b>（例: 石川島播磨→IHI、光洋精工→JTEKT、UTC→Raytheon→RTX、Honeywell からの Garrett スピンオフ）／<b>③ 子会社を親会社へ集約</b>（例: 三菱重工エンジン＆ターボチャージャ→三菱重工、Midea の空調子会社群→Midea グループ、珠海格力の子会社→Gree、Bosch の子会社→Bosch）／<b>④ 機械翻訳による英字化のゆれ</b>（例: 珠海格力が「PEARL HAIGE」と英訳される。原文で確認）。個人名義を会社へ寄せる推測的な統合はしていません。主な統合は次のとおりです（中国系の長い社名など、末尾に拾いきれないゆれは残るため<b>下限の網羅</b>とお考えください）。</p>
       <table class="ctab">
         <tr><td>ROBERT BOSCH CO LTD</td><td>→ Bosch</td><td>表記ゆれ</td></tr>
@@ -375,7 +376,7 @@ const D=window.LS,$=id=>document.getElementById(id);
 const PLJA={load_capacity:"荷重容量",assembly_fixation:"固定・組立",stability_whirl:"安定性",startstop_wear:"起動停止",damping:"減衰",thermal:"熱",tolerance_robust:"公差ロバスト",misalignment_conformity:"追従"};
 const LVJA={pitch_height_thickness:"バンプ形状",segmentation_slit:"分割・スリット",multizone_multipad:"多ゾーン",stacking:"積層",preload:"予圧",material_coating:"材料・被膜",adaptive_geometry:"適応形状",cooling_flow:"冷却流",fixation_design:"固定設計",other:"その他"};
 const LVS=Object.keys(LVJA).filter(k=>k!=="other");
-const STJA={bump:"バンプ型",leaf:"リーフ型",tension:"テンション型",metal_mesh:"金属メッシュ",spring:"スプリング",cantilever:"カンチレバー",hybrid:"ハイブリッド",other:"その他",unknown:"判定不能"};
+const STJA={bump:"バンプ型",leaf:"リーフ型",tension:"テンション型",metal_mesh:"金属メッシュ",spring:"ばね支持",hybrid:"ハイブリッド",other:"その他",unknown:"判定不能"};
 const FMJA={radial:"ラジアル",thrust:"スラスト",combo:"複合",conical:"円錐",unknown:""};
 const APJA={fc_compressor:"燃料電池",turbocharger:"ターボチャージャ",blower_fan:"ブロワ",hvac_chiller:"空調・チラー",acm:"航空機ACM",micro_turbine:"マイクロGT",turbo_expander_cryo:"膨張タービン",motor_spindle:"高速モータ",general_unknown:"—"};
 const MINY=1955,MAXY=2026;
@@ -612,7 +613,7 @@ function distBars(el,keys,labels,getK,dim,set,hotSel){
     <span class="l" title="${k}">${labels?labels[k]:shortNm(k)}</span><div class="t" style="width:${(v/max*100).toFixed(1)}%"></div><span class="v">${v}</span></div>`).join("");
   $(el).querySelectorAll(".bar").forEach(e=>e.addEventListener("click",()=>tgl(set,e.dataset.k)));
 }
-function renderSt(){distBars("stb",["bump","leaf","tension","metal_mesh","spring","cantilever","hybrid","other","unknown"],STJA,o=>o.st,"st",A.st,true);}
+function renderSt(){distBars("stb",["bump","leaf","tension","metal_mesh","spring","hybrid","other","unknown"],STJA,o=>o.st,"st",A.st,true);}
 function renderAp(){
   const keys=Object.keys(APJA).filter(k=>k!=="general_unknown");
   const m=new Map();
@@ -626,10 +627,10 @@ function renderAp(){
 function renderAs(){distBars("asb",null,null,o=>o.as[0],"as",A.as,true);}
 
 /* ================= structure stacked trend ================= */
-const SCOL={bump:"#006BA2",leaf:"#758D99",tension:"#B7C6CF",metal_mesh:"#2E8B7F",spring:"#C97B1E",cantilever:"#7E6BA8",hybrid:"#E3120B",other:"#DEE5E9",unknown:"#F1EEE6"};
+const SCOL={bump:"#006BA2",leaf:"#758D99",tension:"#B7C6CF",metal_mesh:"#2E8B7F",spring:"#C97B1E",hybrid:"#E3120B",other:"#DEE5E9",unknown:"#F1EEE6"};
 function renderStk(){
   const{step,arr}=buckets();
-  const order=["bump","leaf","tension","metal_mesh","spring","cantilever","hybrid","other","unknown"];
+  const order=["bump","leaf","tension","metal_mesh","spring","hybrid","other","unknown"];
   const grid=order.map(()=>arr.map(()=>0));
   D.fams.forEach(o=>{
     if(!o.yr||!pass(o,"st"))return;
@@ -646,7 +647,7 @@ function renderStk(){
   }).join("");
   const lblEvery=step===1?(arr.length>18?5:2):(arr.length>12?2:1);
   $("stkx").innerHTML=arr.map((y,i)=>`<span>${(step===1?(y%lblEvery===0):(i%lblEvery===0))?blab(y,step):''}</span>`).join("");
-  $("stklg").innerHTML=["bump","leaf","tension","metal_mesh","spring","cantilever","hybrid"].map(s=>`<span class="${A.st.has(s)?'on':''}" data-s="${s}"><i style="background:${SCOL[s]}"></i>${STJA[s]}</span>`).join("")+`<span style="cursor:default"><i style="background:#F1EEE6;border:1px solid #DDD"></i>判定不能ほか</span>`;
+  $("stklg").innerHTML=["bump","leaf","tension","metal_mesh","spring","hybrid"].map(s=>`<span class="${A.st.has(s)?'on':''}" data-s="${s}"><i style="background:${SCOL[s]}"></i>${STJA[s]}</span>`).join("")+`<span style="cursor:default"><i style="background:#F1EEE6;border:1px solid #DDD"></i>判定不能ほか</span>`;
   $("stklg").querySelectorAll("span[data-s]").forEach(e=>e.addEventListener("click",()=>tgl(A.st,e.dataset.s)));
 }
 
@@ -898,13 +899,14 @@ function detHTML(o){
       ${o.el&&o.el.length?`<div class="tags" style="margin-top:5px">${o.el.map(e=>`<span class="tg" style="border-color:#006BA2;color:#006BA2">${e}</span>`).join("")}</div>`:""}
       ${o.ef?`<div style="margin-top:4px;font-size:10.5px"><span style="color:#758D99;font-weight:700">主張される効果</span>　${o.ef}</div>`:""}
     </div>`:""}
+    ${o.sq?`<div style="margin-top:6px;font-size:10.5px;color:#5F5F5F"><span style="color:#758D99;font-weight:700">構造分類の根拠（公報原文より）</span>　“${o.sq}”</div>`:""}
     ${(o.mt&&o.mt.length)||(o.co&&o.co.length)||(o.pm&&o.pm.length)?`<div style="margin-top:8px;border-top:1px solid #DDD;padding-top:7px">
       <div style="font-size:9px;color:#758D99;font-weight:700;letter-spacing:.05em">明細に記載のスペック（機械抽出・原文確認前提）</div>
       ${o.mt&&o.mt.length?`<div style="margin-top:3px;font-size:10.5px"><span style="color:#758D99;font-weight:700">材質</span>　${o.mt.join("・")}</div>`:""}
       ${o.co&&o.co.length?`<div style="margin-top:2px;font-size:10.5px"><span style="color:#758D99;font-weight:700">被膜</span>　${o.co.join("・")}</div>`:""}
       ${o.pm&&o.pm.length?`<div class="tags" style="margin-top:4px">${o.pm.map(p=>`<span class="tg" style="border-color:#3E7A5E;color:#3E7A5E">${p.n} ${p.v}${p.u}</span>`).join("")}</div>`:""}
     </div>`:""}
-    <div style="color:#758D99;font-size:10px;margin-top:6px">ファミリー ${o.mm} 公報 · ${o.ju} の国・地域${o.ct?` · 被引用 ${o.ct}`:""} · 判定確度 ${o.cf}${o.as.length?` · ${o.as.join(" / ")}`:""}</div>
+    <div style="color:#758D99;font-size:10px;margin-top:6px">ファミリー ${o.mm} 公報 · ${o.ju} の国・地域${o.ct?` · 被引用 ${o.ct}`:""} · 判定確度 ${o.cf} · 読めた情報: ${["書誌のみ","要約まで","請求項まで","明細まで"][o.ev??1]}${o.as.length?` · ${o.as.join(" / ")}`:""}</div>
     <div style="margin-top:7px"><a href="https://patents.google.com/patent/${o.gp}/ja" target="_blank" rel="noopener">Google Patents で原文を見る（${o.gp}）→</a></div>`;
 }
 
@@ -974,7 +976,7 @@ function popHTML(f){
   const btns=`<div class="pbtns"><button class="frst" data-act="clear">クリア</button><button class="frst" data-act="close">閉じる</button></div>`;
   const cList=(pairs,set,search)=>(search?`<input class="psearch" placeholder="絞り込み検索">`:"")+
     pairs.map(([k,l,c])=>`<label><input type="checkbox" data-k="${k}" ${set.has(k)?"checked":""}>${l}<span class="cnt2">${c}</span></label>`).join("")+btns;
-  if(f==="st"){const m=popCnt(o=>o.st,"st");return cList(["bump","leaf","tension","metal_mesh","spring","cantilever","hybrid","other","unknown"].map(k=>[k,STJA[k],m.get(k)||0]),A.st);}
+  if(f==="st"){const m=popCnt(o=>o.st,"st");return cList(["bump","leaf","tension","metal_mesh","spring","hybrid","other","unknown"].map(k=>[k,STJA[k],m.get(k)||0]),A.st);}
   if(f==="fm"){const m=popCnt(o=>o.fm,"fm");return cList(["radial","thrust","combo","conical","unknown"].map(k=>[k,FMP[k],m.get(k)||0]),A.fm);}
   if(f==="pr"){const m=new Map();D.fams.forEach(o=>{if(pass(o,"pr"))o.pr.forEach(p=>m.set(p,(m.get(p)||0)+1));});return cList(D.PROBS.map(k=>[k,PLJA[k],m.get(k)||0]),A.pr);}
   if(f==="ap"){const m=popCnt(o=>o.ap==="general_unknown"?null:o.ap,"ap");return cList(Object.keys(APJA).filter(k=>k!=="general_unknown").map(k=>[k,APJA[k],m.get(k)||0]).sort((a,b)=>b[2]-a[2]),A.ap);}
