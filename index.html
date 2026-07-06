@@ -198,6 +198,11 @@ table{border-collapse:collapse}
   .bar{grid-template-columns:86px 1fr 28px;gap:6px}
 }
 mark{background:#FFE28A;color:inherit;padding:0 1px;border-radius:2px}
+.li{position:relative;padding-right:28px}
+.favb{position:absolute;top:8px;right:0;font-size:15px;color:#CFC9BC;cursor:pointer;line-height:1;padding:4px 4px;z-index:2}
+.favb.on{color:#E8A33D}
+.favb2{display:inline-block;margin-left:12px;font-size:10.5px;color:#8A8171;cursor:pointer;border:1px solid #D6D2C8;border-radius:10px;padding:2px 9px;background:#FBFAF7}
+.favb2.on{color:#B0700F;border-color:#E8A33D;background:#FFF7E6}
 .hitline{font-size:10px;color:#5F5F5F;margin-top:3px;line-height:1.5}
 .hitline b{color:#758D99;font-weight:700;font-size:9px}
 .qsug{display:flex;flex-wrap:wrap;gap:5px;margin:-2px 0 10px}
@@ -329,7 +334,7 @@ mark{background:#FFE28A;color:inherit;padding:0 1px;border-radius:2px}
     <div class="frow"><span class="flabel">固定方式</span><span class="chip" data-f="fx" data-k="spot_weld">スポット溶接</span><span class="chip" data-f="fx" data-k="insert_tab">差込・タブ</span><span class="chip" data-f="fx" data-k="key_pin">キー・ピン</span><span class="chip" data-f="fx" data-k="rivet_screw">リベット・ねじ</span><span class="chip" data-f="fx" data-k="bond">接着・ろう付け</span><span class="chip" data-f="fx" data-k="self_retain">自己保持</span><span class="chip" data-f="fx" data-k="multi">複数併用</span></div>
     <div class="frow"><span class="flabel">対象種別</span><span class="chip" data-f="sb" data-k="bearing">軸受本体</span><span class="chip" data-f="sb" data-k="system">搭載システム</span><span class="chip" data-f="sb" data-k="manufacturing">製造方法</span><span class="chip" data-f="sb" data-k="testing">試験・評価</span><span class="chip" data-f="sb" data-k="peripheral">周辺技術</span></div>
     <div class="frow"><span class="flabel">複合方式</span><span class="chip" data-f="cb" data-k="mag">磁気併用</span><span class="chip" data-f="cb" data-k="hydrostatic">静圧併用</span><span class="chip" data-f="cb" data-k="tilting_pad">チルトパッド併用</span><span class="chip" data-f="cb" data-k="rolling">転がり併用</span><span class="chip" data-f="cb" data-k="support_combo">支持構造の複合</span></div>
-    <div class="frow"><span class="flabel">その他</span><span class="chip" data-f="fg" data-k="1">図あり</span><span class="chip" data-f="gr" data-k="1">成立のみ</span><span class="chip" data-f="era" data-k="2010">2010年以降</span><span class="chip" data-f="era" data-k="2020">2020年以降</span></div>
+    <div class="frow"><span class="flabel">その他</span><span class="chip" data-f="fav" data-k="1">★スターのみ</span><span class="chip" data-f="fg" data-k="1">図あり</span><span class="chip" data-f="gr" data-k="1">成立のみ</span><span class="chip" data-f="era" data-k="2010">2010年以降</span><span class="chip" data-f="era" data-k="2020">2020年以降</span></div>
     <div class="cnt"><span id="cnt"></span><span style="display:flex;gap:8px;align-items:center"><button class="frst" id="rst2">リセット</button><select id="sort"><option value="new">新しい順</option><option value="ju">展開の広さ順</option><option value="ct">被引用順</option><option value="old">古い順</option></select></span></div>
     <div id="list"></div>
     <button class="more" id="more" style="display:none">さらに表示</button>
@@ -407,7 +412,17 @@ const MINY=1955,MAXY=2026;
 $("dek").textContent=`公知特許 ${D.meta.total.toLocaleString()} ファミリー（1900–2026、優先年ベース。年表チャートは1955年以降）を課題・構造・出願人で分析する。グラフはタップで絞り込み、もう一度タップで解除`;
 
 /* ================= shared filter state ================= */
-const A={q:"",st:new Set(),fm:new Set(),pr:new Set(),lv:new Set(),ap:new Set(),as:new Set(),ju:new Set(),sb:new Set(),cb:new Set(),fx:new Set(),y0:MINY,y1:MAXY,fg:false,gr:false};
+const A={q:"",st:new Set(),fm:new Set(),pr:new Set(),lv:new Set(),ap:new Set(),as:new Set(),ju:new Set(),sb:new Set(),cb:new Set(),fx:new Set(),y0:MINY,y1:MAXY,fg:false,gr:false,fav:false};
+/* ★スター（お気に入り）— この端末のブラウザに保存 */
+const FAV=new Set(JSON.parse(localStorage.getItem("lsFav")||"[]"));
+const saveFav=()=>localStorage.setItem("lsFav",JSON.stringify([...FAV]));
+function tglFav(id){
+  FAV.has(id)?FAV.delete(id):FAV.add(id);saveFav();
+  const on=FAV.has(id);
+  document.querySelectorAll(`.favb[data-fid="${id}"]`).forEach(e=>{e.classList.toggle("on",on);e.textContent=on?"★":"☆";});
+  document.querySelectorAll(`.favb2[data-fid="${id}"]`).forEach(e=>{e.classList.toggle("on",on);e.textContent=on?"★ スター解除":"☆ スターに追加";});
+  if(A.fav)renderAll(); // スターのみ表示中は一覧から即消えるよう再描画
+}
 const FMP={radial:"ラジアル",thrust:"スラスト",combo:"複合",conical:"円錐",unknown:"—"};
 function pass(o,skip){
   skip=skip||"";
@@ -424,6 +439,7 @@ function pass(o,skip){
   if(!skip.includes("fx")&&A.fx.size&&!(o.fx&&A.fx.has(o.fx)))return false;
   if(A.fg&&!o.fg)return false;
   if(A.gr&&!o.gr)return false;
+  if(A.fav&&!FAV.has(o.id))return false;
   if(A.q){const hay=(o.rep+" "+o.t+" "+o.ja+" "+o.as.join(" ")+" "+(o.c1||"")+" "+(o.el||[]).join(" ")+" "+(o.ef||"")+" "+(o.mt||[]).join(" ")+" "+(o.co||[]).join(" ")+" "+(o.pm||[]).map(p=>p.n).join(" ")).toLowerCase();
     const{toks,ex}=qparse(A.q);
     for(const w of toks)if(!hay.includes(w))return false;
@@ -472,7 +488,7 @@ function hitSnips(o,toks){
   }
   return out.length?`<div class="hitline">${out.join("　")}</div>`:"";
 }
-function resetA(){A.q="";A.st.clear();A.fm.clear();A.pr.clear();A.lv.clear();A.ap.clear();A.as.clear();A.ju.clear();A.sb.clear();A.cb.clear();A.fx.clear();A.y0=MINY;A.y1=MAXY;A.fg=false;A.gr=false;$("q").value="";shown=60;}
+function resetA(){A.q="";A.st.clear();A.fm.clear();A.pr.clear();A.lv.clear();A.ap.clear();A.as.clear();A.ju.clear();A.sb.clear();A.cb.clear();A.fx.clear();A.y0=MINY;A.y1=MAXY;A.fg=false;A.gr=false;A.fav=false;$("q").value="";shown=60;}
 function tgl(set,k){set.has(k)?set.delete(k):set.add(k);shown=60;renderAll();}
 
 /* time buckets: yearly when span<=30, else 5-year */
@@ -540,6 +556,7 @@ function renderFbar(){
   if(A.y0>MINY||A.y1<MAXY)chips.push(["yr","","期間",`${A.y0}–${A.y1}`]);
   if(A.fg)chips.push(["fg","","","図あり"]);
   if(A.gr)chips.push(["gr","","","成立のみ"]);
+  if(A.fav)chips.push(["fav","","",`★スター（${FAV.size}件）`]);
   if(A.q)chips.push(["q","","検索",A.q]);
   const empty=`<span class="none">絞り込みなし — グラフの要素をタップすると全体が連動します</span>`;
   const html=chips.length?chips.map(([f,k,pre,lab,red])=>`<span class="fchip ${red?'red':''}" data-f="${f}" data-k="${k}">${pre?`<b>${pre}</b>`:""}${lab} ✕</span>`).join("")+`<button class="frst rstA">リセット</button>`:empty;
@@ -549,7 +566,7 @@ function renderFbar(){
     el.querySelectorAll(".fchip").forEach(c=>c.addEventListener("click",()=>{
       const f=c.dataset.f,k=c.dataset.k;
       if(f==="yr"){A.y0=MINY;A.y1=MAXY;}
-      else if(f==="fg")A.fg=false;else if(f==="gr")A.gr=false;
+      else if(f==="fg")A.fg=false;else if(f==="gr")A.gr=false;else if(f==="fav")A.fav=false;
       else if(f==="q"){A.q="";$("q").value="";$("qdb").value="";}
       else if(A[f])A[f].delete(k);
       shown=60;renderAll();
@@ -908,7 +925,7 @@ function syncFindChips(){
     let on=false;
     if(f==="st")on=A.st.has(k);else if(f==="fm")on=A.fm.has(k);else if(f==="pr")on=A.pr.has(k);else if(f==="lv")on=A.lv.has(k);
     else if(f==="sb")on=A.sb.has(k);else if(f==="cb")on=A.cb.has(k);else if(f==="fx")on=A.fx.has(k);
-    else if(f==="fg")on=A.fg;else if(f==="gr")on=A.gr;
+    else if(f==="fg")on=A.fg;else if(f==="gr")on=A.gr;else if(f==="fav")on=A.fav;
     else if(f==="era")on=(A.y0===+k&&A.y1===MAXY);
     c.classList.toggle("on",on);
   });
@@ -918,6 +935,7 @@ document.querySelectorAll("#v-find .chip").forEach(c=>c.addEventListener("click"
   if(f==="era"){if(A.y0===+k&&A.y1===MAXY){A.y0=MINY;}else{A.y0=+k;A.y1=MAXY;}}
   else if(f==="fg")A.fg=!A.fg;
   else if(f==="gr")A.gr=!A.gr;
+  else if(f==="fav")A.fav=!A.fav;
   else if(f==="st")A.st.has(k)?A.st.delete(k):A.st.add(k);
   else if(f==="fm")A.fm.has(k)?A.fm.delete(k):A.fm.add(k);
   else if(f==="pr")A.pr.has(k)?A.pr.delete(k):A.pr.add(k);
@@ -943,6 +961,7 @@ function pubDisp(rep){return rep.replace(/-/g," ")}
 function rowHTML(o,i){
   const toks=A.q?qparse(A.q).toks:[];
   return `<div class="li ${o.fg?'':'nofig'}" data-i="${i}">
+    <span class="favb ${FAV.has(o.id)?'on':''}" data-fid="${o.id}" title="スター">${FAV.has(o.id)?"★":"☆"}</span>
     ${o.fg?`<img loading="lazy" src="figs/${o.id}.png">`:""}
     <div>
       <div class="no">${pubDisp(o.rep)}<small>${toks.length?markText(o.as[0]||"—",toks):(o.as[0]||"—")} · ${o.yr||"—"}${o.gr?" · 成立":""}</small></div>
@@ -966,6 +985,7 @@ function renderList(){
   $("list").innerHTML=cur.slice(0,shown).map((o,i)=>rowHTML(o,i)).join("");
   $("more").style.display=cur.length>shown?"block":"none";
   $("list").querySelectorAll(".li").forEach(e=>e.addEventListener("click",()=>toggleDet(+e.dataset.i)));
+  $("list").querySelectorAll(".favb").forEach(e=>e.addEventListener("click",ev=>{ev.stopPropagation();tglFav(e.dataset.fid);}));
   $("tolist").textContent=`この条件の特許一覧を見る（${cur.length}件）→`;
 }
 function toggleDet(i){
@@ -973,6 +993,7 @@ function toggleDet(i){
   if(d.classList.contains("on")){d.classList.remove("on");return;}
   d.innerHTML=detHTML(o);
   d.classList.add("on");
+  d.querySelectorAll(".favb2").forEach(e=>e.addEventListener("click",ev=>{ev.stopPropagation();tglFav(e.dataset.fid);}));
 }
 function detHTML(o){
   return `${o.t?`<div class="en">${o.t}</div>`:""}
@@ -1000,7 +1021,7 @@ function detHTML(o){
       ${o.pm&&o.pm.length?`<div class="tags" style="margin-top:4px">${o.pm.map(p=>`<span class="tg" style="border-color:#3E7A5E;color:#3E7A5E">${p.n} ${p.v}${p.u}</span>`).join("")}</div>`:""}
     </div>`:""}
     <div style="color:#758D99;font-size:10px;margin-top:6px">ファミリー ${o.mm} 公報 · ${o.ju} の国・地域${o.ct?` · 被引用 ${o.ct}`:""} · 判定確度 ${o.cf} · 読めた情報: ${["書誌のみ","要約まで","請求項まで","明細まで"][o.ev??1]}${o.as.length?` · ${o.as.join(" / ")}`:""}</div>
-    <div style="margin-top:7px"><a href="https://patents.google.com/patent/${o.gp}/ja" target="_blank" rel="noopener">Google Patents で原文を見る（${o.gp}）→</a></div>`;
+    <div style="margin-top:7px"><a href="https://patents.google.com/patent/${o.gp}/ja" target="_blank" rel="noopener">Google Patents で原文を見る（${o.gp}）→</a><span class="favb2 ${FAV.has(o.id)?'on':''}" data-fid="${o.id}">${FAV.has(o.id)?"★ スター解除":"☆ スターに追加"}</span></div>`;
 }
 
 /* ================= db table ================= */
@@ -1057,6 +1078,7 @@ function renderDB(){
     const i=+tr.dataset.i,o=list[i],d=$("dbd-"+i);
     if(d.style.display!=="none"){d.style.display="none";return;}
     d.firstElementChild.innerHTML=detHTML(o);d.style.display="";
+    d.querySelectorAll(".favb2").forEach(e=>e.addEventListener("click",ev=>{ev.stopPropagation();tglFav(e.dataset.fid);}));
   }));
   $("moredb").style.display=list.length>shownDB?"block":"none";
 }
