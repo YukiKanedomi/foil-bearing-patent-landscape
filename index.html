@@ -203,6 +203,17 @@ mark{background:#FFE28A;color:inherit;padding:0 1px;border-radius:2px}
 .favb.on{color:#E8A33D}
 .favb2{display:inline-block;margin-left:12px;font-size:10.5px;color:#8A8171;cursor:pointer;border:1px solid #D6D2C8;border-radius:10px;padding:2px 9px;background:#FBFAF7}
 .favb2.on{color:#B0700F;border-color:#E8A33D;background:#FFF7E6}
+.karte{background:#FBFAF7;border:1px solid #E3DFD3;border-left:3px solid var(--red);padding:12px 14px;margin:4px 0 14px}
+.karte .kh{font-size:12px;letter-spacing:.03em;margin-bottom:8px}
+.karte .kh b{font-size:15px;margin-left:2px}
+.karte .kg{display:flex;flex-wrap:wrap;gap:4px 22px;margin-bottom:6px}
+.karte .kg div{display:flex;flex-direction:column}
+.karte .kg b{font-size:16px;font-family:var(--mono);font-weight:600}
+.karte .kg span{font-size:8.5px;color:#758D99;letter-spacing:.05em}
+.karte .kl{font-size:10.5px;line-height:1.8;color:#3F3F3F}
+.karte .kl b{color:#758D99;font-size:9px;letter-spacing:.04em}
+.lbn{position:fixed;top:44%;z-index:1001;color:#fff;font-size:46px;line-height:1;cursor:pointer;padding:16px 12px;user-select:none;text-shadow:0 1px 10px rgba(0,0,0,.55);left:0}
+.lbn.nx{left:auto;right:0}
 .hitline{font-size:10px;color:#5F5F5F;margin-top:3px;line-height:1.5}
 .hitline b{color:#758D99;font-weight:700;font-size:9px}
 .qsug{display:flex;flex-wrap:wrap;gap:5px;margin:-2px 0 10px}
@@ -228,6 +239,7 @@ mark{background:#FFE28A;color:inherit;padding:0 1px;border-radius:2px}
   <section class="view on" id="v-dash">
     <div class="kpi" id="kpi"></div>
     <div class="fbar" id="fbar"></div>
+    <div id="karte"></div>
 
     <h2>年次推移 — 期間を絞ると全グラフが連動する</h2>
     <div class="cs">優先年ベース・1年刻み。スライダーで期間を選択（<span style="color:var(--red);font-weight:700">赤</span>＝期間内ピーク年）</div>
@@ -289,6 +301,11 @@ mark{background:#FFE28A;color:inherit;padding:0 1px;border-radius:2px}
         <div class="hscroll"><table class="mx" id="ac"></table></div>
 
         <div class="hr"></div>
+        <h2>出願人 × 固定方式 — 各社のつくり方の癖</h2>
+        <div class="cs">絞り込み後の上位10社（固定方式タグのある特許のみ）。セルをタップ→その社×固定方式に絞り込み（再タップで解除）</div>
+        <div class="hscroll"><table class="mx" id="af"></table></div>
+
+        <div class="hr"></div>
         <h2>支持構造の内訳と勢力図</h2>
         <div class="cs">トップフォイルを支える支持構造の種類。バーをタップで絞り込み。下は期間内の構成推移。金属メッシュ・ばね支持は近年の非バンプ型</div>
         <div id="stb"></div>
@@ -319,7 +336,7 @@ mark{background:#FFE28A;color:inherit;padding:0 1px;border-radius:2px}
     </div>
 
     <button class="more" id="tolist">この条件の特許一覧を見る →</button>
-    <div class="note"><b>読みどころ</b>　2020年代は882ファミリーと史上最多ペース。首位は空調のGree、NTN・IHIの日本勢が続き、燃料電池・チラーが波を作る。出願は荷重容量と固定・組立に集中する一方、公差ロバスト・追従は全期間で計205件と薄く、課題×解決手段マップの空白セルとともに「文献が疎な領域」として残る。</div>
+    <div class="note"><b>読みどころ</b>　2020年代は882ファミリーと史上最多ペース。首位は空調のGree、NTN・IHIの日本勢が続き、燃料電池・チラーが波を作る。出願は荷重容量と固定・組立に集中。フォイルの固定方式では差込・タブ係止が最多で、近年は燃料電池向けの非バンプ型（ばね支持）や磁気軸受との併用が目立つ。</div>
     <div class="src">出典: Google Patents Public Data（BigQuery）。分類は要約ベースの一次判定（原文確認前提）。件数はファミリー単位</div>
   </section>
 
@@ -335,7 +352,7 @@ mark{background:#FFE28A;color:inherit;padding:0 1px;border-radius:2px}
     <div class="frow"><span class="flabel">対象種別</span><span class="chip" data-f="sb" data-k="bearing">軸受本体</span><span class="chip" data-f="sb" data-k="system">搭載システム</span><span class="chip" data-f="sb" data-k="manufacturing">製造方法</span><span class="chip" data-f="sb" data-k="testing">試験・評価</span><span class="chip" data-f="sb" data-k="peripheral">周辺技術</span></div>
     <div class="frow"><span class="flabel">複合方式</span><span class="chip" data-f="cb" data-k="mag">磁気併用</span><span class="chip" data-f="cb" data-k="hydrostatic">静圧併用</span><span class="chip" data-f="cb" data-k="tilting_pad">チルトパッド併用</span><span class="chip" data-f="cb" data-k="rolling">転がり併用</span><span class="chip" data-f="cb" data-k="support_combo">支持構造の複合</span></div>
     <div class="frow"><span class="flabel">その他</span><span class="chip" data-f="fav" data-k="1">★スターのみ</span><span class="chip" data-f="fg" data-k="1">図あり</span><span class="chip" data-f="gr" data-k="1">成立のみ</span><span class="chip" data-f="era" data-k="2010">2010年以降</span><span class="chip" data-f="era" data-k="2020">2020年以降</span></div>
-    <div class="cnt"><span id="cnt"></span><span style="display:flex;gap:8px;align-items:center"><button class="frst" id="rst2">リセット</button><select id="sort"><option value="new">新しい順</option><option value="ju">展開の広さ順</option><option value="ct">被引用順</option><option value="old">古い順</option></select></span></div>
+    <div class="cnt"><span id="cnt"></span><span style="display:flex;gap:8px;align-items:center"><button class="frst" id="rst2">リセット</button><select id="sort"><option value="new">新しい順</option><option value="ju">展開の広さ順</option><option value="ct">被引用順</option><option value="hot">注目度順（被引用÷年数）</option><option value="old">古い順</option></select></span></div>
     <div id="list"></div>
     <button class="more" id="more" style="display:none">さらに表示</button>
   </div></section>
@@ -344,7 +361,7 @@ mark{background:#FFE28A;color:inherit;padding:0 1px;border-radius:2px}
   <section class="view" id="v-db">
     <input class="sbox" id="qdb" placeholder="検索：番号・出願人・技術語（絞り込みは全タブ共有）">
     <div class="fbar" id="fbar2"></div>
-    <div class="cnt"><span id="cntdb"></span><span style="font-size:9.5px">列見出しタップで並べ替え／行タップで詳細</span></div>
+    <div class="cnt"><span id="cntdb"></span><span style="display:flex;gap:8px;align-items:center"><button class="frst" id="csvdl">CSV保存</button><span style="font-size:9.5px">列見出しタップで並べ替え／行タップで詳細</span></span></div>
     <div class="hscroll"><table class="dbt" id="dbt"></table></div>
     <button class="more" id="moredb" style="display:none">さらに表示</button>
   </section>
@@ -358,7 +375,7 @@ mark{background:#FFE28A;color:inherit;padding:0 1px;border-radius:2px}
     <button class="more" id="morez" style="display:none">さらに表示</button>
   </section>
 
-  <p class="foot">⚠ 本サイトは<b>公開済み特許の客観分析のみ</b>を収載しています。分類・要約は機械判定の一次情報で、正確な内容は各公報の原文をご確認ください。件数はファミリー（同一発明の各国出願をまとめた単位）ベース。出願人は主要な社名変更・承継・表記ゆれを名寄せしています（詳細は下の「データと方法」）。出典: Google Patents Public Data（BigQuery）／図: 各特許公報（パブリックドメイン）／生成 2026-07-04</p>
+  <p class="foot">⚠ 本サイトは<b>公開済み特許の客観分析のみ</b>を収載しています。分類・要約は機械判定の一次情報で、正確な内容は各公報の原文をご確認ください。件数はファミリー（同一発明の各国出願をまとめた単位）ベース。出願人は主要な社名変更・承継・表記ゆれを名寄せしています（詳細は下の「データと方法」）。出典: Google Patents Public Data（BigQuery）／図: 各特許公報（パブリックドメイン）／生成 <span id="gdate">—</span></p>
 
   <details class="about">
     <summary>データと方法 — 名寄せ・分類・コア選定のルール</summary>
@@ -394,7 +411,7 @@ mark{background:#FFE28A;color:inherit;padding:0 1px;border-radius:2px}
 </div>
 
 <div class="pop" id="pop" style="display:none"></div>
-<div class="lb" id="lb"><span class="x" id="lbx">✕</span><div class="box" id="lbbox"></div></div>
+<div class="lb" id="lb"><span class="x" id="lbx">✕</span><span class="lbn" id="lbprev">‹</span><span class="lbn nx" id="lbnext">›</span><div class="box" id="lbbox"></div></div>
 
 <script src="data.js"></script>
 <script>
@@ -410,6 +427,7 @@ const FXJA={spot_weld:"スポット溶接",insert_tab:"差込・タブ",key_pin:
 const APJA={fc_compressor:"燃料電池",turbocharger:"ターボチャージャ",blower_fan:"ブロワ",hvac_chiller:"空調・チラー",acm:"航空機ACM",micro_turbine:"マイクロGT",turbo_expander_cryo:"膨張タービン",motor_spindle:"高速モータ",general_unknown:"—"};
 const MINY=1955,MAXY=2026;
 $("dek").textContent=`公知特許 ${D.meta.total.toLocaleString()} ファミリー（1900–2026、優先年ベース。年表チャートは1955年以降）を課題・構造・出願人で分析する。グラフはタップで絞り込み、もう一度タップで解除`;
+$("gdate").textContent=D.meta.date;
 
 /* ================= shared filter state ================= */
 const A={q:"",st:new Set(),fm:new Set(),pr:new Set(),lv:new Set(),ap:new Set(),as:new Set(),ju:new Set(),sb:new Set(),cb:new Set(),fx:new Set(),y0:MINY,y1:MAXY,fg:false,gr:false,fav:false};
@@ -521,10 +539,41 @@ D.fams.forEach(o=>{const a=o.as[0];if(!a||!o.yr)return;if(!(a in FIRSTY)||o.yr<F
 /* ================= tabs ================= */
 document.querySelectorAll(".tab").forEach(t=>t.addEventListener("click",()=>showView(t.dataset.v)));
 function showView(v){
+  curView=v;
   document.querySelectorAll(".tab").forEach(x=>x.classList.toggle("on",x.dataset.v===v));
   document.querySelectorAll(".view").forEach(x=>x.classList.remove("on"));
   $("v-"+v).classList.add("on");
   window.scrollTo({top:0,behavior:"smooth"});
+  syncHash();
+}
+
+/* ---- 絞り込み状態のURL化（共有・ブックマーク用） ---- */
+let curView="dash";
+function stateToHash(){
+  const o={};
+  if(A.q)o.q=A.q;
+  for(const k of ["st","fm","pr","lv","ap","as","ju","sb","cb","fx"])if(A[k].size)o[k]=[...A[k]];
+  if(A.y0>MINY)o.y0=A.y0;if(A.y1<MAXY)o.y1=A.y1;
+  if(A.fg)o.fg=1;if(A.gr)o.gr=1;if(A.fav)o.fav=1;
+  if(curView!=="dash")o.v=curView;
+  return Object.keys(o).length?"#s="+encodeURIComponent(JSON.stringify(o)):"";
+}
+function syncHash(){
+  history.replaceState(null,"",location.pathname+location.search+stateToHash());
+}
+function applyHash(){
+  const h=location.hash;
+  if(h==="#find"||h==="#db"||h==="#zukan"){showView(h.slice(1));return;}
+  if(!h.startsWith("#s="))return;
+  try{
+    const o=JSON.parse(decodeURIComponent(h.slice(3)));
+    if(o.q){A.q=o.q;$("q").value=o.q;$("qdb").value=o.q;}
+    for(const k of ["st","fm","pr","lv","ap","as","ju","sb","cb","fx"])if(o[k])o[k].forEach(v=>A[k].add(v));
+    if(o.y0)A.y0=o.y0;if(o.y1)A.y1=o.y1;
+    $("r0").value=A.y0;$("r1").value=A.y1;
+    if(o.fg)A.fg=true;if(o.gr)A.gr=true;if(o.fav)A.fav=true;
+    if(o.v)showView(o.v);
+  }catch{}
 }
 
 /* ================= KPI ================= */
@@ -559,7 +608,7 @@ function renderFbar(){
   if(A.fav)chips.push(["fav","","",`★スター（${FAV.size}件）`]);
   if(A.q)chips.push(["q","","検索",A.q]);
   const empty=`<span class="none">絞り込みなし — グラフの要素をタップすると全体が連動します</span>`;
-  const html=chips.length?chips.map(([f,k,pre,lab,red])=>`<span class="fchip ${red?'red':''}" data-f="${f}" data-k="${k}">${pre?`<b>${pre}</b>`:""}${lab} ✕</span>`).join("")+`<button class="frst rstA">リセット</button>`:empty;
+  const html=chips.length?chips.map(([f,k,pre,lab,red])=>`<span class="fchip ${red?'red':''}" data-f="${f}" data-k="${k}">${pre?`<b>${pre}</b>`:""}${lab} ✕</span>`).join("")+`<button class="frst rstA">リセット</button><button class="frst shr">🔗 リンク共有</button>`:empty;
   ["fbar","fbar2","fbar3"].forEach(id=>{
     const el=$(id);if(!el)return;
     el.innerHTML=html;
@@ -572,6 +621,12 @@ function renderFbar(){
       shown=60;renderAll();
     }));
     el.querySelectorAll(".rstA").forEach(b=>b.addEventListener("click",()=>{resetA();$("qdb").value="";renderAll();}));
+    el.querySelectorAll(".shr").forEach(b=>b.addEventListener("click",async()=>{
+      const url=location.origin+location.pathname+location.search+stateToHash();
+      try{await navigator.clipboard.writeText(url);b.textContent="✓ コピーしました";}
+      catch{prompt("このURLをコピーしてください",url);}
+      setTimeout(()=>{b.textContent="🔗 リンク共有";},1800);
+    }));
   });
 }
 
@@ -861,6 +916,79 @@ function renderAC(){
   }));
 }
 
+/* ================= applicant × fixation matrix ================= */
+function renderAF(){
+  const FXK=Object.keys(FXJA);
+  const tot=new Map();
+  D.fams.forEach(o=>{if(o.fx&&pass(o,"as,fx")&&o.as[0])tot.set(o.as[0],(tot.get(o.as[0])||0)+1);});
+  const top=[...tot.entries()].sort((a,b)=>b[1]-a[1]).slice(0,10);
+  const cnt=top.map(()=>FXK.map(()=>0));
+  D.fams.forEach(o=>{
+    if(!o.fx||!pass(o,"as,fx"))return;
+    const ti=top.findIndex(t=>t[0]===o.as[0]);if(ti<0)return;
+    const fi=FXK.indexOf(o.fx);if(fi>=0)cnt[ti][fi]++;
+  });
+  const max=Math.max(1,...cnt.flat());
+  let h=`<tr><th></th>${FXK.map(k=>`<th>${FXJA[k]}</th>`).join("")}<th></th></tr>`;
+  top.forEach(([nm,v],ti)=>{
+    h+=`<tr><td class="rl" data-as="${nm}" style="cursor:pointer;${A.as.has(nm)?'color:var(--red)':''}" title="${nm}">${shortNm(nm)}</td>`;
+    FXK.forEach((k,fi)=>{
+      const c=cnt[ti][fi],[bg,fg]=heat(c,max);
+      const sel=A.as.has(nm)&&A.fx.has(k);
+      h+=`<td class="cell ${sel?'sel':''}" data-as="${nm}" data-fx="${k}" style="background:${bg};color:${fg}" title="${shortNm(nm)} × ${FXJA[k]}: ${c}件">${c||''}</td>`;
+    });
+    h+=`<td class="tot">${v}</td></tr>`;
+  });
+  $("af").innerHTML=h;
+  $("af").querySelectorAll(".rl[data-as]").forEach(c=>c.addEventListener("click",()=>tgl(A.as,c.dataset.as)));
+  $("af").querySelectorAll(".cell").forEach(c=>c.addEventListener("click",()=>{
+    const nm=c.dataset.as,k=c.dataset.fx;
+    if(A.as.has(nm)&&A.fx.has(k)){A.as.delete(nm);A.fx.delete(k);}
+    else{A.as.clear();A.fx.clear();A.as.add(nm);A.fx.add(k);}
+    shown=60;shownDB=300;renderAll();
+  }));
+}
+
+/* ================= 会社カルテ（出願人を1社だけ選んだとき） ================= */
+function renderKarte(){
+  const el=$("karte");
+  if(A.as.size!==1){el.innerHTML="";return;}
+  const nm=[...A.as][0];
+  const mine=D.fams.filter(o=>o.as[0]===nm);
+  if(!mine.length){el.innerHTML="";return;}
+  const n=mine.length;
+  const yrs=mine.map(o=>o.yr).filter(Boolean);
+  const y0=Math.min(...yrs),y1=Math.max(...yrs);
+  const recent=(mine.filter(o=>(o.yr||0)>=2018).length/n*100).toFixed(0);
+  const avgJu=(mine.reduce((s,o)=>s+o.ju,0)/n).toFixed(1);
+  const grn=mine.filter(o=>o.gr).length;
+  // 特化係数の高い課題 top2
+  const corpN=D.fams.length;
+  const spec=D.PROBS.map(p=>{
+    const m=mine.filter(o=>o.pr.includes(p)).length/n;
+    const c=D.fams.filter(o=>o.pr.includes(p)).length/corpN;
+    return [p,c>0?m/c:0,mine.filter(o=>o.pr.includes(p)).length];
+  }).filter(x=>x[2]>=3).sort((a,b)=>b[1]-a[1]).slice(0,2);
+  // 固定方式の内訳
+  const fxc={};mine.forEach(o=>{if(o.fx)fxc[o.fx]=(fxc[o.fx]||0)+1;});
+  const fxs=Object.entries(fxc).sort((a,b)=>b[1]-a[1]).map(([k,v])=>`${FXJA[k]} ${v}`).join("・");
+  // 被引用トップ3
+  const cited=mine.filter(o=>o.ct).sort((a,b)=>b.ct-a.ct).slice(0,3);
+  el.innerHTML=`<div class="karte">
+    <div class="kh">会社カルテ　<b>${shortNm(nm)}</b><span style="color:#758D99;font-weight:400;font-size:10px">　${nm}（第一出願人ベース）</span></div>
+    <div class="kg">
+      <div><b>${n}</b><span>ファミリー</span></div>
+      <div><b>${y0}–${y1}</b><span>出願期間</span></div>
+      <div><b>${recent}%</b><span>2018年以降</span></div>
+      <div><b>${avgJu}</b><span>平均 国・地域数</span></div>
+      <div><b>${grn}</b><span>成立あり</span></div>
+    </div>
+    ${spec.length?`<div class="kl"><b>強い課題（全体比の特化度）</b>　${spec.map(([p,r,c])=>`${PLJA[p]} ×${r.toFixed(1)}（${c}件）`).join("　")}</div>`:""}
+    ${fxs?`<div class="kl"><b>固定方式の癖</b>　${fxs}</div>`:""}
+    ${cited.length?`<div class="kl"><b>被引用の多い特許</b>　${cited.map(o=>`<a href="https://patents.google.com/patent/${o.gp}/ja" target="_blank" rel="noopener">${pubDisp(o.rep)}</a>（被引用${o.ct}）`).join("　")}</div>`:""}
+  </div>`;
+}
+
 /* ================= jurisdiction lines ================= */
 const JUS=[["CN","#E3120B"],["JP","#006BA2"],["US","#0C0C0C"],["KR","#758D99"],["EP","#B7C6CF"]];
 function renderJU(){
@@ -980,6 +1108,7 @@ function renderList(){
   if(s==="old")cur.sort((a,b)=>(a.yr||9999)-(b.yr||9999));
   if(s==="ju")cur.sort((a,b)=>b.ju-a.ju||(b.yr||0)-(a.yr||0));
   if(s==="ct")cur.sort((a,b)=>(b.ct||0)-(a.ct||0)||(b.yr||0)-(a.yr||0));
+  if(s==="hot"){const hot=o=>(o.ct||0)/Math.max(2,2027-(o.yr||2027));cur.sort((a,b)=>hot(b)-hot(a)||(b.yr||0)-(a.yr||0));}
   $("cnt").textContent=`${cur.length} / ${D.fams.length} 件`;
   $("qsug").querySelectorAll("span").forEach(e=>e.classList.toggle("on",A.q===e.dataset.t));
   $("list").innerHTML=cur.slice(0,shown).map((o,i)=>rowHTML(o,i)).join("");
@@ -1084,6 +1213,24 @@ function renderDB(){
 }
 $("moredb").addEventListener("click",()=>{shownDB+=500;renderDB();});
 
+/* ---- CSV保存（今の絞り込み結果すべて・UTF-8 BOM） ---- */
+$("csvdl").addEventListener("click",()=>{
+  const list=D.fams.filter(o=>pass(o));
+  const esc=(v)=>{v=String(v??"");return /[",\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v;};
+  const head=["公報番号","GPリンク","出願人","優先年","日本語要約","名称","構造","形式","課題","解決手段","固定方式","複合方式","対象種別","適用機器","国・地域数","ファミリー公報数","被引用","成立","読めた情報","スター"];
+  const rows=list.map(o=>[
+    o.rep,`https://patents.google.com/patent/${o.gp}/ja`,(o.as||[]).join(" / "),o.yr||"",o.ja||"",o.t||"",
+    STJA[o.st]||"",FMJA[o.fm]||"",o.pr.map(p=>PLJA[p]).join("・"),o.lv.map(l=>LVJA[l]||l).join("・"),
+    o.fx?FXJA[o.fx]:"",o.cb?CBJA[o.cb]:"",o.sb?SBJA[o.sb]:"軸受本体",o.ap!=="general_unknown"?APJA[o.ap]:"",
+    o.ju,o.mm,o.ct||"",o.gr?"成立":"",["書誌のみ","要約まで","請求項まで","明細まで"][o.ev??1],FAV.has(o.id)?"★":""
+  ].map(esc).join(","));
+  const csv="﻿"+head.join(",")+"\n"+rows.join("\n");
+  const a=document.createElement("a");
+  a.href=URL.createObjectURL(new Blob([csv],{type:"text/csv"}));
+  a.download=`foil-patents_${D.meta.date}_${list.length}件.csv`;
+  a.click();URL.revokeObjectURL(a.href);
+});
+
 /* ---- 列ヘッダーフィルタ（Excel風ポップオーバー） ---- */
 let popSpec=null,popXY=null;
 function closePop(){popSpec=null;$("pop").style.display="none";}
@@ -1161,30 +1308,52 @@ function renderZ(){
     <div class="cp"><div class="no">${pubDisp(o.rep)}</div><div class="ja">${o.ja||o.t}</div><div class="mt">${o.as[0]?shortNm(o.as[0]):"—"} · ${o.yr||"—"}</div></div>
   </div>`).join("");
   $("morez").style.display=zlist.length>shownZ?"block":"none";
-  $("zgrid").querySelectorAll(".zc").forEach(e=>e.addEventListener("click",()=>{
-    const o=zlist.find(x=>x.id===e.dataset.id);
-    $("lbbox").innerHTML=`<img src="figs/${o.id}.png"><div class="cap"><b>${pubDisp(o.rep)}</b>　${o.ja||o.t}<br>
-      <span style="color:#758D99;font-size:10.5px">${o.as[0]||""} · ${o.yr||""}</span>
-      ${o.c1?`<div style="font-size:11px;line-height:1.7;margin-top:6px;background:#F5F4EF;padding:7px 9px"><span style="font-size:9px;color:#758D99;font-weight:700">請求項1の骨子（機械要約）</span><br>${o.c1}</div>`:""}<br>
-      <a href="https://patents.google.com/patent/${o.gp}/ja" target="_blank" rel="noopener">Google Patents で原文を見る（${o.gp}）→</a></div>`;
-    $("lb").classList.add("on");
-  }));
+  $("zgrid").querySelectorAll(".zc").forEach(e=>e.addEventListener("click",()=>openLb(zlist.findIndex(x=>x.id===e.dataset.id))));
 }
+/* ライトボックス: 左右スワイプ・‹›ボタン・矢印キーで次の特許へ（グリッドの閲覧は従来どおり） */
+let zIdx=-1;
+function openLb(i){
+  if(!zlist.length)return;
+  zIdx=(i+zlist.length)%zlist.length;
+  const o=zlist[zIdx];
+  $("lbbox").innerHTML=`<img src="figs/${o.id}.png"><div class="cap">
+      <span style="float:right;color:#758D99;font-size:10px;font-family:var(--mono)">${zIdx+1} / ${zlist.length}</span>
+      <b>${pubDisp(o.rep)}</b>　${o.ja||o.t}<br>
+      <span style="color:#758D99;font-size:10.5px">${o.as[0]||""} · ${o.yr||""}${o.fx?` · 固定: ${FXJA[o.fx]}`:""}</span>
+      ${o.c1?`<div style="font-size:11px;line-height:1.7;margin-top:6px;background:#F5F4EF;padding:7px 9px"><span style="font-size:9px;color:#758D99;font-weight:700">請求項1の骨子（機械要約）</span><br>${o.c1}</div>`:""}<br>
+      <a href="https://patents.google.com/patent/${o.gp}/ja" target="_blank" rel="noopener">Google Patents で原文を見る（${o.gp}）→</a><span class="favb2 ${FAV.has(o.id)?'on':''}" data-fid="${o.id}">${FAV.has(o.id)?"★ スター解除":"☆ スターに追加"}</span></div>`;
+  $("lbbox").querySelectorAll(".favb2").forEach(e=>e.addEventListener("click",ev=>{ev.stopPropagation();tglFav(e.dataset.fid);}));
+  $("lb").classList.add("on");
+}
+$("lbprev").addEventListener("click",e=>{e.stopPropagation();openLb(zIdx-1);});
+$("lbnext").addEventListener("click",e=>{e.stopPropagation();openLb(zIdx+1);});
+let touchX=null;
+$("lb").addEventListener("touchstart",e=>{touchX=e.touches[0].clientX;},{passive:true});
+$("lb").addEventListener("touchend",e=>{
+  if(touchX===null)return;
+  const dx=e.changedTouches[0].clientX-touchX;touchX=null;
+  if(Math.abs(dx)>45)openLb(zIdx+(dx<0?1:-1));
+},{passive:true});
+document.addEventListener("keydown",e=>{
+  if(!$("lb").classList.contains("on"))return;
+  if(e.key==="ArrowLeft")openLb(zIdx-1);
+  else if(e.key==="ArrowRight")openLb(zIdx+1);
+  else if(e.key==="Escape")$("lb").classList.remove("on");
+});
 $("lbx").addEventListener("click",()=>$("lb").classList.remove("on"));
 $("lb").addEventListener("click",e=>{if(e.target===$("lb"))$("lb").classList.remove("on");});
 $("morez").addEventListener("click",()=>{shownZ+=200;renderZ();});
 
 /* ================= render all ================= */
 function renderAll(){
-  renderKPI();renderFbar();renderYear();renderPM();renderHM();renderMX();renderSK();renderAT();renderAC();renderJU();
+  renderKPI();renderFbar();renderKarte();renderYear();renderPM();renderHM();renderMX();renderSK();renderAT();renderAC();renderAF();renderJU();
   renderSt();renderFx();renderCb();renderAp();renderAs();renderStk();renderLife();
   syncFindChips();renderList();renderDB();renderZ();
   if(popSpec)renderPop();
+  syncHash();
 }
+applyHash();
 renderAll();
-if(location.hash==="#find")showView("find");
-if(location.hash==="#db")showView("db");
-if(location.hash==="#zukan")showView("zukan");
 </script>
 </body>
 </html>
