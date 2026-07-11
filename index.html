@@ -369,6 +369,11 @@ mark{background:#FFE28A;color:inherit;padding:0 1px;border-radius:2px}
       </div>
     </div>
 
+    <div class="hr"></div>
+    <h2>設計相場 — 明細に書かれた寸法・性能のレンジ</h2>
+    <div class="cs">各線＝1ファミリーの明細に記載されたレンジ（機械抽出・単位換算済み）。<b style="color:#8A9199">灰＝全体</b>、<b style="color:var(--red)">赤＝今の絞り込み</b>。破線＝全体の中央値。線をタップで原文へ。軸は対数</div>
+    <div id="norm"></div>
+
     <button class="more" id="tolist">この条件の特許一覧を見る →</button>
     <div class="note"><b>読みどころ</b>　2020年代は882ファミリーと史上最多ペース。首位は空調のGree、NTN・IHIの日本勢が続き、燃料電池・チラーが波を作る。出願は荷重容量と固定・組立に集中。フォイルの固定方式では差込・タブ係止が最多で、近年は燃料電池向けの非バンプ型（ばね支持）や磁気軸受との併用が目立つ。</div>
     <div class="src">出典: Google Patents Public Data（BigQuery）。分類は要約ベースの一次判定（原文確認前提）。件数はファミリー単位</div>
@@ -1036,6 +1041,70 @@ function renderKarte(){
   $("tocorp").addEventListener("click",()=>{corpSel=nm;showView("corp");renderCorp();});
 }
 
+/* ================= 設計相場（L3数値の正規化ストリップ図） ================= */
+const NORMDEF=[
+  {k:"foil_thk",l:"フォイル厚",u:"μm",log:true},
+  {k:"bump_h",l:"バンプ高さ",u:"μm",log:true},
+  {k:"clearance",l:"軸受すきま",u:"μm",log:true},
+  {k:"coat_thk",l:"被膜厚",u:"μm",log:true},
+  {k:"dia",l:"軸受径",u:"mm",log:true},
+  {k:"rpm",l:"回転数",u:"rpm",log:true},
+  {k:"temp",l:"温度（使用・耐熱）",u:"℃",log:false},
+];
+const fmtN=(v)=>v>=1e6?(v/1e6)+"M":v>=1000?(+(v/1000).toPrecision(3))+"k":(+v.toPrecision(3));
+const filtersOn=()=>!!(A.q||A.st.size||A.fm.size||A.pr.size||A.lv.size||A.ap.size||A.as.size||A.ju.size||A.sb.size||A.cb.size||A.fx.size||A.fg||A.gr||A.fav||A.y0>MINY||A.y1<MAXY);
+function renderNorm(){
+  const el=$("norm");if(!el)return;
+  const fOn=filtersOn();let html="";
+  for(const d of NORMDEF){
+    const rows=[];
+    D.fams.forEach(o=>{(o.px||[]).forEach(p=>{if(p.k===d.k)rows.push({o,lo:p.lo,hi:p.hi});});});
+    if(rows.length<6)continue;
+    const min=Math.min(...rows.map(r=>r.lo)),max=Math.max(...rows.map(r=>r.hi));
+    const W=820,H=68,x0=6,x1=W-6,y0=10,y1=H-20;
+    const lmin=d.log?Math.log10(min):min,lmax=d.log?Math.log10(max):max;
+    const X=(v)=>x0+((d.log?Math.log10(v):v)-lmin)/Math.max(1e-9,lmax-lmin)*(x1-x0);
+    let g="";
+    // 目盛
+    const ticks=[];
+    if(d.log){for(let e=Math.floor(Math.log10(min));e<=Math.ceil(Math.log10(max));e++)for(const m of [1,2,5]){const t=m*Math.pow(10,e);if(t>=min&&t<=max)ticks.push(t);}}
+    else{const step=Math.pow(10,Math.floor(Math.log10(max-min)))/2;for(let t=Math.ceil(min/step)*step;t<=max;t+=step)ticks.push(t);}
+    for(const t of ticks)g+=`<line x1="${X(t).toFixed(1)}" y1="${y0}" x2="${X(t).toFixed(1)}" y2="${y1}" stroke="#EEECE5"/><text x="${X(t).toFixed(1)}" y="${H-7}" font-size="8.5" fill="#758D99" text-anchor="middle" font-family="IBM Plex Mono">${fmtN(t)}</text>`;
+    // 同一レンジは1本に束ね、太さと「×n」バッジで頻度を表す
+    const lane=(id)=>{let h=0;for(const c of id)h=(h*31+c.charCodeAt(0))%9973;return y0+5+(h%(y1-y0-10));};
+    const grp=new Map();
+    for(const r of rows){
+      const isHot=fOn&&pass(r.o);
+      const key=`${r.lo}|${r.hi}|${isHot?1:0}`;
+      if(!grp.has(key))grp.set(key,{lo:r.lo,hi:r.hi,hot:isHot,items:[]});
+      grp.get(key).items.push(r.o);
+    }
+    const cold=[],hot=[];
+    for(const G of grp.values()){
+      const n=G.items.length,o0=G.items[0];
+      const y=lane(o0.id),a=X(G.lo),b=Math.max(X(G.hi),X(G.lo)+2.5);
+      const w=Math.min(8,2+Math.log2(n)*1.5);
+      const names=[...new Set(G.items.map(o=>o.as[0]?shortNm(o.as[0]):"—"))].slice(0,3).join("・");
+      const seg=`<line x1="${a.toFixed(1)}" y1="${y}" x2="${b.toFixed(1)}" y2="${y}" stroke="${G.hot?"#E3120B":"#9AA4AC"}" stroke-width="${w.toFixed(1)}" stroke-linecap="round" opacity="${G.hot?0.85:0.4}" style="cursor:pointer" data-gp="${o0.gp}"><title>${fmtN(G.lo)}${G.lo!==G.hi?"–"+fmtN(G.hi):""} ${d.u} · ${n}件（${names}${G.items.length>3?" ほか":""}）</title></line>`
+        +(n>=4?`<text x="${(b+4).toFixed(1)}" y="${y+3}" font-size="9" fill="${G.hot?"#E3120B":"#758D99"}" font-family="IBM Plex Mono" font-weight="600">×${n}</text>`:"");
+      (G.hot?hot:cold).push(seg);
+    }
+    g+=cold.join("")+hot.join("");
+    // 全体中央値（レンジ中点の中央値）
+    const mids=rows.map(r=>(r.lo+r.hi)/2).sort((a,b)=>a-b);
+    const med=mids[Math.floor(mids.length/2)];
+    g+=`<line x1="${X(med).toFixed(1)}" y1="${y0-3}" x2="${X(med).toFixed(1)}" y2="${y1+2}" stroke="#0C0C0C" stroke-width="1.4" stroke-dasharray="3 2"/>`;
+    const anchor=X(med)>W*0.72?`text-anchor="end" x="${(X(med)-5).toFixed(1)}"`:`x="${(X(med)+5).toFixed(1)}"`;
+    g+=`<text ${anchor} y="${y0+5}" font-size="9" fill="#0C0C0C" font-family="IBM Plex Mono" font-weight="600">中央値 ${fmtN(med)}${d.u}</text>`;
+    const nh=fOn?rows.filter(r=>pass(r.o)).length:0;
+    html+=`<div style="display:grid;grid-template-columns:104px 1fr;gap:10px;align-items:center;padding:5px 0;border-top:1px solid #F0EEE7">
+      <span style="font-size:11px;line-height:1.5"><b>${d.l}</b><br><span style="color:#758D99;font-size:9px;font-family:var(--mono)">${rows.length}件${fOn?` · 絞込${nh}`:""}</span></span>
+      <svg viewBox="0 0 ${W} ${H}" style="width:100%">${g}</svg></div>`;
+  }
+  el.innerHTML=html;
+  el.querySelectorAll("line[data-gp]").forEach(e=>e.addEventListener("click",()=>window.open(`https://patents.google.com/patent/${e.dataset.gp}/ja`,"_blank")));
+}
+
 /* ================= 企業レポート ================= */
 let corpSel=null;
 function majors(){
@@ -1509,7 +1578,7 @@ $("morez").addEventListener("click",()=>{shownZ+=200;renderZ();});
 /* ================= render all ================= */
 function renderAll(){
   renderKPI();renderFbar();renderKarte();renderYear();renderPM();renderHM();renderMX();renderSK();renderAT();renderAC();renderAF();renderJU();
-  renderSt();renderFx();renderCb();renderAp();renderAs();renderStk();renderLife();
+  renderSt();renderFx();renderCb();renderAp();renderAs();renderStk();renderLife();renderNorm();
   syncFindChips();renderList();renderDB();renderZ();renderCorp();
   if(popSpec)renderPop();
   syncHash();
