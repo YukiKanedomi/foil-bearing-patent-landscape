@@ -371,7 +371,7 @@ mark{background:#FFE28A;color:inherit;padding:0 1px;border-radius:2px}
 
     <div class="hr"></div>
     <h2>設計相場 — 明細に書かれた寸法・性能のレンジ</h2>
-    <div class="cs">各線＝1ファミリーの明細に記載されたレンジ（機械抽出・単位換算済み）。<b style="color:#8A9199">灰＝全体</b>、<b style="color:var(--red)">赤＝今の絞り込み</b>。破線＝全体の中央値。線をタップで原文へ。軸は対数</div>
+    <div class="cs">各線＝1ファミリーの明細に記載されたレンジ（機械抽出・単位換算済み）。<b style="color:#8A9199">灰＝全体</b>、<b style="color:var(--red)">赤＝今の絞り込み</b>。破線＝全体の中央値。線をタップで原文へ。軸は対数。<br>フォイル厚は<b>被膜を除いた素材の板厚</b>（トップ/バック/中間の区別なく集計・被膜厚は別段）。回転数は軸径に依存するため、同一特許に両方の記載がある場合のみ<b>DN値</b>と<b>すきま／軸径比</b>に無次元・正規化して併記</div>
     <div id="norm"></div>
 
     <button class="more" id="tolist">この条件の特許一覧を見る →</button>
@@ -1043,12 +1043,14 @@ function renderKarte(){
 
 /* ================= 設計相場（L3数値の正規化ストリップ図） ================= */
 const NORMDEF=[
-  {k:"foil_thk",l:"フォイル厚",u:"μm",log:true},
+  {k:"foil_thk",l:"フォイル厚（素材板厚）",u:"μm",log:true},
   {k:"bump_h",l:"バンプ高さ",u:"μm",log:true},
   {k:"clearance",l:"軸受すきま",u:"μm",log:true},
+  {k:"clr_ratio",l:"すきま／軸径比",u:"×10⁻³",log:true},
   {k:"coat_thk",l:"被膜厚",u:"μm",log:true},
   {k:"dia",l:"軸受径",u:"mm",log:true},
   {k:"rpm",l:"回転数",u:"rpm",log:true},
+  {k:"dn",l:"DN値（軸径×回転数）",u:"mm·rpm",log:true},
   {k:"temp",l:"温度（使用・耐熱）",u:"℃",log:false},
 ];
 const fmtN=(v)=>v>=1e6?(v/1e6)+"M":v>=1000?(+(v/1000).toPrecision(3))+"k":(+v.toPrecision(3));
