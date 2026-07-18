@@ -1399,8 +1399,14 @@ function corpHTML(nm){
   <div class="cs">下の集計値（特化係数・年代分布・被引用）に基づく分析コメント。<b>分析時点: ${D.corpTx.edition} のデータ</b>による評価で、出願から公開まで約1.5年かかるため直近の動きは実際より少なく見えます。事実は各特許の原文でご確認ください</div>
   <div class="anote">
     <p class="al">${tx.lead}</p>
-    <p><b>強みと薄い領域</b>　${tx.sw}</p>
-    <p><b>読み取れること</b>　${tx.read}</p>
+    ${tx.hist?`<p><b>ポートフォリオの成り立ち</b>　${tx.hist}</p>`:""}
+    ${tx.strong?`<p><b>強み</b>　${tx.strong}</p>`:""}
+    ${tx.weak?`<p><b>薄い領域</b>　${tx.weak}</p>`:""}
+    ${tx.core?`<p><b>中核特許</b>　${tx.core}</p>`:""}
+    ${tx.recent?`<p><b>直近の動き</b>　${tx.recent}</p>`:""}
+    ${tx.pos?`<p><b>業界内の位置づけ</b>　${tx.pos}</p>`:""}
+    ${tx.sw?`<p><b>強みと薄い領域</b>　${tx.sw}</p>`:""}
+    ${tx.read?`<p><b>読み取れること</b>　${tx.read}</p>`:""}
   </div>`)(D.corpTx.tx[nm]):""}
   <h2 style="margin-top:18px">出願の推移</h2>
   ${corpYearSVG(mine)}
