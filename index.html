@@ -74,6 +74,18 @@ table{border-collapse:collapse}
 .mx .rl{font-size:9.5px;text-align:right;padding-right:6px;font-weight:700;white-space:nowrap}
 .mx .cell{height:22px;text-align:center;font-size:8.5px;font-family:var(--mono);border:1px solid #fff;cursor:pointer;min-width:20px;transition:background .3s}
 .mx .cell.sel{outline:2px solid var(--ink);outline-offset:-2px}
+.mgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:8px;margin:10px 0}
+.mcard{border:1px solid var(--g2);border-top:2px solid var(--red);background:#fff;padding:10px 12px;cursor:pointer}
+.mcard:hover{border-color:var(--ink)}
+.mcard .mn{font-weight:800;font-size:13px}
+.mcard .ms{font-size:10.5px;color:#5F5F5F;margin-top:3px;line-height:1.5}
+.mcard .mc{font-family:var(--mono);font-size:10px;color:#758D99;margin-top:5px}
+.mbar{display:flex;align-items:center;gap:7px;margin:3px 0;cursor:pointer}
+.mbar .ml{width:110px;font-size:10.5px;text-align:right;font-weight:700;flex:none}
+.mbar .mt2{height:13px;background:var(--red);flex:none}
+.mbar .mv{font-family:var(--mono);font-size:9.5px;color:#758D99}
+.mbar:hover .ml{color:var(--red)}
+.mback{font-size:11px;color:var(--red);cursor:pointer;font-weight:700;margin-bottom:8px;display:inline-block}
 /* assignee matrix */
 .st{display:grid;grid-template-columns:104px 1fr 34px;align-items:center;gap:8px;margin:4px 0;cursor:pointer}
 .st .l{font-size:10px;text-align:right;font-family:var(--mono);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -264,6 +276,7 @@ mark{background:#FFE28A;color:inherit;padding:0 1px;border-radius:2px}
   <div class="tabs">
     <button class="tab on" data-v="dash">ダッシュボード</button>
     <button class="tab" data-v="geno">組み合わせ</button>
+    <button class="tab" data-v="manual">症状マニュアル</button>
     <button class="tab" data-v="find">特許検索</button>
     <button class="tab" data-v="db">一覧表</button>
     <button class="tab" data-v="corp">企業レポート</button>
@@ -393,6 +406,15 @@ mark{background:#FFE28A;color:inherit;padding:0 1px;border-radius:2px}
     <div class="src">出典: Google Patents Public Data（BigQuery）＋Google Patents個別ページ。件数はファミリー単位</div>
   </section>
 
+  <!-- ============ MANUAL（症状から引くフィールドマニュアル） ============ -->
+  <section class="view" id="v-manual">
+    <h2>症状マニュアル — 困りごとから特許の系譜を引く</h2>
+    <div class="cs">「どんな症状に困っているか」を入口に、歴代の特許がその症状をどう解いてきたかをたどる読みものです。課題タグは公報の課題・目的の記述からの<b>逐語引用つき</b>で全数を付け直したもの（根拠は各特許の詳細パネルに表示）。集計は収載全体ベースで、他タブの絞り込みとは連動しません</div>
+    <div id="manwrap"></div>
+    <div class="note"><b>読み方の注意</b>　「定石」の並びは収載特許の件数分布であり、優劣の評価ではありません。課題が公報に明記されない特許（構造説明のみの要約など）は集計に入りません。物理の説明は一般的な教科書レベルの整理です。</div>
+    <div class="src">出典: Google Patents Public Data（BigQuery）＋Google Patents個別ページ。件数はファミリー単位</div>
+  </section>
+
   <!-- ============ FIND ============ -->
   <section class="view" id="v-find"><div class="findwrap">
     <input class="sbox" id="q" placeholder='検索：番号・出願人・技術語（"完全一致"・-除外語 も使えます）'>
@@ -448,6 +470,7 @@ mark{background:#FFE28A;color:inherit;padding:0 1px;border-radius:2px}
       <p><b>分類タグと要約</b>　構造・課題・解決手段・適用機器のタグと日本語1行要約は、発明の名称と要約（判定できない場合はクレーム冒頭も）をもとにした機械判定の一次情報です。コア特許には、公報のクレームから抽出した骨子（請求項1を中心に、主要な従属項の特徴を含むことがあります）・被引用数（取得時点のスナップショット）・材質/被膜/設計数値も付与しています。いずれも原文確認を前提にお使いください。</p>
       <p><b>「読めた情報」＝分類の根拠にできた情報量</b>　機械分類の信頼度は「どこまで原文を読めたか」で決まるため、各ファミリーに <b>明細まで</b>（明細本文のテキストを取得済み）／<b>請求項まで</b>（請求項テキストあり）／<b>要約まで</b>（発明の名称と要約のみ）／<b>書誌のみ</b>（テキストが公開されておらずスキャン画像だけ＝内容は分類できない）の4段階を付け、詳細パネルに表示しています。古い公報（1980年以前の独・旧ソ連・日本の実用新案など）はテキスト自体が存在しないことが多く、この場合は正直に「書誌のみ」とし、構造・課題の判定は行っていません。なお Google Patents へのリンクは、同じファミリーの中から<b>図と本文が表示できる公報</b>（日本語公報を優先）に向けています。スキャン画像しか無いページに当たった場合は、ページ内の「Worldwide applications」から別の国の公報に切り替えると図が見られることがあります。</p>
       <p><b>「構造」＝支持構造で分けています</b>　トップフォイルの下でフォイルを弾性的に支える<b>支持構造</b>の種類で分類しています。<b>バンプ</b>（波状の山＝最も一般的）／<b>リーフ</b>（多葉・重ね葉）／<b>テンション</b>（張力で巻き付け）に加え、近年の非バンプ型として <b>金属メッシュ</b>（ワイヤメッシュのパッドで支持）／<b>ばね支持</b>（コイル・板・皿ばねなどの独立ばね部材、「spring foil」層、片持ちフォイル片。燃料電池向けで各社が採用）を立てています。スプリング式と片持ち（カンチレバー）式は文献上の呼び分けが揺れていて、要約の記述だけでは安定して区別できないため、<b>あえて「ばね支持」1本にまとめています</b>（細分しないのは誤分類を避けるためです）。支持構造のラベルは<b>バンプ・リーフを含む全て</b>について、名称・要約・請求項からの<b>逐語引用が取れた場合にだけ</b>付けています（2026-07-11の総点検で全数をこの基準に統一。引用が公報原文に実在するかを機械照合で検査済みで、引用は各特許の詳細に表示）。本文に支持構造の記載がない出願は、たとえフォイル軸受の特許でも正直に「判定不能」としています。</p>
+      <p><b>「課題」タグは目的節からの逐語引用つき</b>　各特許が「何を解決しようとしているか」の課題タグは、2026-07-18に全数を付け直しました。判定の根拠は公報の課題・目的の記述（明細の目的節「〜を目的とする」等を優先）で、<b>付けた課題すべてに原文からの逐語引用</b>を要求し、引用が原文に実在するかを機械照合しています（引用は詳細パネルに表示）。背景に書かれた従来技術の課題と発明自身の課題を区別し、課題が明記されない特許（構造説明だけの要約など）には正直にタグを付けていません。付け直し後に独立の再判定（ブラインド監査92件）を行い、完全一致63%・部分一致まで含め90%を確認しています（課題は1件に複数付くため部分ずれは解釈幅の範囲）。</p>
       <p><b>対象種別・複合方式・固定方式のタグ</b>　<b>対象種別</b>は発明の主対象（軸受本体／搭載システム／製造方法／試験・評価／周辺技術）で、明記のないものは軸受本体です。<b>複合方式</b>はフォイル軸受を磁気・静圧・チルトパッド・転がり軸受などと同じロータで意図的に併用する特許に付けています。<b>固定方式</b>は「トップ/バンプフォイルをハウジング・スリーブへどう留めるか」で、スポット溶接／差込・タブ係止／キー・ピン／リベット・ねじ／接着・ろう付け／自己保持（固定部なし）に分けています。複合方式（磁気等）と固定方式は、<b>請求項・明細からの逐語引用が取れた場合にだけ</b>付け、引用が原文に実在するかを機械照合しています（引用は詳細パネルに表示）。固定方式は請求項に方式まで書かれない特許も多く、その場合は正直に未タグとしています。</p>
       <p><b>出願人の名寄せ</b>　同じ出願人が別名で二重にカウントされるのを防ぐため、次の4種類のゆれを統合しています。<b>① 表記・分かち書き・綴りのゆれ</b>（例: 西安交通大学の「XI AN」と「XIAN」、Capstone の綴り誤記「TRUBINE」）／<b>② 社名変更・合併・スピンオフ</b>（例: 石川島播磨→IHI、光洋精工→JTEKT、UTC→Raytheon→RTX、Honeywell からの Garrett スピンオフ）／<b>③ 子会社を親会社へ集約</b>（例: 三菱重工エンジン＆ターボチャージャ→三菱重工、Midea の空調子会社群→Midea グループ、珠海格力の子会社→Gree、Bosch の子会社→Bosch）／<b>④ 機械翻訳による英字化のゆれ</b>（例: 珠海格力が「PEARL HAIGE」と英訳される。原文で確認）。個人名義を会社へ寄せる推測的な統合はしていません。主な統合は次のとおりです（中国系の長い社名など、末尾に拾いきれないゆれは残るため<b>下限の網羅</b>とお考えください）。</p>
       <table class="ctab">
@@ -620,6 +643,7 @@ function stateToHash(){
   if(curView!=="dash")o.v=curView;
   if(curView==="corp"&&corpSel)o.c=corpSel;
   if(gx!=="st")o.gx=gx;if(gy!=="fx")o.gy=gy;
+  if(curView==="manual"&&manSym)o.ms=manSym;
   return Object.keys(o).length?"#s="+encodeURIComponent(JSON.stringify(o)):"";
 }
 function syncHash(){
@@ -638,6 +662,7 @@ function applyHash(){
     if(o.fg)A.fg=true;if(o.gr)A.gr=true;if(o.fav)A.fav=true;
     if(o.c)corpSel=o.c;
     if(o.gx&&GAX[o.gx])gx=o.gx;if(o.gy&&GAX[o.gy])gy=o.gy;
+    if(o.ms&&SYMP[o.ms])manSym=o.ms;
     if(o.v)showView(o.v);
   }catch{}
 }
@@ -864,6 +889,92 @@ function renderGeno(){
   $("tolist3").textContent=`この条件の特許一覧を見る（${cur.length.toLocaleString()}件）→`;
 }
 $("tolist3").addEventListener("click",()=>showView("find"));
+
+/* ================= 症状マニュアル ================= */
+const SYMP={
+  startstop_wear:{nm:"起動停止で削れる",sym:"起動・停止のたびに軸とフォイルがこすれて摩耗し、被膜が尽きると急に壊れる。起動トルクが大きい",
+    phys:"浮上する前の低速域では空気膜がまだ立たず、軸とトップフォイルが直接こすれる（境界潤滑）。摩耗の総量は起動停止の回数で決まり、被膜の寿命がそのまま軸受の寿命になる。",
+    trade:"被膜を厚くすれば寿命は延びるが数μmのすきまを食う。予圧を弱めれば起動トルクは減るが安定性が犠牲になる。"},
+  stability_whirl:{nm:"高速で振れ回る",sym:"ある回転数を超えると回転数の半分近い周波数で軸が振れ回る（サブシンクロナス振動・ホワール）",
+    phys:"気膜の交差剛性が引き起こす自励振動で、回転数を上げるほど出やすい。フォイル軸受では接触部の摩擦（クーロン減衰）がこれを食い止める主役になる。",
+    trade:"予圧や摩擦を増やすと安定余裕は増えるが、起動トルク・摩耗・公差過敏が悪化する。"},
+  load_capacity:{nm:"荷重を支えきれない",sym:"高荷重や大径化で空気膜が破れ、接触・焼付きに至る。浮上できる荷重の上限が足りない",
+    phys:"膜圧は楔形すきまと周速で決まり、最小膜厚は軸受端に出やすい。バンプ剛性の分布・端部の側方漏れ・多層化が効かせ所になる。",
+    trade:"剛性を上げれば荷重容量は伸びるが、追従性と減衰が犠牲になりやすい。"},
+  damping:{nm:"振動が収まらない",sym:"通過共振や外乱後の振動がなかなか減衰しない。逆に減衰過多で応答が鈍いことも",
+    phys:"フォイル軸受の減衰は気膜そのものより、フォイル同士・フォイルとハウジングの接触面で起きるマイクロスリップ（クーロン減衰）が主役。積層や中間フォイルで摩擦面を仕込む。",
+    trade:"摩擦を増やすと減衰は稼げるが、ヒステリシスが出て小振幅で効かず、公差にも敏感になる。"},
+  thermal:{nm:"熱で変形・焼付く",sym:"高速・高負荷で発熱し、フォイルが熱変形（サーマルクラウニング）して膜厚が乱れ、最悪焼き付く",
+    phys:"膜のせん断発熱は周速の2乗で効く。熱は薄いフォイルに逃げ場がなく、冷却流路の設計と熱変形を見込んだ形状が定石になる。",
+    trade:"冷却流を増やすと熱は逃げるが、系統の圧損・複雑さが増す。"},
+  misalignment_conformity:{nm:"傾き・たわみに追従できない",sym:"軸の傾きや熱たわみで片当たりし、端部だけが摩耗する",
+    phys:"最小膜厚は軸受端に出やすく、ミスアライメントはそれを直撃する。分割パッド・柔軟支持・球面座など「逃げ」を作る構造が並ぶ。",trade:""},
+  tolerance_robust:{nm:"公差に過敏",sym:"数μmの製作ばらつきで性能が別物になり、歩留まりが上がらない",
+    phys:"すきま数十μmの世界では公差がそのまま性能分布になる。フォイルの弾性で吸収するのが本来の強みで、その仕立て方が発明の中心になる。",trade:""},
+  assembly_fixation:{nm:"組立・固定が難しい",sym:"部品が多く組立が煩雑。溶接の歪みや固定部のガタが性能を壊す",
+    phys:"トップ/バンプフォイルの固定はスポット溶接・差込タブ・キー等が定番だが、固定端の作りが剛性分布と減衰を左右するため、単なる工作性の話では済まない。",
+    trade:"溶接レス・一体化は組立性を上げるが、固定の確実さや剛性の自由度とトレードオフになる。"},
+  noise:{nm:"うるさい",sym:"騒音が問題になる（家電・空調用途で顕在化しやすい）",phys:"振動・流体音・接触音が源で、安定性や減衰の課題と根がつながっていることが多い。",trade:""},
+  other:{nm:"その他の困りごと",sym:"双方向回転に対応できない・コスト・専用試験手段の欠如など、定番分類の外にある明示的な課題",phys:"",trade:""}
+};
+const MORDER=["startstop_wear","stability_whirl","load_capacity","damping","thermal","misalignment_conformity","tolerance_robust","assembly_fixation","noise","other"];
+let manSym=null;
+function renderManual(){
+  const w=$("manwrap");if(!w)return;
+  const esc=escH;
+  if(!manSym){
+    const counts={};D.fams.forEach(o=>(o.pr||[]).forEach(p=>counts[p]=(counts[p]||0)+1));
+    w.innerHTML=`<div class="mgrid">`+MORDER.map(k=>{
+      const s=SYMP[k];return`<div class="mcard" data-ms="${k}"><div class="mn">${s.nm}</div><div class="ms">${esc(s.sym)}</div><div class="mc">${(counts[k]||0).toLocaleString()} ファミリー</div></div>`;
+    }).join("")+`</div>`;
+    w.querySelectorAll(".mcard").forEach(c=>c.addEventListener("click",()=>{manSym=c.dataset.ms;renderManual();syncHash();window.scrollTo({top:0});}));
+    return;
+  }
+  const k=manSym,s=SYMP[k];
+  const mine=D.fams.filter(o=>(o.pr||[]).includes(k));
+  const bars=(get,lab,f,vocabOnly)=>{
+    const t=new Map();
+    mine.forEach(o=>{const vs=get(o);(Array.isArray(vs)?vs:vs?[vs]:[]).forEach(v=>{if(vocabOnly&&!lab[v])return;t.set(v,(t.get(v)||0)+1);});});
+    const top=[...t.entries()].sort((a,b)=>b[1]-a[1]).slice(0,8);
+    const mx=Math.max(1,...top.map(e=>e[1]));
+    return top.map(([v,n])=>`<div class="mbar" data-f="${f}" data-k="${v}"><span class="ml">${lab[v]||v}</span><i class="mt2" style="width:${(n/mx*160).toFixed(0)}px"></i><span class="mv">${n}</span></div>`).join("")||`<div style="font-size:10.5px;color:#758D99">該当タグの件数が足りません</div>`;
+  };
+  const cited=mine.filter(o=>o.ct).sort((a,b)=>b.ct-a.ct).slice(0,6);
+  const hot=o=>(o.ct||0)/Math.max(2,2027-(o.yr||2027));
+  const cIds=new Set(cited.map(o=>o.id));
+  const recent=mine.filter(o=>(o.yr||0)>=2019&&!cIds.has(o.id)).sort((a,b)=>hot(b)-hot(a)).slice(0,3);
+  const dec=new Map();mine.forEach(o=>{if(o.yr)dec.set(Math.floor(o.yr/10)*10,(dec.get(Math.floor(o.yr/10)*10)||0)+1);});
+  const peak=[...dec.entries()].sort((a,b)=>b[1]-a[1])[0];
+  w.innerHTML=`
+    <span class="mback" id="mback">← 症状一覧へ戻る</span>
+    <h2 style="margin-top:2px">${s.nm} <span style="font-weight:400;font-size:12px;color:#758D99">${PLJA[k]||(k==="noise"?"騒音":"その他")}・${mine.length.toLocaleString()}ファミリー${peak?`・最多は${peak[0]}年代`:""}</span></h2>
+    <div class="cs" style="max-width:720px">${esc(s.sym)}${s.phys?`<br><b>物理:</b> ${esc(s.phys)}`:""}${s.trade?`<br><b>トレードオフ:</b> ${esc(s.trade)}`:""}</div>
+    <div class="dgrid" style="margin-top:8px">
+      <div>
+        <h2 style="font-size:13px">定石 — どんな手段で解いてきたか</h2>
+        <div class="cs">バーをタップ→この症状×手段で特許検索へ</div>${bars(o=>o.lv,LVJA,"lv",true)}
+        <div class="hr"></div>
+        <h2 style="font-size:13px">支持構造との関係</h2>
+        <div class="cs">構造を判定できた特許のみ</div>${bars(o=>o.st==="unknown"?null:o.st,STJA,"st",true)}
+        <div class="hr"></div>
+        <h2 style="font-size:13px">どの機器で問題になるか</h2>${bars(o=>(o.ap&&o.ap!=="general_unknown")?o.ap:null,APJA,"ap",true)}
+      </div>
+      <div>
+        <h2 style="font-size:13px">よく引かれる特許（被引用順）</h2>
+        ${cited.map(o=>patRow(o,`・被引用${o.ct}`)).join("")||`<div style="font-size:10.5px;color:#758D99">被引用データのある特許がありません</div>`}
+        ${recent.length?`<h2 style="font-size:13px;margin-top:12px">近年の動き（2019年以降）</h2>${recent.map(o=>patRow(o)).join("")}`:""}
+      </div>
+    </div>
+    <button class="more" id="mtofind">この症状の特許一覧を見る（${mine.length.toLocaleString()}件）→</button>`;
+  $("mback").addEventListener("click",()=>{manSym=null;renderManual();syncHash();});
+  $("mtofind").addEventListener("click",()=>{resetA();A.pr.add(k);showView("find");renderAll();});
+  w.querySelectorAll(".mbar").forEach(b=>b.addEventListener("click",()=>{
+    resetA();A.pr.add(k);
+    const f=b.dataset.f,v=b.dataset.k;
+    if(f==="lv")A.lv.add(v);if(f==="st")A.st.add(v);if(f==="ap")A.ap.add(v);
+    showView("find");renderAll();
+  }));
+}
 
 /* ================= assignee × time ================= */
 function renderAT(){
@@ -1472,6 +1583,7 @@ function detHTML(o){
     </div>`:""}
     ${o.sq?`<div style="margin-top:6px;font-size:10.5px;color:#5F5F5F"><span style="color:#758D99;font-weight:700">構造分類の根拠（公報原文より）</span>　“${o.sq}”</div>`:""}
     ${o.fq?`<div style="margin-top:6px;font-size:10.5px;color:#5F5F5F"><span style="color:#758D99;font-weight:700">固定方式の根拠（公報原文より）</span>　“${o.fq}”</div>`:""}
+    ${o.pq?Object.entries(o.pq).map(([k,v])=>`<div style="margin-top:4px;font-size:10.5px;color:#5F5F5F"><span style="color:#B0322B;font-weight:700">課題「${PLJA[k]||k}」の根拠（公報原文より）</span>　“${v}”</div>`).join(""):""}
     ${(o.mt&&o.mt.length)||(o.co&&o.co.length)||(o.pm&&o.pm.length)?`<div style="margin-top:8px;border-top:1px solid #DDD;padding-top:7px">
       <div style="font-size:9px;color:#758D99;font-weight:700;letter-spacing:.05em">明細に記載のスペック（機械抽出・原文確認前提）</div>
       ${o.mt&&o.mt.length?`<div style="margin-top:3px;font-size:10.5px"><span style="color:#758D99;font-weight:700">材質</span>　${o.mt.join("・")}</div>`:""}
@@ -1675,7 +1787,7 @@ $("morez").addEventListener("click",()=>{shownZ+=200;renderZ();});
 
 /* ================= render all ================= */
 function renderAll(){
-  renderKPI();renderFbar();renderKarte();renderYear();renderPM();renderHM();renderMX();renderGeno();renderSK();renderAT();renderAC();renderAF();renderJU();
+  renderKPI();renderFbar();renderKarte();renderYear();renderPM();renderHM();renderMX();renderGeno();renderManual();renderSK();renderAT();renderAC();renderAF();renderJU();
   renderSt();renderFx();renderCb();renderAp();renderAs();renderStk();renderLife();renderNorm();
   syncFindChips();renderList();renderDB();renderZ();renderCorp();
   if(popSpec)renderPop();
