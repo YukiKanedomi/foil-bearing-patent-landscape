@@ -263,6 +263,7 @@ mark{background:#FFE28A;color:inherit;padding:0 1px;border-radius:2px}
 
   <div class="tabs">
     <button class="tab on" data-v="dash">ダッシュボード</button>
+    <button class="tab" data-v="geno">組み合わせ</button>
     <button class="tab" data-v="find">特許検索</button>
     <button class="tab" data-v="db">一覧表</button>
     <button class="tab" data-v="corp">企業レポート</button>
@@ -377,6 +378,19 @@ mark{background:#FFE28A;color:inherit;padding:0 1px;border-radius:2px}
     <button class="more" id="tolist">この条件の特許一覧を見る →</button>
     <div class="note"><b>読みどころ</b>　2020年代は882ファミリーと史上最多ペース。首位は空調のGree、NTN・IHIの日本勢が続き、燃料電池・チラーが波を作る。出願は荷重容量と固定・組立に集中。フォイルの固定方式では差込・タブ係止が最多で、近年は燃料電池向けの非バンプ型（ばね支持）や磁気軸受との併用が目立つ。</div>
     <div class="src">出典: Google Patents Public Data（BigQuery）。分類は要約ベースの一次判定（原文確認前提）。件数はファミリー単位</div>
+  </section>
+
+  <!-- ============ GENO（組み合わせマップ） ============ -->
+  <section class="view" id="v-geno">
+    <h2>組み合わせマップ — 技術の分布を2軸で眺める</h2>
+    <div class="cs">行と列の軸を選ぶと、収載特許がどの組み合わせに集中しているかを一枚のマトリクスで表示します。濃いセル＝出願が厚い組み合わせ。セルをタップ→その組み合わせに絞り込み（全タブ連動・再タップで解除）。期間スライダーなど他の絞り込みも反映されます</div>
+    <div class="frow"><span class="flabel">行（縦）</span><span id="gxsel"></span></div>
+    <div class="frow"><span class="flabel">列（横）</span><span id="gysel"></span></div>
+    <div class="cs" id="gcov"></div>
+    <div class="hscroll"><table class="mx" id="geno"></table></div>
+    <button class="more" id="tolist3">この条件の特許一覧を見る →</button>
+    <div class="note"><b>読み方の注意</b>　空白セルは「その組み合わせの技術が存在しない」ことを意味しません。タグは公報テキストから読めた範囲の一次判定で、固定方式・複合方式は逐語引用が取れた特許のみに付いています。要約しか読めない特許では細部のタグが付かないため、空白には「記載を確認できなかった」場合が含まれます。</div>
+    <div class="src">出典: Google Patents Public Data（BigQuery）＋Google Patents個別ページ。件数はファミリー単位</div>
   </section>
 
   <!-- ============ FIND ============ -->
@@ -605,6 +619,7 @@ function stateToHash(){
   if(A.fg)o.fg=1;if(A.gr)o.gr=1;if(A.fav)o.fav=1;
   if(curView!=="dash")o.v=curView;
   if(curView==="corp"&&corpSel)o.c=corpSel;
+  if(gx!=="st")o.gx=gx;if(gy!=="fx")o.gy=gy;
   return Object.keys(o).length?"#s="+encodeURIComponent(JSON.stringify(o)):"";
 }
 function syncHash(){
@@ -622,6 +637,7 @@ function applyHash(){
     $("r0").value=A.y0;$("r1").value=A.y1;
     if(o.fg)A.fg=true;if(o.gr)A.gr=true;if(o.fav)A.fav=true;
     if(o.c)corpSel=o.c;
+    if(o.gx&&GAX[o.gx])gx=o.gx;if(o.gy&&GAX[o.gy])gy=o.gy;
     if(o.v)showView(o.v);
   }catch{}
 }
@@ -768,6 +784,86 @@ function renderMX(){
     shown=60;renderAll();
   }));
 }
+
+/* ================= 組み合わせマップ（GENO） ================= */
+const ERAS=[["e0","〜1989",MINY,1989],["e1","1990年代",1990,1999],["e2","2000年代",2000,2009],["e3","2010年代",2010,2019],["e4","2020年代",2020,MAXY]];
+const GAX={
+  st:{ja:"支持構造",keys:()=>["bump","leaf","tension","metal_mesh","spring","hybrid","other","unknown"],lab:k=>STJA[k],vals:o=>[o.st],skip:"st",set:()=>A.st,cov:null},
+  fx:{ja:"固定方式",keys:()=>Object.keys(FXJA),lab:k=>FXJA[k],vals:o=>o.fx?[o.fx]:[],skip:"fx",set:()=>A.fx,cov:o=>!!o.fx},
+  pr:{ja:"課題",keys:()=>D.PROBS,lab:k=>PLJA[k]||k,vals:o=>o.pr,skip:"pr",set:()=>A.pr,cov:o=>o.pr.length>0},
+  lv:{ja:"解決手段",keys:()=>LVS,lab:k=>LVJA[k],vals:o=>o.lv,skip:"lv",set:()=>A.lv,cov:o=>o.lv.length>0},
+  ap:{ja:"適用機器",keys:()=>Object.keys(APJA).filter(k=>k!=="general_unknown"),lab:k=>APJA[k],vals:o=>(o.ap&&o.ap!=="general_unknown")?[o.ap]:[],skip:"ap",set:()=>A.ap,cov:o=>o.ap&&o.ap!=="general_unknown"},
+  cb:{ja:"複合方式",keys:()=>Object.keys(CBJA),lab:k=>CBJA[k],vals:o=>o.cb?[o.cb]:[],skip:"cb",set:()=>A.cb,cov:o=>!!o.cb},
+  sb:{ja:"対象種別",keys:()=>Object.keys(SBJA),lab:k=>SBJA[k],vals:o=>[o.sb||"bearing"],skip:"sb",set:()=>A.sb,cov:null},
+  as:{ja:"出願人",keys:null,lab:k=>shortNm(k),vals:o=>o.as[0]?[o.as[0]]:[],skip:"as",set:()=>A.as,cov:null},
+  era:{ja:"年代",keys:()=>ERAS.map(e=>e[0]),lab:k=>ERAS.find(e=>e[0]===k)[1],vals:o=>{if(!o.yr)return[];const e=ERAS.find(e=>o.yr>=e[2]&&o.yr<=e[3]);return e?[e[0]]:[];},skip:"yr",set:null,cov:null}
+};
+let gx="st",gy="fx";
+function eraSel(k){const e=ERAS.find(x=>x[0]===k);return e&&A.y0===e[2]&&A.y1===e[3];}
+function gTgl(ax,k){
+  const d=GAX[ax];
+  if(ax==="era"){const e=ERAS.find(x=>x[0]===k);
+    if(eraSel(k)){A.y0=MINY;A.y1=MAXY;}else{A.y0=e[2];A.y1=e[3];}
+    $("r0").value=A.y0;$("r1").value=A.y1;return;}
+  const s=d.set();s.has(k)?s.delete(k):(s.clear(),s.add(k));
+}
+function gIsSel(ax,k){return ax==="era"?eraSel(k):GAX[ax].set().has(k);}
+function renderGeno(){
+  if(gx===gy)gy=(gx==="st")?"fx":"st";
+  // 軸セレクタ
+  for(const[el,cur,other]of[["gxsel",gx,gy],["gysel",gy,gx]]){
+    $(el).style.display="contents";
+    $(el).innerHTML=Object.keys(GAX).map(k=>`<span class="chip ${k===cur?'on':''}" data-ax="${k}" ${k===other?'style="opacity:.35"':''}>${GAX[k].ja}</span>`).join("");
+  }
+  $("gxsel").querySelectorAll(".chip").forEach(c=>c.addEventListener("click",()=>{if(c.dataset.ax!==gy){gx=c.dataset.ax;renderGeno();syncHash();}}));
+  $("gysel").querySelectorAll(".chip").forEach(c=>c.addEventListener("click",()=>{if(c.dataset.ax!==gx){gy=c.dataset.ax;renderGeno();syncHash();}}));
+  const X=GAX[gx],Y=GAX[gy];
+  const skip=X.skip+","+Y.skip;
+  const base=D.fams.filter(o=>pass(o,skip));
+  // 出願人軸は絞り込み後の上位12社を動的に
+  const keysOf=d=>{
+    if(d.keys)return d.keys();
+    const t=new Map();base.forEach(o=>{if(o.as[0])t.set(o.as[0],(t.get(o.as[0])||0)+1);});
+    return[...t.entries()].sort((a,b)=>b[1]-a[1]).slice(0,12).map(e=>e[0]);
+  };
+  const xs=keysOf(X),ys=keysOf(Y);
+  const cnt=xs.map(()=>ys.map(()=>0));
+  base.forEach(o=>{
+    X.vals(o).forEach(xv=>{const xi=xs.indexOf(xv);if(xi<0)return;
+      Y.vals(o).forEach(yv=>{const yi=ys.indexOf(yv);if(yi>=0)cnt[xi][yi]++;});});
+  });
+  const max=Math.max(1,...cnt.flat());
+  let h=`<tr><th></th>${ys.map(k=>`<th>${Y.lab(k)}</th>`).join("")}</tr>`;
+  xs.forEach((xk,i)=>{
+    h+=`<tr><td class="rl">${X.lab(xk)}</td>`;
+    ys.forEach((yk,j)=>{
+      const v=cnt[i][j],[bg,fg]=heat(v,max);
+      const sel=gIsSel(gx,xk)&&gIsSel(gy,yk);
+      h+=`<td class="cell ${sel?'sel':''}" data-x="${xk}" data-y="${yk}" style="background:${bg};color:${fg}" title="${X.lab(xk)} × ${Y.lab(yk)}: ${v}件">${v||''}</td>`;
+    });
+    h+=`</tr>`;
+  });
+  $("geno").innerHTML=h;
+  $("geno").querySelectorAll(".cell").forEach(c=>c.addEventListener("click",()=>{
+    const xk=c.dataset.x,yk=c.dataset.y,was=gIsSel(gx,xk)&&gIsSel(gy,yk);
+    for(const[ax,k]of[[gx,xk],[gy,yk]]){
+      if(ax==="era"){A.y0=MINY;A.y1=MAXY;$("r0").value=A.y0;$("r1").value=A.y1;}
+      else GAX[ax].set().clear();
+      if(!was)gTgl(ax,k);
+    }
+    shown=60;renderAll();
+  }));
+  // カバレッジ注記（タグが部分的な軸のみ）
+  const covs=[];
+  for(const[ax,d]of[[gx,X],[gy,Y]])if(d.cov){
+    const n=base.filter(d.cov).length;
+    covs.push(`${d.ja}タグあり ${n.toLocaleString()}／${base.length.toLocaleString()}件`);
+  }
+  $("gcov").innerHTML=covs.length?`このマトリクスに乗るのは ${covs.join("・")}（タグの無い特許は行・列に現れません）`:`対象 ${base.length.toLocaleString()}件`;
+  const cur=D.fams.filter(o=>pass(o));
+  $("tolist3").textContent=`この条件の特許一覧を見る（${cur.length.toLocaleString()}件）→`;
+}
+$("tolist3").addEventListener("click",()=>showView("find"));
 
 /* ================= assignee × time ================= */
 function renderAT(){
@@ -1579,7 +1675,7 @@ $("morez").addEventListener("click",()=>{shownZ+=200;renderZ();});
 
 /* ================= render all ================= */
 function renderAll(){
-  renderKPI();renderFbar();renderKarte();renderYear();renderPM();renderHM();renderMX();renderSK();renderAT();renderAC();renderAF();renderJU();
+  renderKPI();renderFbar();renderKarte();renderYear();renderPM();renderHM();renderMX();renderGeno();renderSK();renderAT();renderAC();renderAF();renderJU();
   renderSt();renderFx();renderCb();renderAp();renderAs();renderStk();renderLife();renderNorm();
   syncFindChips();renderList();renderDB();renderZ();renderCorp();
   if(popSpec)renderPop();
