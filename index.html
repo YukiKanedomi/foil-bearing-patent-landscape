@@ -86,6 +86,10 @@ table{border-collapse:collapse}
 .mbar .mv{font-family:var(--mono);font-size:9.5px;color:#758D99}
 .mbar:hover .ml{color:var(--red)}
 .mback{font-size:11px;color:var(--red);cursor:pointer;font-weight:700;margin-bottom:8px;display:inline-block}
+.anote{border:1px solid var(--g2);border-left:3px solid var(--red);background:#FCFBF8;padding:12px 15px;max-width:780px}
+.anote p{font-size:12px;line-height:1.85;margin:0 0 8px}
+.anote p:last-child{margin-bottom:0}
+.anote .al{font-weight:800;font-size:13px}
 /* assignee matrix */
 .st{display:grid;grid-template-columns:104px 1fr 34px;align-items:center;gap:8px;margin:4px 0;cursor:pointer}
 .st .l{font-size:10px;text-align:right;font-family:var(--mono);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -1390,6 +1394,14 @@ function corpHTML(nm){
     <div><div class="n">${recent}%</div><div class="l">2018年以降</div></div>
   </div>
   <div class="crplead">初出願は${y0}年、ピークは${peak[0]}年（${peak[1]}件）。直近では2018年以降が全体の${recent}%を占める。以下はすべて公知特許${n}ファミリーからの自動集計で、原文確認を前提とした一次情報です。</div>
+  ${D.corpTx&&D.corpTx.tx[nm]?(tx=>`
+  <h2 style="margin-top:18px">アナリストノート — この数字から読み取れること</h2>
+  <div class="cs">下の集計値（特化係数・年代分布・被引用）に基づく分析コメント。<b>分析時点: ${D.corpTx.edition} のデータ</b>による評価で、出願から公開まで約1.5年かかるため直近の動きは実際より少なく見えます。事実は各特許の原文でご確認ください</div>
+  <div class="anote">
+    <p class="al">${tx.lead}</p>
+    <p><b>強みと薄い領域</b>　${tx.sw}</p>
+    <p><b>読み取れること</b>　${tx.read}</p>
+  </div>`)(D.corpTx.tx[nm]):""}
   <h2 style="margin-top:18px">出願の推移</h2>
   ${corpYearSVG(mine)}
   <div class="crp2">
